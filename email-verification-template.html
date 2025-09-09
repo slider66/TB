@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirma tu cuenta</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: #f3f4f6;
+    }
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #ffffff;
+    }
+    .header {
+      text-align: center;
+      padding: 20px 0;
+    }
+    .header img {
+      max-width: 150px;
+    }
+    .content {
+      padding: 30px;
+      text-align: center;
+      border-top: 1px solid #e5e7eb;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .content h1 {
+      font-size: 24px;
+      font-weight: 700;
+      color: #171717;
+      margin-bottom: 16px;
+    }
+    .content p {
+      font-size: 16px;
+      line-height: 1.5;
+      color: #525252;
+      margin-bottom: 24px;
+    }
+    .button {
+      display: inline-block;
+      padding: 14px 28px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #ffffff;
+      background-color: #ff6b35;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background-color 0.3s;
+    }
+    .footer {
+      padding: 20px;
+      text-align: center;
+      font-size: 12px;
+      color: #a3a3a3;
+    }
+    .footer a {
+      color: #ff6b35;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <img  alt="Logo de la empresa" src="https://images.unsplash.com/photo-1485531865381-286666aa80a9" />
+    </div>
+    <div class="content">
+      <h1>¡Un último paso!</h1>
+      <p>Gracias por registrarte. Por favor, haz clic en el botón de abajo para confirmar tu dirección de correo electrónico y activar tu cuenta.</p>
+      <a href="{{ .ConfirmationURL }}" class="button">Confirmar Cuenta</a>
+      <p style="font-size: 12px; color: #a3a3a3; margin-top: 24px;">Si no te has registrado en nuestro sitio, puedes ignorar este correo electrónico de forma segura.</p>
+    </div>
+    <div class="footer">
+      <p>&copy; 2025 Tu Empresa. Todos los derechos reservados.</p>
+      <p>Si tienes problemas con el botón, copia y pega esta URL en tu navegador:<br> <a href="{{ .ConfirmationURL }}">{{ .ConfirmationURL }}</a></p>
+    </div>
+  </div>
+</body>
+</html>

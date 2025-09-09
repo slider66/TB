@@ -1,0 +1,12 @@
+## Pages
+- [Confirmación de Cuenta](/authconfirm): Tu cuenta ha sido confirmada exitosamente. Inicia sesión para continuar.
+- [Contacto - Traductor Burocrático](/contact): Contacta con nosotros para cualquier duda o consulta. Estamos aquí para ayudarte.
+- [Pago Cancelado - Traductor Burocrático](/paymentcancelled): No description available
+- [Pago Exitoso - Traductor Burocrático](/paymentsuccess): No description available
+- [Panel de Administración](/admin): No description available
+- [Panel de Usuario](/panel): Gestiona tus documentos y perfil desde tu panel de usuario.
+- [Preguntas Frecuentes - Traductor Burocrático](/faq): Encuentra respuestas a las preguntas más comunes sobre cómo funciona Traductor Burocrático, qué documentos puedes subir y nuestros tiempos de respuesta.
+- [Soporte y Ayuda - Traductor Burocrático](/support): Contacta con nuestro equipo de soporte para cualquier duda o consulta. Estamos aquí para ayudarte.
+- [Tarifas - Traductor Burocrático](/pricing): Planes y precios flexibles para traducir y entender tus documentos oficiales. Desde un análisis básico hasta un plan completo con plantillas.
+- [Términos y Condiciones - Traductor Burocrático](/terms): Consulta los términos y condiciones de uso de la plataforma Traductor Burocrático.
+- [Untitled Page](/casedetail): No description available
