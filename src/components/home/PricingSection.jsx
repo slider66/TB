@@ -1,91 +1,99 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Check, Zap, Shield } from 'lucide-react';
+import { Check, Zap, FileText, Languages, PlusCircle } from 'lucide-react';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { redirectToCheckout } from '@/lib/stripe';
 
-const PricingSection = ({ onUploadClick }) => {
+const PricingSection = ({ onStartClick, isPage = false }) => {
   const { user } = useAuth();
 
   const handleStartClick = (plan) => {
     if (user) {
       redirectToCheckout(plan);
     } else {
-      onUploadClick();
+      onStartClick();
     }
   };
+
+  const features = [
+    "PDF claro con resumen y checklist paso a paso",
+    "Entrega en menos de 24 horas",
+    "IA + revisión humana para máxima precisión",
+    "1 revisión gratuita si algo no queda claro",
+    "Enlaces oficiales para tramitar online",
+  ];
+
+  const addons = [
+    { icon: <Zap className="h-6 w-6 text-orange" />, title: "Servicio Urgente 4h", price: "+9,90 €" },
+    { icon: <FileText className="h-6 w-6 text-orange" />, title: "Documento largo", price: "+4,90 € / 10 pág. extra" },
+    { icon: <Languages className="h-6 w-6 text-orange" />, title: "Traducción (EN/FR/PT)", price: "+6,90 €" },
+  ];
+
+  const TitleComponent = isPage ? 'h1' : 'h2';
 
   return (
     <section id="pricing" className="py-20 px-4 bg-neutral-50">
       <div className="max-w-6xl mx-auto">
-         <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-neutral-800 mb-4">Planes para cada necesidad</h2>
-          <p className="text-xl text-neutral-600 max-w-3xl mx-auto">Precios claros y sencillos para empezar sin dudarlo.</p>
+        <div className="text-center mb-12">
+          <TitleComponent className="text-4xl font-bold text-neutral-800 mb-4">Una tarifa única, todo incluido</TitleComponent>
+          <p className="text-xl text-neutral-600 max-w-3xl mx-auto">
+            Sin sorpresas. Un único pago para que entiendas cualquier documento administrativo de hasta 10 páginas.
+          </p>
         </div>
 
-        <div className="grid md:grid-cols-1 lg:grid-cols-3 gap-8 items-center">
-          {/* Basic Plan */}
-          <Card className="pricing-card lg:col-span-1">
+        <div className="grid lg:grid-cols-5 gap-8 items-start">
+          <Card className="lg:col-span-3 pricing-card highlighted border-2 border-orange shadow-orange">
             <CardHeader>
-              <CardTitle className="text-2xl font-bold">Básico</CardTitle>
-              <CardDescription>Para una visión clara y rápida.</CardDescription>
+              <CardTitle className="text-2xl font-bold">Plan Único</CardTitle>
+              <CardDescription>La solución completa para entender tu burocracia.</CardDescription>
             </CardHeader>
-            <CardContent className="flex flex-col h-full">
-              <div className="text-4xl font-bold text-orange mb-6">9,90 €</div>
-              <ul className="space-y-3 mb-8">
-                <li className="flex items-center"><Check className="h-5 w-5 text-green-500 mr-3" />Explicación en lenguaje común</li>
-                <li className="flex items-center"><Check className="h-5 w-5 text-green-500 mr-3" />Checklist de acciones</li>
+            <CardContent>
+              <div className="text-5xl font-bold text-orange mb-6">14,90 € <span className="text-lg font-normal text-neutral-500">IVA incl.</span></div>
+              <ul className="space-y-4 mb-8">
+                {features.map((feature, index) => (
+                  <li key={index} className="flex items-start">
+                    <Check className="h-5 w-5 text-green-500 mr-3 mt-1 flex-shrink-0" />
+                    <span>{feature}</span>
+                  </li>
+                ))}
               </ul>
-              <div className="mt-auto">
-                <Button className="btn-secondary w-full" onClick={() => handleStartClick('basic')}>Empezar ahora</Button>
-              </div>
+              <Button className="btn-primary w-full text-lg py-6" onClick={() => handleStartClick('UNICO')}>
+                Empezar ahora
+              </Button>
             </CardContent>
           </Card>
 
-          {/* Complete Plan */}
-          <Card className="pricing-card highlighted lg:col-span-1 border-2 border-orange shadow-orange h-full">
-            <div className="highlight-badge">Más Popular</div>
-            <CardHeader>
-              <CardTitle className="text-2xl font-bold">Completo</CardTitle>
-              <CardDescription>La opción más completa para actuar.</CardDescription>
-            </CardHeader>
-            <CardContent className="flex flex-col h-full">
-              <div className="text-4xl font-bold text-orange mb-6">19,90 €</div>
-              <ul className="space-y-3 mb-8">
-                <li className="flex items-center"><Check className="h-5 w-5 text-green-500 mr-3" /><strong>Todo lo del plan Básico</strong></li>
-                <li className="flex items-center"><Check className="h-5 w-5 text-green-500 mr-3" />Plantillas para responder</li>
-                <li className="flex items-center"><Check className="h-5 w-5 text-green-500 mr-3" />Mini-glosario de términos</li>
-              </ul>
-              <div className="mt-auto">
-                <Button className="btn-primary w-full" onClick={() => handleStartClick('complete')}>Empezar ahora</Button>
-              </div>
-            </CardContent>
-          </Card>
-          
-          {/* Urgent Extra */}
-          <Card className="pricing-card lg:col-span-1 bg-orange/5 border-orange/20 h-full">
-             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-2xl font-bold"><Zap className="text-orange" />Extra Urgente</CardTitle>
-              <CardDescription>Prioridad máxima para tu tranquilidad.</CardDescription>
-            </CardHeader>
-            <CardContent className="flex flex-col h-full">
-              <div className="text-2xl font-bold text-orange mb-4">+9-12 €</div>
-              <p className="text-neutral-600 mb-auto">
-                Recibe tu análisis en <strong>menos de 4 horas</strong> en horario laboral.
-              </p>
-              <p className="text-xs text-neutral-500 mt-4">
-                Añádelo al seleccionar tu plan al subir el documento.
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-        
-        <div className="mt-8 text-center">
-          <div className="inline-flex items-center bg-green-100 text-green-800 p-3 rounded-lg text-sm">
-            <Shield className="h-5 w-5 mr-2" />
-            <p><strong>Garantía de Plazo:</strong> Si no cumplimos, upgrade gratis o devolución parcial.</p>
+          <div className="lg:col-span-2 space-y-6">
+             <Card className="bg-white">
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-xl font-bold"><PlusCircle className="text-orange" />Add-ons Opcionales</CardTitle>
+                    <CardDescription>Personaliza tu servicio según tus necesidades.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <ul className="space-y-4">
+                        {addons.map((addon, index) => (
+                            <li key={index} className="flex items-center justify-between">
+                                <div className="flex items-center gap-3">
+                                    {addon.icon}
+                                    <span className="font-medium text-neutral-700">{addon.title}</span>
+                                </div>
+                                <span className="font-bold text-neutral-800">{addon.price}</span>
+                            </li>
+                        ))}
+                    </ul>
+                </CardContent>
+            </Card>
+            <Card className="bg-blue-50 border-blue-200">
+                <CardContent className="p-6">
+                    <h4 className="font-bold text-blue-800 mb-2">¿Necesitas más ayuda?</h4>
+                    <p className="text-blue-700 text-sm">
+                        Si tu caso requiere gestión o defensa, te derivamos a un partner de confianza (solo si lo autorizas).
+                        <br/><br/>
+                        <em className="text-xs text-blue-600">Aviso: este es un servicio pedagógico de comprensión; no sustituye asesoramiento legal o fiscal.</em>
+                    </p>
+                </CardContent>
+            </Card>
           </div>
         </div>
       </div>

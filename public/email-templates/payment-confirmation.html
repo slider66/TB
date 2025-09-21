@@ -1,0 +1,47 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirmación de Pedido</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+    body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+    .container { max-width: 600px; margin: 0 auto; padding: 20px; background-color: #ffffff; }
+    .header { text-align: center; padding: 20px 0; }
+    .header img { max-width: 150px; }
+    .content { padding: 30px; text-align: left; border-top: 1px solid #e5e7eb; border-bottom: 1px solid #e5e7eb; color: #404040; }
+    .content h1 { font-size: 24px; font-weight: 700; color: #171717; margin-bottom: 16px; }
+    .content p { font-size: 16px; line-height: 1.5; margin-bottom: 24px; }
+    .button { display: inline-block; padding: 14px 28px; font-size: 16px; font-weight: 600; color: #ffffff; background-color: #ff6b35; border-radius: 8px; text-decoration: none; }
+    .footer { padding: 20px; text-align: center; font-size: 12px; color: #a3a3a3; }
+    .footer a { color: #ff6b35; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <img alt="Logo de Traductor Burocrático" src="https://i.imgur.com/s9uisfT.png" />
+    </div>
+    <div class="content">
+      <h1>¡Gracias por tu confianza!</h1>
+      <p>Hola {{name}},</p>
+      <p>Hemos recibido tu pago y tu pedido <strong>{{order_id}}</strong> ya está en marcha. Nuestro equipo ha comenzado a trabajar en tu caso.</p>
+      <p>Puedes seguir el estado de tu caso en cualquier momento desde tu panel de cliente.</p>
+      <a href="{{site_url}}/cases/{{case_id}}" class="button">Ver mi caso</a>
+      <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 24px 0;">
+      <h3>Resumen del pedido:</h3>
+      <ul>
+        <li><strong>ID Pedido:</strong> {{order_id}}</li>
+        <li><strong>Fecha:</strong> {{payment_date}}</li>
+        <li><strong>Total:</strong> {{total_amount}}€</li>
+      </ul>
+    </div>
+    <div class="footer">
+      <p>&copy; {{year}} Traductor Burocrático. Todos los derechos reservados.</p>
+      <p><a href="{{site_url}}/support">Centro de Ayuda</a> | <a href="{{site_url}}/privacy-policy">Política de Privacidad</a></p>
+    </div>
+  </div>
+</body>
+</html>

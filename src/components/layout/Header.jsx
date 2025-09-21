@@ -1,10 +1,8 @@
-
-import React, { useState } from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Menu, X, LogOut, UserCircle, ShieldCheck } from 'lucide-react';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
+import { LogOut, User, LayoutDashboard, Menu, X } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,191 +10,168 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-  DropdownMenuPortal,
-} from "@/components/ui/dropdown-menu"
+} from '@/components/ui/dropdown-menu';
+import { motion, AnimatePresence } from 'framer-motion';
 
-const Header = ({ onLoginClick }) => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+const Header = ({ onLoginClick, onStartClick }) => {
   const { user, signOut, isAdmin } = useAuth();
   const navigate = useNavigate();
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const handleLogout = () => {
-    signOut();
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const handleSignOut = async () => {
+    await signOut();
     navigate('/');
   };
 
-  const handleNavClick = (e, path) => {
-    e.preventDefault();
-    const protectedRoutes = ['/upload', '/clients', '/account', '/cases'];
-    if (protectedRoutes.some(p => path.startsWith(p)) && !user) {
-      onLoginClick();
-      setMobileMenuOpen(false);
-    } else {
-      setMobileMenuOpen(false);
-      navigate(path);
-    }
+  const navLinks = [
+    { to: '/pricing', text: 'Precios' },
+    { to: '/partners', text: 'Partners' },
+    { to: '/faq', text: 'Preguntas Frecuentes' },
+  ];
+
+  const mobileMenuVariants = {
+    hidden: { opacity: 0, y: -20 },
+    visible: { opacity: 1, y: 0, transition: { staggerChildren: 0.05 } },
+    exit: { opacity: 0, y: -20 },
   };
 
-  const navLinks = [
-    { to: '/', text: 'Inicio' },
-    { to: '/pricing', text: 'Precios' },
-    { to: '/upload', text: 'Subir Documento' },
-  ];
-  
-  const userRole = user?.user_metadata?.role;
-  if (!user) {
-     navLinks.push({ to: '/partners', text: 'Quiero ser partner' });
-  }
-
-  const activeLinkClass = 'text-orange';
-  const inactiveLinkClass = 'text-neutral-600 hover:text-orange';
-
-  const navigateToDashboard = () => {
-    if (userRole === 'client') {
-      navigate('/clients');
-    } else if (userRole === 'partner_admin' || userRole === 'partner_member' || userRole === 'reviewer') {
-      navigate('/partners');
-    } else if (isAdmin) {
-      navigate('/admin');
-    }
+  const mobileLinkVariants = {
+    hidden: { opacity: 0, y: -10 },
+    visible: { opacity: 1, y: -0 },
   };
 
   return (
-    <nav className="bg-white/80 backdrop-blur-lg shadow-sm border-b border-neutral-200 sticky top-0 z-40">
-      <div className="max-w-6xl mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
-          <NavLink to="/" className="flex items-center">
-            <span className="text-2xl font-bold text-gradient">
-              Traductor Burocrático
-            </span>
-          </NavLink>
+    <header
+      className={`sticky top-0 z-40 transition-all duration-300 ${
+        isScrolled || isMobileMenuOpen ? 'bg-white/95 shadow-md backdrop-blur-lg' : 'bg-transparent'
+      }`}
+    >
+      <div className="container mx-auto px-6 h-20 flex justify-between items-center">
+        <Link to="/" className="flex items-center">
+          <img src="https://horizons-cdn.hostinger.com/5d895b2d-33c5-4462-8a9e-665d2e957763/806325b9ee47551f89d11b2417c2653a.png" alt="Traductor Burocrático Logo" className="h-8 w-auto" />
+        </Link>
 
-          <div className="hidden md:flex items-center space-x-8">
-            {navLinks.map((link) => (
-              <a
-                key={link.to}
-                href={link.to}
-                onClick={(e) => handleNavClick(e, link.to)}
-                className={`font-medium transition-colors ${
-                  window.location.pathname === link.to ? activeLinkClass : inactiveLinkClass
-                }`}
-              >
-                {link.text}
-              </a>
-            ))}
-            {user ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-                     <span className="font-medium text-neutral-700 flex items-center gap-2">
-                        <UserCircle className="h-8 w-8 text-orange"/>
-                    </span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuPortal>
-                  <DropdownMenuContent className="w-56" align="end" forceMount>
-                    <DropdownMenuLabel className="font-normal">
-                      <div className="flex flex-col space-y-1">
-                        <p className="text-sm font-medium leading-none">Conectado</p>
-                        <p className="text-xs leading-none text-muted-foreground">
-                          {user.email}
-                        </p>
-                      </div>
-                    </DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={navigateToDashboard}>
-                      Mis Expedientes
-                    </DropdownMenuItem>
-                     <DropdownMenuItem onClick={() => navigate('/account')}>
-                      Mi Cuenta
-                    </DropdownMenuItem>
-                    {isAdmin && (
-                      <DropdownMenuItem onClick={() => navigate('/admin')}>
-                        <ShieldCheck className="mr-2 h-4 w-4" />
-                        Admin Panel
-                      </DropdownMenuItem>
-                    )}
-                    <DropdownMenuItem onClick={() => navigate('/support')}>
-                      Soporte
-                    </DropdownMenuItem>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={handleLogout}>
-                      <LogOut className="mr-2 h-4 w-4" />
-                      <span>Salir</span>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenuPortal>
-              </DropdownMenu>
-            ) : (
-              <Button className="btn-primary" onClick={onLoginClick}>
+        <nav className="hidden md:flex items-center gap-8">
+          {navLinks.map((link) => (
+            <NavLink
+              key={link.to}
+              to={link.to}
+              className={({ isActive }) =>
+                `font-medium text-neutral-600 hover:text-orange transition-colors ${
+                  isActive ? 'text-orange' : ''
+                }`
+              }
+            >
+              {link.text}
+            </NavLink>
+          ))}
+        </nav>
+
+        <div className="hidden md:flex items-center gap-4">
+          {user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="flex items-center gap-2">
+                  <User className="h-5 w-5" />
+                  Mi Cuenta
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel>Sesión iniciada</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => navigate('/panel')}>
+                  <LayoutDashboard className="mr-2 h-4 w-4" />
+                  <span>Panel de Casos</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => navigate('/account')}>
+                  <User className="mr-2 h-4 w-4" />
+                  <span>Mi Perfil</span>
+                </DropdownMenuItem>
+                {isAdmin && (
+                  <DropdownMenuItem onClick={() => navigate('/admin')}>
+                    <LayoutDashboard className="mr-2 h-4 w-4" />
+                    <span>Admin</span>
+                  </DropdownMenuItem>
+                )}
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleSignOut}>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Cerrar sesión</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <>
+              <Button variant="ghost" onClick={onLoginClick}>
                 Iniciar Sesión
               </Button>
-            )}
-          </div>
-
-          <div className="md:hidden">
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="text-neutral-600 hover:text-orange"
-            >
-              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </button>
-          </div>
+              <Button className="btn-primary" onClick={onStartClick}>
+                Empezar ahora
+              </Button>
+            </>
+          )}
         </div>
 
-        <AnimatePresence>
-          {mobileMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              className="md:hidden border-t border-neutral-200"
-            >
-              <div className="py-4 space-y-4">
-                {navLinks.map((link) => (
-                  <a
-                    key={link.to}
-                    href={link.to}
-                    onClick={(e) => handleNavClick(e, link.to)}
-                    className={`block w-full text-left font-medium transition-colors ${
-                      window.location.pathname === link.to ? activeLinkClass : inactiveLinkClass
-                    }`}
+        <div className="md:hidden">
+          <Button variant="ghost" size="icon" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+            {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </Button>
+        </div>
+      </div>
+
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            variants={mobileMenuVariants}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            className="md:hidden absolute top-20 left-0 w-full bg-white/95 backdrop-blur-lg shadow-lg pb-6"
+          >
+            <motion.nav className="flex flex-col items-center gap-6 px-6">
+              {navLinks.map((link) => (
+                <motion.div key={link.to} variants={mobileLinkVariants}>
+                  <NavLink
+                    to={link.to}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className={({ isActive }) =>
+                      `text-lg font-medium text-neutral-700 hover:text-orange transition-colors ${
+                        isActive ? 'text-orange' : ''
+                      }`
+                    }
                   >
                     {link.text}
-                  </a>
-                ))}
+                  </NavLink>
+                </motion.div>
+              ))}
+              <motion.div variants={mobileLinkVariants} className="w-full pt-4 border-t border-neutral-200">
                 {user ? (
-                   <>
-                    <a href="#" onClick={(e) => handleNavClick(e, userRole === 'client' ? '/clients' : '/partners')} className={`block w-full text-left font-medium transition-colors ${inactiveLinkClass}`}>Mis Expedientes</a>
-                    <a href="#" onClick={(e) => handleNavClick(e, '/account')} className={`block w-full text-left font-medium transition-colors ${inactiveLinkClass}`}>Mi Cuenta</a>
-                     {isAdmin && (
-                      <a href="#" onClick={(e) => handleNavClick(e, '/admin')} className={`block w-full text-left font-medium transition-colors ${inactiveLinkClass}`}>
-                        <ShieldCheck className="mr-2 h-4 w-4 inline-block" />
-                        Admin Panel
-                      </a>
-                    )}
-                    <Button variant="ghost" className="w-full justify-start" onClick={handleLogout}>
-                      <LogOut className="h-4 w-4 mr-2"/>
-                      <span>Salir</span>
-                    </Button>
-                  </>
+                  <div className="flex flex-col gap-4">
+                     <Button variant="outline" className="w-full" onClick={() => { navigate('/panel'); setIsMobileMenuOpen(false); }}>Panel de Casos</Button>
+                     <Button variant="outline" className="w-full" onClick={() => { navigate('/account'); setIsMobileMenuOpen(false); }}>Mi Perfil</Button>
+                     <Button variant="destructive" className="w-full" onClick={() => { handleSignOut(); setIsMobileMenuOpen(false); }}>Cerrar sesión</Button>
+                  </div>
                 ) : (
-                   <Button
-                    className="btn-primary w-full"
-                    onClick={() => {
-                      onLoginClick();
-                      setMobileMenuOpen(false);
-                    }}
-                  >
-                    Iniciar Sesión
-                  </Button>
+                  <div className="flex flex-col gap-4">
+                    <Button variant="outline" className="w-full" onClick={() => { onLoginClick(); setIsMobileMenuOpen(false); }}>Iniciar Sesión</Button>
+                    <Button className="btn-primary w-full" onClick={() => { onStartClick(); setIsMobileMenuOpen(false); }}>Empezar ahora</Button>
+                  </div>
                 )}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-    </nav>
+              </motion.div>
+            </motion.nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </header>
   );
 };
 

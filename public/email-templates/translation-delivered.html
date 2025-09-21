@@ -1,0 +1,40 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tu Traducción está Lista</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+    body { margin: 0; padding: 0; font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+    .container { max-width: 600px; margin: 0 auto; padding: 20px; background-color: #ffffff; }
+    .header { text-align: center; padding: 20px 0; }
+    .header img { max-width: 150px; }
+    .content { padding: 30px; text-align: left; border-top: 1px solid #e5e7eb; border-bottom: 1px solid #e5e7eb; color: #404040; }
+    .content h1 { font-size: 24px; font-weight: 700; color: #171717; margin-bottom: 16px; }
+    .content p { font-size: 16px; line-height: 1.5; margin-bottom: 24px; }
+    .button { display: inline-block; padding: 14px 28px; font-size: 16px; font-weight: 600; color: #ffffff; background-color: #ff6b35; border-radius: 8px; text-decoration: none; }
+    .footer { padding: 20px; text-align: center; font-size: 12px; color: #a3a3a3; }
+    .footer a { color: #ff6b35; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <img alt="Logo de Traductor Burocrático" src="https://i.imgur.com/s9uisfT.png" />
+    </div>
+    <div class="content">
+      <h1>¡Hemos terminado!</h1>
+      <p>Hola {{name}},</p>
+      <p>La traducción y el análisis de tu documento para el caso <strong>{{case_id}}</strong> ya están disponibles en tu panel de cliente.</p>
+      <p>Accede ahora para ver el resultado, la checklist de acciones y los próximos pasos.</p>
+      <a href="{{site_url}}/cases/{{case_id}}" class="button">Acceder al resultado</a>
+    </div>
+    <div class="footer">
+      <p>&copy; {{year}} Traductor Burocrático. Todos los derechos reservados.</p>
+      <p><a href="{{site_url}}/support">Centro de Ayuda</a> | <a href="{{site_url}}/privacy-policy">Política de Privacidad</a></p>
+    </div>
+  </div>
+</body>
+</html>

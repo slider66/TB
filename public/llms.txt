@@ -1,12 +1,19 @@
 ## Pages
+- [Actualizar Contraseña - Traductor Burocrático](/updatepassword): Actualiza tu contraseña para acceder a tu cuenta.
+- [Cambiar Contraseña - Traductor Burocrático](/changepassword): Actualiza la contraseña de tu cuenta.
 - [Confirmación de Cuenta](/authconfirm): Tu cuenta ha sido confirmada exitosamente. Inicia sesión para continuar.
-- [Contacto - Traductor Burocrático](/contact): Contacta con nosotros para cualquier duda o consulta. Estamos aquí para ayudarte.
+- [Mi Cuenta - Traductor Burocrático](/account): Gestiona los datos de tu cuenta y tu perfil.
+- [Nuevo Pedido - Traductor Burocrático](/order): No description available
 - [Pago Cancelado - Traductor Burocrático](/paymentcancelled): No description available
 - [Pago Exitoso - Traductor Burocrático](/paymentsuccess): No description available
 - [Panel de Administración](/admin): No description available
 - [Panel de Usuario](/panel): Gestiona tus documentos y perfil desde tu panel de usuario.
-- [Preguntas Frecuentes - Traductor Burocrático](/faq): Encuentra respuestas a las preguntas más comunes sobre cómo funciona Traductor Burocrático, qué documentos puedes subir y nuestros tiempos de respuesta.
-- [Soporte y Ayuda - Traductor Burocrático](/support): Contacta con nuestro equipo de soporte para cualquier duda o consulta. Estamos aquí para ayudarte.
-- [Tarifas - Traductor Burocrático](/pricing): Planes y precios flexibles para traducir y entender tus documentos oficiales. Desde un análisis básico hasta un plan completo con plantillas.
+- [Política de Cookies - Traductor Burocrático](/cookiespolicy): Información sobre el uso de cookies en Traductor Burocrático.
+- [Política de Privacidad - Traductor Burocrático](/privacypolicy): Política de Privacidad de Traductor Burocrático. Conoce cómo tratamos tus datos personales.
 - [Términos y Condiciones - Traductor Burocrático](/terms): Consulta los términos y condiciones de uso de la plataforma Traductor Burocrático.
 - [Untitled Page](/casedetail): No description available
+- [Untitled Page](/contact): No description available
+- [Untitled Page](/faq): No description available
+- [Untitled Page](/partners): No description available
+- [Untitled Page](/pricing): No description available
+- [Untitled Page](/support): No description available

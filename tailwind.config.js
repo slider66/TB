@@ -22,6 +22,10 @@ module.exports = {
         'primary-orange-dark': '#e55a2b',
         'orange': '#ff6b35',
       },
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+        montserrat: ['Montserrat', 'sans-serif'],
+      },
       keyframes: {
         "accordion-down": {
           from: { height: 0 },

@@ -1,4 +1,3 @@
-
 import { loadStripe } from '@stripe/stripe-js';
 import { supabase } from '@/lib/customSupabaseClient';
 import toast from 'react-hot-toast';
@@ -12,21 +11,12 @@ const getStripe = () => {
   return stripePromise;
 };
 
-export const redirectToCheckout = async (plan, urgent = false) => {
+export const redirectToCheckout = async (orderId, email, isGuest) => {
   const toastId = toast.loading('Redirigiendo a la pasarela de pago...');
   
   try {
-    const { data: { session: authSession }, error: authError } = await supabase.auth.getSession();
-
-    if (authError || !authSession) {
-      throw new Error('Debes iniciar sesión para realizar una compra.');
-    }
-
     const { data, error } = await supabase.functions.invoke('create-checkout-session', {
-      body: { plan, urgent },
-      headers: {
-        Authorization: `Bearer ${authSession.access_token}`,
-      }
+      body: { orderId, email, isGuest },
     });
 
     if (error) {

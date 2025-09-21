@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect, Suspense, lazy } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { Toaster } from '@/components/ui/toaster';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -12,9 +12,10 @@ import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { Loader2 } from 'lucide-react';
 import AdminRoute from '@/components/AdminRoute';
 import StickyCta from '@/components/layout/StickyCta';
+import CookieConsentBanner from '@/components/CookieConsentBanner';
 
 const HomePage = lazy(() => import('@/pages/HomePage'));
-const UploadPage = lazy(() => import('@/pages/UploadPage'));
+const OrderPage = lazy(() => import('@/pages/OrderPage'));
 const ClientsPage = lazy(() => import('@/pages/ClientsPage'));
 const PartnersPage = lazy(() => import('@/pages/PartnersPage'));
 const LoginPage = lazy(() => import('@/pages/LoginPage'));
@@ -23,6 +24,8 @@ const ContactPage = lazy(() => import('@/pages/ContactPage'));
 const SupportPage = lazy(() => import('@/pages/SupportPage'));
 const FaqPage = lazy(() => import('@/pages/FaqPage'));
 const TermsPage = lazy(() => import('@/pages/TermsPage'));
+const PrivacyPolicyPage = lazy(() => import('@/pages/PrivacyPolicyPage'));
+const CookiesPolicyPage = lazy(() => import('@/pages/CookiesPolicyPage'));
 const PricingPage = lazy(() => import('@/pages/PricingPage'));
 const AuthConfirmPage = lazy(() => import('@/pages/AuthConfirmPage'));
 const AuthCallbackPage = lazy(() => import('@/pages/AuthCallbackPage'));
@@ -32,11 +35,14 @@ const CaseDetailPage = lazy(() => import('@/pages/CaseDetailPage'));
 const PaymentSuccessPage = lazy(() => import('@/pages/PaymentSuccessPage'));
 const PaymentCancelledPage = lazy(() => import('@/pages/PaymentCancelledPage'));
 const AdminPage = lazy(() => import('@/pages/AdminPage'));
+const UpdatePasswordPage = lazy(() => import('@/pages/UpdatePasswordPage'));
+const ChangePasswordPage = lazy(() => import('@/pages/ChangePasswordPage'));
 
 function App() {
   const [isLoginOpen, setLoginOpen] = useState(false);
   const [isRegisterOpen, setRegisterOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const { user } = useAuth();
 
   const openLogin = () => {
@@ -47,6 +53,10 @@ function App() {
   const openRegister = () => {
     setLoginOpen(false);
     setRegisterOpen(true);
+  };
+
+  const openOrder = () => {
+    navigate('/order');
   };
 
   const closeModals = () => {
@@ -62,14 +72,14 @@ function App() {
 
   return (
     <div className="min-h-screen bg-white">
-      <Header onLoginClick={openLogin} />
+      <Header onLoginClick={openLogin} onStartClick={openOrder} />
       <main className="pb-20 md:pb-0">
         <Suspense fallback={<div className="flex justify-center items-center h-screen"><Loader2 className="h-12 w-12 animate-spin text-orange" /></div>}>
           <AnimatePresence mode="wait">
             <Routes location={location} key={location.pathname}>
-              <Route path="/" element={<HomePage onUploadClick={openLogin} />} />
-              <Route path="/upload" element={<UploadPage />} />
-              <Route path="/pricing" element={<PricingPage onStartClick={openLogin} />} />
+              <Route path="/" element={<HomePage onUploadClick={openOrder} />} />
+              <Route path="/order" element={<OrderPage />} />
+              <Route path="/pricing" element={<PricingPage onStartClick={openOrder} />} />
               <Route path="/clients" element={<ClientsPage />} />
               <Route path="/cases/:caseId" element={<CaseDetailPage />} />
               <Route path="/partners" element={<PartnersPage />} />
@@ -79,10 +89,14 @@ function App() {
               <Route path="/support" element={<SupportPage />} />
               <Route path="/faq" element={<FaqPage />} />
               <Route path="/terms" element={<TermsPage />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicyPage />} />
+              <Route path="/cookies-policy" element={<CookiesPolicyPage />} />
               <Route path="/auth/confirm" element={<AuthConfirmPage onLoginClick={openLogin} />} />
               <Route path="/auth/callback" element={<AuthCallbackPage />} />
+              <Route path="/update-password" element={<UpdatePasswordPage />} />
               <Route path="/panel" element={<PanelPage />} />
               <Route path="/account" element={<AccountPage />} />
+              <Route path="/account/change-password" element={<ChangePasswordPage />} />
               <Route path="/payment/success" element={<PaymentSuccessPage />} />
               <Route path="/payment/cancelled" element={<PaymentCancelledPage />} />
               <Route path="/admin/*" element={
@@ -95,7 +109,7 @@ function App() {
         </Suspense>
       </main>
       <Footer />
-      <StickyCta onUploadClick={openLogin} />
+      <StickyCta onUploadClick={openOrder} />
       <Dialog open={isLoginOpen} onOpenChange={setLoginOpen}>
         <DialogContent className="sm:max-w-[425px] p-0 bg-white rounded-xl">
           <Login onLoginSuccess={closeModals} onSwitchToRegister={openRegister} />
@@ -107,6 +121,7 @@ function App() {
         </DialogContent>
       </Dialog>
       <Toaster />
+      <CookieConsentBanner />
     </div>
   );
 }

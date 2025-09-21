@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -29,11 +28,11 @@ const CtaSection = ({ onUploadClick }) => {
             ¿Listo para simplificar tu burocracia?
           </h2>
           <p className="text-xl text-white/90 mb-8">
-            Únete a miles de usuarios que ya han simplificado sus trámites
+            Sube tu PDF o foto del documento y te guiamos en cada paso.
           </p>
           <Button 
             className="bg-white text-orange hover:bg-neutral-100 text-lg px-8 py-4"
-            onClick={() => handleStartClick('complete')}
+            onClick={() => handleStartClick('UNICO')}
           >
             Empezar Ahora
             <ArrowRight className="ml-2 h-5 w-5" />

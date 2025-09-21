@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 
 export const useScrollProgress = (threshold = 0.4) => {

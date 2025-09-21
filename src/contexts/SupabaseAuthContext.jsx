@@ -66,7 +66,7 @@ export const AuthProvider = ({ children }) => {
       password,
       options: {
         data: metadata,
-        emailRedirectTo: "https://traductorburocratico.es/auth/callback",
+        emailRedirectTo: `${window.location.origin}/auth/callback`,
       },
     });
 
@@ -120,6 +120,27 @@ export const AuthProvider = ({ children }) => {
     return { error };
   }, [toast]);
   
+  const sendPasswordResetEmail = useCallback(async (email) => {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/update-password`,
+    });
+
+    if (error) {
+       toast({
+        variant: "destructive",
+        title: "Error",
+        description: "No se pudo enviar el correo de restablecimiento. Inténtalo de nuevo.",
+      });
+    } else {
+        toast({
+            title: "Correo enviado",
+            description: "Si existe una cuenta con este email, recibirás un mensaje para restablecer tu contraseña.",
+            className: "bg-green-500 text-white",
+        });
+    }
+    return { error };
+  }, [toast]);
+
   const updateUserPassword = useCallback(async (newPassword) => {
     const { data, error } = await supabase.auth.updateUser({
       password: newPassword,
@@ -136,8 +157,9 @@ export const AuthProvider = ({ children }) => {
     signUp,
     signIn,
     signOut,
+    sendPasswordResetEmail,
     updateUserPassword,
-  }), [user, session, loading, isAdmin, signUp, signIn, signOut, updateUserPassword]);
+  }), [user, session, loading, isAdmin, signUp, signIn, signOut, sendPasswordResetEmail, updateUserPassword]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

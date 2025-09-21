@@ -1,7 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
-import { FileText, User, Users, Shield, DollarSign, Scale, Mail } from 'lucide-react';
+import { FileText, User, Users, Shield, DollarSign, Scale, Mail, Smile, RefreshCcw, AlertTriangle, Ban } from 'lucide-react';
 
 const Section = ({ icon, title, children }) => (
   <motion.div
@@ -78,19 +78,52 @@ const TermsPage = () => {
             <p>Los precios se muestran en el sitio. Si eres consumidor, tienes 14 días para desistir, salvo que el servicio ya se haya prestado. Las suscripciones de Partners se renuevan automáticamente y pueden cancelarse en cualquier momento.</p>
           </Section>
 
-          <Section icon={<Users />} title="8. Área de Partners">
+          <Section icon={<Smile />} title="8. Política de satisfacción">
+            <p>En Traductor Burocrático trabajamos para que cada documento entregado cumpla con el objetivo de ofrecer una explicación clara y comprensible.</p>
+            <p>Si el resultado no cumple tus expectativas, podrás ponerte en contacto con nuestro equipo en un plazo máximo de 15 días naturales desde la entrega del servicio.</p>
+          </Section>
+
+          <Section icon={<RefreshCcw />} title="9. Opciones de resolución">
+            <p>Tras revisar tu caso, nuestro equipo podrá ofrecerte:</p>
+            <ul>
+              <li>Un nuevo análisis gratuito del documento, adaptado a tus comentarios.</li>
+              <li>En última instancia, y si no quedas satisfecho, la devolución íntegra del importe abonado.</li>
+            </ul>
+          </Section>
+
+          <Section icon={<Mail />} title="10. Procedimiento para solicitarlo">
+            <p>Envía un correo a <a href="mailto:soporte@traductorburocratico.es" className="text-orange hover:underline">soporte@traductorburocratico.es</a> indicando el número de pedido, fecha y motivo de la solicitud.</p>
+            <p>El equipo revisará tu petición y te responderá en un plazo máximo de 5 días laborables.</p>
+            <p>Si procede la devolución, ésta se realizará a través del mismo medio de pago utilizado en la compra.</p>
+          </Section>
+
+          <Section icon={<AlertTriangle />} title="11. Exclusiones">
+            <p>No se realizarán devoluciones en los siguientes casos:</p>
+            <ul>
+              <li>Solicitudes presentadas pasados los 15 días desde la entrega.</li>
+              <li>Uso indebido o fraudulento del servicio (ej. documentos falsificados).</li>
+              <li>Casos en los que el documento haya sido manipulado tras la entrega de la traducción.</li>
+            </ul>
+          </Section>
+
+          <Section icon={<Ban />} title="12. Cancelaciones">
+            <p>Una vez iniciado el proceso de análisis y traducción del documento, no será posible cancelar el pedido.</p>
+            <p>En caso de que el usuario desee cancelar antes de que el análisis comience, se podrá solicitar por email, y se devolverá el importe íntegro.</p>
+          </Section>
+
+          <Section icon={<Users />} title="13. Área de Partners">
             <p>Los Partners deben cumplir la normativa aplicable y actúan por su cuenta y riesgo. Podemos verificar su identidad y suspender cuentas por incumplimiento.</p>
           </Section>
 
-          <Section icon={<Scale />} title="9. Garantías y Responsabilidad">
+          <Section icon={<Scale />} title="14. Garantías y Responsabilidad">
              <p>El servicio se presta “tal cual”. Eres responsable de las decisiones que tomes. Nuestra responsabilidad económica se limita al importe que hayas pagado en los últimos 12 meses.</p>
           </Section>
           
-          <Section icon={<FileText />} title="10. Modificaciones y Ley Aplicable">
+          <Section icon={<FileText />} title="15. Modificaciones y Ley Aplicable">
             <p>Podemos modificar estos términos, notificándote con antelación. La ley aplicable es la española y, para cualquier disputa, los tribunales de Madrid (o tu domicilio si eres consumidor).</p>
           </Section>
 
-          <Section icon={<Mail />} title="11. Contacto">
+          <Section icon={<Mail />} title="16. Contacto">
             <p>Para cualquier consulta legal o de servicio, puedes escribir a <a href="mailto:legal@traductorburocratico.es" className="text-orange hover:underline">legal@traductorburocratico.es</a>.</p>
           </Section>
 

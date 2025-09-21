@@ -1,15 +1,17 @@
 
 import React, { useState, useEffect } from 'react';
-import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
-import { Mail, Send, Phone, MapPin } from 'lucide-react';
+import { Mail, Send, Phone, MapPin, Loader2 } from 'lucide-react';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
+import { Helmet } from 'react-helmet-async';
+import { supabase } from '@/lib/customSupabaseClient';
 
 const SupportPage = () => {
   const { toast } = useToast();
   const { user } = useAuth();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -40,7 +42,7 @@ const SupportPage = () => {
     setFormData(prev => ({ ...prev, [id]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const { firstName, lastName, phone, email, message } = formData;
     if (!firstName || !lastName || !phone || !email || !message) {
@@ -52,19 +54,51 @@ const SupportPage = () => {
       return;
     }
     
-    toast({
-      title: "🚧 Formulario en construcción",
-      description: "Esta función no está implementada aún, pero ¡gracias por tu interés! 🚀"
-    });
+    setIsSubmitting(true);
+
+    try {
+      const { error } = await supabase.functions.invoke('send-contact-email', {
+        body: {
+          name: `${firstName} ${lastName}`,
+          email: email,
+          phone: phone,
+          message: message,
+        },
+      });
+
+      if (error) {
+        throw error;
+      }
+
+      toast({
+        title: "✅ Consulta enviada",
+        description: "Gracias por contactarnos. Tu consulta ha sido recibida y te responderemos pronto.",
+      });
+      setFormData(prev => ({ ...prev, message: '' }));
+    } catch (error) {
+      console.error('Error sending support form:', error);
+      toast({
+        title: "❌ Error al enviar",
+        description: "Hubo un problema al enviar tu consulta. Por favor, inténtalo de nuevo.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
+  const title = "Soporte y Ayuda para tu trámite con la administración";
+  const description = "Nuestro equipo de soporte te ayuda con tu notificación de Hacienda, AEAT o Seguridad Social. Contacta para resolver dudas sobre tu trámite.";
 
   return (
     <>
       <Helmet>
-        <title>Soporte y Ayuda - Traductor Burocrático</title>
-        <meta name="description" content="Contacta con nuestro equipo de soporte para cualquier duda o consulta. Estamos aquí para ayudarte." />
-        <meta property="og:title" content="Soporte y Ayuda - Traductor Burocrático" />
-        <meta property="og:description" content="Contacta con nuestro equipo de soporte para cualquier duda o consulta." />
+        <title>{title}</title>
+        <meta name="description" content={description} />
+        <link rel="canonical" href="https://traductorburocratico.es/support" />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:url" content="https://traductorburocratico.es/support" />
       </Helmet>
       <div className="min-h-screen py-20 px-4">
         <div className="max-w-4xl mx-auto">
@@ -74,7 +108,7 @@ const SupportPage = () => {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <h1 className="text-4xl md:text-5xl font-bold text-neutral-800 mb-4">Soporte y Ayuda</h1>
+            <h1 className="text-4xl md:text-5xl font-bold text-neutral-800 mb-4 font-montserrat">Soporte y Ayuda</h1>
             <p className="text-xl text-neutral-600">¿Tienes preguntas? Rellena el formulario y te responderemos lo antes posible.</p>
           </motion.div>
 
@@ -84,7 +118,7 @@ const SupportPage = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
             >
-              <h2 className="text-2xl font-bold text-neutral-800 mb-6">Envíanos tu consulta</h2>
+              <h2 className="text-2xl font-bold text-neutral-800 mb-6 font-montserrat">Envíanos tu consulta</h2>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
@@ -110,9 +144,13 @@ const SupportPage = () => {
                   <label className="block text-sm font-medium text-neutral-700 mb-2" htmlFor="message">Mensaje</label>
                   <textarea id="message" value={formData.message} onChange={handleInputChange} rows="5" placeholder="Escribe tu consulta aquí..." required className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-orange focus:outline-none"></textarea>
                 </div>
-                <Button type="submit" className="btn-primary w-full text-lg py-4">
-                  <Send className="mr-2 h-5 w-5" />
-                  Enviar Consulta
+                <Button type="submit" className="btn-primary w-full text-lg py-4" disabled={isSubmitting}>
+                  {isSubmitting ? (
+                    <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                  ) : (
+                    <Send className="mr-2 h-5 w-5" />
+                  )}
+                  {isSubmitting ? 'Enviando...' : 'Enviar Consulta'}
                 </Button>
               </form>
             </motion.div>
@@ -122,7 +160,7 @@ const SupportPage = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
             >
-              <h2 className="text-2xl font-bold text-neutral-800 mb-6">Información de Contacto</h2>
+              <h2 className="text-2xl font-bold text-neutral-800 mb-6 font-montserrat">Información de Contacto</h2>
               <div className="space-y-6">
                 <div className="flex items-start gap-4">
                   <div className="feature-icon !w-12 !h-12 !min-w-[3rem]">
