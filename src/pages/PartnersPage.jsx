@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { Helmet } from 'react-helmet-async';
+import { supabase } from '@/lib/customSupabaseClient';
 
 
 const PartnersPage = () => {
@@ -58,18 +59,87 @@ const PartnersPage = () => {
     </div>
   );
 
+
   const PublicPartnersPage = () => {
-    const title = "Únete como Partner: Recibe clientes cualificados | 55 chars";
-    const description = "Conecta con clientes que necesitan un gestor o abogado para su trámite con la administración. Recibe leads cualificados. AEAT, Hacienda.";
+    const title = "Leads para Gestorías y Abogados | Traductor Burocrático";
+    const description = "Recibe clientes cualificados y verificados para tu gestoría o despacho. Únete como partner y accede a leads listos para contratar.";
+
+    const [partner, setPartner] = useState({ name: '', email: '', phone: '', colegiado: '', experiencia: '', especialidad: '', _hp: '' });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [ts] = useState(() => Date.now());
+
+    const handleChange = (field) => (e) => {
+      setPartner((prev) => ({ ...prev, [field]: e.target.value }));
+    };
+
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      // Honeypot: abort if filled (likely a bot)
+      if (partner._hp && partner._hp.trim() !== '') {
+        return;
+      }
+
+      // Second-level honeypot: minimum dwell time before submit
+      if (Date.now() - ts < 1500) {
+        return;
+      }
+
+      // Normalization and defensive trimming
+      const normalizeSpaces = (s) => s.replace(/\s+/g, ' ').trim();
+      const safeName = normalizeSpaces(partner.name);
+      const safeEmail = partner.email.trim().toLowerCase();
+      const safePhone = partner.phone.replace(/[^+\d]/g, '').trim();
+      const safeColegiado = partner.colegiado.trim();
+      const safeExperiencia = normalizeSpaces(partner.experiencia);
+      const safeEspecialidad = partner.especialidad && partner.especialidad !== '' ? partner.especialidad : null;
+
+      // Requiere nº colegiado para Abogado y Asesor Fiscal
+      const needsColegiado = ['Abogado', 'Asesor Fiscal'].includes(partner.especialidad);
+      if (needsColegiado && !safeColegiado) {
+        toast({ title: 'Falta colegiado', description: 'Indica el nº de colegiado.', variant: 'destructive' });
+        return;
+      }
+      if (isSubmitting) return;
+      setIsSubmitting(true);
+      try {
+        const { error } = await supabase
+          .from('partner_requests')
+          .insert({
+            name: safeName,
+            email: safeEmail,
+            phone: safePhone,
+            colegiado: safeColegiado,
+            experiencia: safeExperiencia,
+            especialidad: safeEspecialidad,
+          });
+        if (error) throw error;
+        toast({ title: 'Solicitud enviada', description: 'Te contactaremos pronto.' });
+        setPartner({ name: '', email: '', phone: '', colegiado: '', experiencia: '', especialidad: '', _hp: '' });
+      } catch (err) {
+        if (err?.code === '23505') {
+          toast({ title: 'Solicitud duplicada', description: 'Ya tenemos tu solicitud.' });
+        } else if (err?.message?.toLowerCase?.()?.includes('row-level security')) {
+          toast({ title: 'Permisos de BD', description: 'RLS bloquea el insert.', variant: 'destructive' });
+        } else {
+          toast({ title: 'Error', description: 'No se pudo enviar la solicitud.', variant: 'destructive' });
+        }
+      } finally {
+        setIsSubmitting(false);
+      }
+    };
 
     return (
       <>
         <Helmet>
           <title>{title}</title>
           <meta name="description" content={description} />
+          <meta name="robots" content="index,follow" />
           <link rel="canonical" href="https://traductorburocratico.es/partners" />
           <meta property="og:title" content={title} />
           <meta property="og:description" content={description} />
+          <meta property="og:type" content="website" />
+          <meta property="og:site_name" content="Traductor Burocrático" />
+          <meta property="og:locale" content="es_ES" />
           <meta property="og:url" content="https://traductorburocratico.es/partners" />
         </Helmet>
         <div className="min-h-screen py-20 px-4">
@@ -163,36 +233,84 @@ const PartnersPage = () => {
               <h2 className="text-2xl font-bold text-neutral-800 mb-6 text-center">
                 Únete a Nuestra Red
               </h2>
-              <form className="space-y-6">
+              <form className="space-y-6" onSubmit={handleSubmit}>
+                {/* Honeypot field for bots */}
+                <div style={{ position: 'absolute', left: '-10000px', top: 'auto', width: '1px', height: '1px', overflow: 'hidden' }} aria-hidden="true">
+                  <label>
+                    No completar
+                    <input
+                      type="text"
+                      name="_hp"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      value={partner._hp}
+                      onChange={handleChange('_hp')}
+                    />
+                  </label>
+                </div>
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-neutral-700 mb-2">
+                    <label htmlFor="partner-name" className="block text-sm font-medium text-neutral-700 mb-2">
                       Nombre Completo
                     </label>
                     <input
+                      id="partner-name"
                       type="text"
                       className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-orange focus:border-orange"
                       placeholder="Tu nombre completo"
+                      required
+                      maxLength={100}
+                      autoComplete="name"
+                      pattern="^[A-Za-zÀ-ÿ'’\-\.\s]{2,100}$"
+                      value={partner.name}
+                      onChange={handleChange('name')}
+                      disabled={isSubmitting}
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-neutral-700 mb-2">
+                    <label htmlFor="partner-email" className="block text-sm font-medium text-neutral-700 mb-2">
                       Email Profesional
                     </label>
                     <input
+                      id="partner-email"
                       type="email"
                       className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-orange focus:border-orange"
                       placeholder="tu@email.com"
+                      required
+                      maxLength={100}
+                      autoComplete="email"
+                      value={partner.email}
+                      onChange={handleChange('email')}
+                      disabled={isSubmitting}
                     />
                   </div>
                 </div>
+
+                <div>
+                  <label htmlFor="partner-phone" className="block text-sm font-medium text-neutral-700 mb-2">
+                    Teléfono
+                  </label>
+                  <input
+                    id="partner-phone"
+                    type="tel"
+                    className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-orange focus:border-orange"
+                    placeholder="Tu número de contacto"
+                    required
+                    maxLength={20}
+                    autoComplete="tel"
+                    pattern="^[+]?\d{7,20}$"
+                    value={partner.phone}
+                    onChange={handleChange('phone')}
+                    disabled={isSubmitting}
+                  />
+                </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-2">
+                  <label htmlFor="partner-especialidad" className="block text-sm font-medium text-neutral-700 mb-2">
                     Especialidad
                   </label>
-                  <select className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-orange focus:border-orange">
-                    <option>Selecciona tu especialidad</option>
+                  <select id="partner-especialidad" className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-orange focus:border-orange" value={partner.especialidad} onChange={handleChange('especialidad')} required disabled={isSubmitting}>
+                    <option value="" disabled>Selecciona tu especialidad</option>
                     <option>Gestoría</option>
                     <option>Abogado</option>
                     <option>Asesor Fiscal</option>
@@ -202,40 +320,42 @@ const PartnersPage = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-2">
+                  <label htmlFor="partner-colegiado" className="block text-sm font-medium text-neutral-700 mb-2">
                     Número de Colegiado
                   </label>
                   <input
+                    id="partner-colegiado"
                     type="text"
                     className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-orange focus:border-orange"
                     placeholder="Número de colegiado profesional"
+                    maxLength={30}
+                    autoComplete="off"
+                    pattern="^[A-Za-z0-9\-\/]{3,30}$"
+                    value={partner.colegiado}
+                    onChange={handleChange('colegiado')}
+                    disabled={isSubmitting}
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-neutral-700 mb-2">
+                  <label htmlFor="partner-experiencia" className="block text-sm font-medium text-neutral-700 mb-2">
                     Experiencia
                   </label>
                   <textarea
+                    id="partner-experiencia"
                     rows={4}
                     className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-orange focus:border-orange"
                     placeholder="Describe tu experiencia y especialidades..."
+                    required
+                    maxLength={1000}
+                    autoComplete="off"
+                    value={partner.experiencia}
+                    onChange={handleChange('experiencia')}
+                    disabled={isSubmitting}
                   />
                 </div>
-
-                <Button 
-                  type="submit" 
-                  className="btn-primary w-full text-lg py-4"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    toast({
-                      title: "🚧 Esta función no está implementada aún",
-                      description: "¡Pero no te preocupes! Puedes solicitarla en tu próximo mensaje! 🚀"
-                    });
-                  }}
-                >
-                  Solicitar Acceso
-                  <ArrowRight className="ml-2 h-5 w-5" />
+                <Button type="submit" className="btn-primary w-full text-lg py-4" disabled={isSubmitting}>
+                  {isSubmitting ? 'Enviando…' : 'Solicitar Acceso'}
                 </Button>
               </form>
             </motion.div>
