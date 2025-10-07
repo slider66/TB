@@ -1,0 +1,53 @@
+{
+  "name": "traductor-burocratico",
+  "version": "1.0.0",
+  "tools": [
+    {
+      "name": "documents_process_document",
+      "description": "Encola el procesamiento (extraccion + normalizacion)",
+      "args_schema": {
+        "type": "object",
+        "properties": { "request_id": { "type": "string", "format": "uuid" } },
+        "required": ["request_id"]
+      },
+      "invoke": { "type": "http", "method": "POST", "url": "/functions/v1/documents.process_document" }
+    },
+    {
+      "name": "documents_simplify_document",
+      "description": "Ejecuta la simplificacion pedagogica con IA",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "request_id": { "type": "string", "format": "uuid" },
+          "language": { "type": "string", "enum": ["es","gl","ca","eu","en"], "default": "es" }
+        },
+        "required": ["request_id"]
+      },
+      "invoke": { "type": "http", "method": "POST", "url": "/functions/v1/documents.simplify_document" }
+    },
+    {
+      "name": "report_generate",
+      "description": "Genera PDF en reports/ y guarda URL (server-side)",
+      "args_schema": {
+        "type": "object",
+        "properties": { "analysis_id": { "type": "string", "format": "uuid" } },
+        "required": ["analysis_id"]
+      },
+      "invoke": { "type": "http", "method": "POST", "url": "/functions/v1/report.generate" }
+    },
+    {
+      "name": "storage_get_signed_url",
+      "description": "Emite una URL firmada temporal (server-side)",
+      "args_schema": {
+        "type": "object",
+        "properties": {
+          "bucket": { "type": "string", "enum": ["reports","uploads"] },
+          "path": { "type": "string" },
+          "expiresIn": { "type": "integer", "minimum": 30, "maximum": 3600, "default": 60 }
+        },
+        "required": ["bucket","path"]
+      },
+      "invoke": { "type": "http", "method": "POST", "url": "/functions/v1/storage.get_signed_url" }
+    }
+  ]
+}
