@@ -123,9 +123,9 @@ function generateLlmsTxt(pages) {
   const sortedPages = pages.sort((a, b) => a.title.localeCompare(b.title));
   const pageEntries = sortedPages.map(page => 
     `- [${page.title}](${page.url}): ${page.description}`
-  ).join('\n');
+  ).join('\\n');
   
-  return `## Pages\n${pageEntries}`;
+  return ## Pages\n;
 }
 
 function ensureDirectoryExists(dirPath) {
@@ -138,8 +138,8 @@ function processPageFile(filePath, routes) {
   try {
     const content = fs.readFileSync(filePath, 'utf8');
     return extractHelmetData(content, filePath, routes);
-  } catch (error) {
-    console.error(`❌ Error processing ${filePath}:`, error.message);
+  } catch (_error) {
+    console.error(`ÃƒÂ¢Ã‚ÂÃ…â€™ Error processing ${filePath}:`, error.message);
     return null;
   }
 }
@@ -161,7 +161,7 @@ function main() {
       .filter(Boolean);
     
     if (pages.length === 0) {
-      console.error('❌ No pages with Helmet components found!');
+      console.error('ÃƒÂ¢Ã‚ÂÃ…â€™ No pages with Helmet components found!');
       process.exit(1);
     }
   }
@@ -179,3 +179,6 @@ const isMainModule = import.meta.url === `file://${process.argv[1]}`;
 if (isMainModule) {
   main();
 }
+
+
+

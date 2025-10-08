@@ -1,0 +1,241 @@
+{
+  "generatedAt": "2025-10-08T20:45:33.698Z",
+  "markdown": {
+    "issues": [
+      {
+        "file": "README.md",
+        "frontMatter": "missing",
+        "brokenLinks": []
+      },
+      {
+        "file": "requisitos.md",
+        "frontMatter": "missing",
+        "brokenLinks": [],
+        "frontMatterError": "can not read a block mapping entry; a multiline key may not be an implicit key at line 8, column 7:\n    status: Draft\\\n          ^"
+      },
+      {
+        "file": "kb/canonical_sources.md",
+        "frontMatter": "missing",
+        "brokenLinks": []
+      },
+      {
+        "file": "docs/design_tokens_traductor_burocratico.md",
+        "frontMatter": "missing",
+        "brokenLinks": []
+      },
+      {
+        "file": "docs/PLACEHOLDERS.md",
+        "frontMatter": "missing",
+        "brokenLinks": []
+      },
+      {
+        "file": "docs/requisitos.md",
+        "frontMatter": "missing",
+        "brokenLinks": [],
+        "frontMatterError": "can not read a block mapping entry; a multiline key may not be an implicit key at line 8, column 7:\n    status: Draft\\\n          ^"
+      },
+      {
+        "file": "docs/scaffolding_tokens_readme_tbbutton.md",
+        "frontMatter": "missing",
+        "brokenLinks": []
+      },
+      {
+        "file": "docs/style.md",
+        "frontMatter": "missing",
+        "brokenLinks": []
+      },
+      {
+        "file": "docs/visual-studio-mcp.md",
+        "frontMatter": "missing",
+        "brokenLinks": []
+      }
+    ],
+    "stats": {
+      "total": 9,
+      "missingFrontMatter": 9,
+      "frontMatterErrors": 2,
+      "brokenLinks": 0
+    }
+  },
+  "json": {
+    "issues": [
+      {
+        "file": "package.json",
+        "valid": true
+      },
+      {
+        "file": "tsconfig.json",
+        "valid": true
+      },
+      {
+        "file": "tsconfig.node.json",
+        "valid": true
+      }
+    ],
+    "stats": {
+      "total": 3,
+      "invalid": 0
+    }
+  },
+  "eslint": {
+    "issues": [
+      {
+        "file": "src\\App.tsx",
+        "messages": [
+          {
+            "ruleId": "import/order",
+            "message": "`./pages/dashboard/DashboardPage` import should occur before import of `./pages/home/HomePage`",
+            "severity": "warning",
+            "line": 8,
+            "column": 1
+          },
+          {
+            "ruleId": "import/order",
+            "message": "`./pages/partners/PartnersPage` import should occur before import of `./pages/responsibility/ContactPage`",
+            "severity": "warning",
+            "line": 9,
+            "column": 1
+          }
+        ]
+      },
+      {
+        "file": "src\\components\\common\\CallToAction.tsx",
+        "messages": [
+          {
+            "ruleId": "import/order",
+            "message": "There should be at least one empty line between import groups",
+            "severity": "warning",
+            "line": 1,
+            "column": 1
+          },
+          {
+            "ruleId": "import/order",
+            "message": "`clsx` import should occur before type import of `react`",
+            "severity": "warning",
+            "line": 2,
+            "column": 1
+          },
+          {
+            "ruleId": "import/no-named-as-default",
+            "message": "Using exported name 'clsx' as identifier for default import.",
+            "severity": "warning",
+            "line": 2,
+            "column": 8
+          }
+        ]
+      },
+      {
+        "file": "src\\components\\common\\UploadDocumentCard.tsx",
+        "messages": [
+          {
+            "ruleId": "import/order",
+            "message": "There should be no empty line within import group",
+            "severity": "warning",
+            "line": 1,
+            "column": 1
+          }
+        ]
+      },
+      {
+        "file": "src\\main.tsx",
+        "messages": [
+          {
+            "ruleId": "import/no-named-as-default-member",
+            "message": "Caution: `ReactDOM` also has a named export `createRoot`. Check if you meant to write `import {createRoot} from 'react-dom/client'` instead.",
+            "severity": "warning",
+            "line": 17,
+            "column": 1
+          }
+        ]
+      },
+      {
+        "file": "src\\pages\\dashboard\\DashboardPage.tsx",
+        "messages": [
+          {
+            "ruleId": "no-irregular-whitespace",
+            "message": "Irregular whitespace not allowed.",
+            "severity": "error",
+            "line": 54,
+            "column": 39
+          },
+          {
+            "ruleId": "no-irregular-whitespace",
+            "message": "Irregular whitespace not allowed.",
+            "severity": "error",
+            "line": 54,
+            "column": 46
+          }
+        ]
+      },
+      {
+        "file": "src\\pages\\partners\\PartnersPage.tsx",
+        "messages": [
+          {
+            "ruleId": "import/order",
+            "message": "There should be no empty line within import group",
+            "severity": "warning",
+            "line": 1,
+            "column": 1
+          }
+        ]
+      },
+      {
+        "file": "src\\pages\\responsibility\\ContactPage.tsx",
+        "messages": [
+          {
+            "ruleId": "import/order",
+            "message": "There should be no empty line within import group",
+            "severity": "warning",
+            "line": 1,
+            "column": 1
+          }
+        ]
+      },
+      {
+        "file": "src\\providers\\SupabaseProvider.tsx",
+        "messages": [
+          {
+            "ruleId": "import/order",
+            "message": "There should be at least one empty line between import groups",
+            "severity": "warning",
+            "line": 1,
+            "column": 1
+          },
+          {
+            "ruleId": "import/order",
+            "message": "There should be no empty line within import group",
+            "severity": "warning",
+            "line": 2,
+            "column": 1
+          },
+          {
+            "ruleId": "import/order",
+            "message": "`react` import should occur before type import of `react`",
+            "severity": "warning",
+            "line": 2,
+            "column": 1
+          },
+          {
+            "ruleId": "import/order",
+            "message": "`@supabase/supabase-js` import should occur before type import of `react`",
+            "severity": "warning",
+            "line": 4,
+            "column": 1
+          }
+        ]
+      }
+    ],
+    "stats": {
+      "filesWithIssues": 8,
+      "totalErrors": 2,
+      "totalWarnings": 13
+    }
+  },
+  "spelling": {
+    "issues": [],
+    "stats": {
+      "totalIssues": 0,
+      "filesWithIssues": 0
+    }
+  }
+}

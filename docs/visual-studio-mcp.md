@@ -1,21 +1,21 @@
-﻿# Integración MCP en Visual Studio
+# IntegraciOn MCP en Visual Studio
 
-Este proyecto expone el contrato MCP (Model Communication Protocol) vía OpenAPI para que Visual Studio pueda generar clientes tipados y probar los comandos.
+Este proyecto expone el contrato MCP (Model Communication Protocol) via OpenAPI para que Visual Studio pueda generar clientes tipados y probar los comandos.
 
 ## Archivos relevantes
 
-- `openapi/mcp.yaml`: especificación OpenAPI 3.0.3 de los comandos MCP y el envelope estándar.
+- `openapi/mcp.yaml`: especificaciOn OpenAPI 3.0.3 de los comandos MCP y el envelope estandar.
 - `api/mcp.http`: ejemplos de llamadas HTTP para depurar localmente (recomendado con Supabase CLI).
 
 ## Usar en Visual Studio (Service Reference)
 
-1. En Visual Studio, botón derecho sobre tu proyecto .NET → `Add` → `Service Reference...`.
+1. En Visual Studio, botOn derecho sobre tu proyecto .NET → `Add` → `Service Reference...`.
 2. Elige `OpenAPI` y selecciona el archivo `openapi/mcp.yaml` de este repo.
 3. Configura el namespace (por ejemplo, `TB.Mcp`) y genera el cliente.
-4. En tu código, inyecta un `HttpClient` con `BaseAddress` apuntando a:
-   - Producción: `https://<PROJECT_REF>.functions.supabase.co`
+4. En tu cOdigo, inyecta un `HttpClient` con `BaseAddress` apuntando a:
+   - ProducciOn: `https://<PROJECT_REF>.functions.supabase.co`
    - Local: `http://127.0.0.1:54321/functions/v1`
-5. Añade el header `Authorization: Bearer <TOKEN>` y `X-Correlation-Id` por llamada.
+5. Anade el header `Authorization: Bearer <TOKEN>` y `X-Correlation-Id` por llamada.
 
 ## Ejemplo de uso (C#)
 
@@ -47,7 +47,7 @@ resp.EnsureSuccessStatusCode();
 ## Notas de cumplimiento MCP
 
 - Propaga `X-Correlation-Id` y (si aplica) `X-Causation-Id` en headers.
-- Mantén `classification` acorde a la sensibilidad de los datos.
-- Usa 202 Accepted cuando el trabajo continúe en background.
-- Los prompts de IA deben respetar guardarraíles (sin asesoramiento legal específico).
+- Manten `classification` acorde a la sensibilidad de los datos.
+- Usa 202 Accepted cuando el trabajo continUe en background.
+- Los prompts de IA deben respetar guardarrailes (sin asesoramiento legal especifico).
 

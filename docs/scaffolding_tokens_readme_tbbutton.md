@@ -1,10 +1,10 @@
 # Scaffolding — tokens + README + TBButton
 
-A continuación tienes **estructura de carpetas**, `README.md`, config de **Style Dictionary**, y un componente **<TBButton/>** listo para copiar/pegar en React + Vite + Tailwind.
+A continuaciOn tienes **estructura de carpetas**, `README.md`, config de **Style Dictionary**, y un componente **<TBButton/>** listo para copiar/pegar en React + Vite + Tailwind.
 
 ---
 
-## Árbol de carpetas (sugerido)
+## Arbol de carpetas (sugerido)
 ```
 project-root/
 ├─ src/
@@ -14,10 +14,10 @@ project-root/
 │  ├─ main.tsx
 │  └─ index.css
 ├─ tokens/
-│  └─ tokens.json              # fuente única de tokens (Style Dictionary)
+│  └─ tokens.json              # fuente Unica de tokens (Style Dictionary)
 ├─ styles/
 │  └─ tokens.css               # variables CSS generadas o pegadas desde el canvas
-├─ style-dictionary.config.cjs # configuración de build de tokens
+├─ style-dictionary.config.cjs # configuraciOn de build de tokens
 ├─ tailwind.config.js          # extiende con tb-*
 ├─ postcss.config.js
 ├─ package.json
@@ -28,24 +28,24 @@ project-root/
 
 ## README.md
 ```md
-# Traductor Burocrático — Design Tokens & UI
+# Traductor Burocratico — Design Tokens & UI
 
-Este paquete define **tokens de diseño** y un ejemplo de componente **TBButton** coherente con `style.md`.
+Este paquete define **tokens de diseno** y un ejemplo de componente **TBButton** coherente con `style.md`.
 
 ## Requisitos
 - Node 18+
 - Vite + React + Tailwind
 
-## Instalación (mínima)
+## InstalaciOn (minima)
 
 ```bash
 npm i -D style-dictionary tailwindcss postcss autoprefixer
 npx tailwindcss init -p
 ```
 
-1) Copia `tokens/tokens.json` (fuente) y `styles/tokens.css` (variables CSS).
-2) Reemplaza/mezcla `tailwind.config.js` con el snippet del canvas (extensión `tb:*`).
-3) Importa los estilos en `src/index.css` o `src/main.tsx`:
+1. Copia `tokens/tokens.json` (fuente) y `styles/tokens.css` (variables CSS).
+2. Reemplaza o mezcla `tailwind.config.js` con el snippet del canvas (extension `tb:*`).
+3. Importa los estilos en `src/index.css` o `src/main.tsx`:
 
 ```css
 @import "/styles/tokens.css";
@@ -54,7 +54,7 @@ npx tailwindcss init -p
 @tailwind utilities;
 ```
 
-4) Usa el componente `<TBButton/>` en tu app.
+4. Usa el componente `<TBButton/>` en tu app.
 
 ## Build de tokens (opcional, si quieres generar `styles/tokens.css` con Style Dictionary)
 
@@ -76,13 +76,13 @@ npm run tokens
 ```
 
 ## Accesibilidad
-- Contraste AA mínimo 4.5:1 en texto normal.
-- Áreas táctiles ≥ 44×44px.
+- Contraste AA minimo 4.5:1 en texto normal.
+- Areas tactiles ≥ 44×44px.
 - Focus visible: Tailwind `focus-visible:outline` o estilos propios.
 
 ## Notas
-- `tokens.json` es la **fuente única de verdad**. `styles/tokens.css` puede generarse o pegarse manualmente.
-- Mantén `style.md` y estos tokens sincronizados.
+- `tokens.json` es la **fuente Unica de verdad**. `styles/tokens.css` puede generarse o pegarse manualmente.
+- Manten `style.md` y estos tokens sincronizados.
 ```
 ```
 
@@ -116,7 +116,7 @@ module.exports = {
 };
 ```
 
-> Si prefieres no compilar, puedes **pegar** la versión `tokens.css` que ya tienes en el canvas.
+> Si prefieres no compilar, puedes **pegar** la versiOn `tokens.css` que ya tienes en el canvas.
 
 ---
 
@@ -193,8 +193,8 @@ export { TBButton } from "./TBButton";
 
 ---
 
-## tailwind.config.js (extensión mínima)
-> Si ya tienes Tailwind, **fusiona** esta sección dentro de `extend`.
+## tailwind.config.js (extensiOn minima)
+> Si ya tienes Tailwind, **fusiona** esta secciOn dentro de `extend`.
 ```js
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -245,7 +245,7 @@ export default function App() {
     <div className="p-6 space-y-4">
       <TBButton variant="primary">Subir documento</TBButton>
       <TBButton variant="secondary">Ver pasos</TBButton>
-      <TBButton variant="ghost" size="sm">Más info</TBButton>
+      <TBButton variant="ghost" size="sm">Mas info</TBButton>
       <TBButton fullWidth size="lg">Descargar resumen</TBButton>
     </div>
   );
@@ -255,7 +255,6 @@ export default function App() {
 ---
 
 ## Notas finales
-- Carga la tipografía **Inter** (woff2) en `index.html` o con `@font-face` para evitar FOUC.
+- Carga la tipografia **Inter** (woff2) en `index.html` o con `@font-face` para evitar FOUC.
 - Los estilos usan **variables CSS**; funcionan con o sin Tailwind.
-- Mantén sincronía con `style.md` y los **Design Tokens** del canvas.
-
+- Manten sincronia con `style.md` y los **Design Tokens** del canvas.

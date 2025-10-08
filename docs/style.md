@@ -1,50 +1,50 @@
-# style.md — Traductor Burocrático
+# style.md — Traductor Burocratico
 
 version: 1.1  
 last_updated: 2025-10-08  
-owners: ["Brand/Producto", "UX", "Contenido"]  
+owners: \["Brand/Producto", "UX", "Contenido"\]  
 status: Updated — incluye paletas y sistema de botones.
 
 ---
 
 ## 1) Esencia de marca
-**“Entiende qué te pide la Administración, sin jerga.”**  
-Plataforma que traduce documentos oficiales a lenguaje común, guiando al usuario hacia la acción correcta con rigor, claridad y empatía.
+* *“Entiende que te pide la AdministraciOn, sin jerga.”**  
+Plataforma que traduce documentos oficiales a lenguaje comUn, guiando al usuario hacia la acciOn correcta con rigor, claridad y empatia.
 
-**Valores**: claridad, confianza, acción y respeto.
+* *Valores**: claridad, confianza, acciOn y respeto.
 
 ---
 
 ## 2) Identidad visual — Colores y paletas
 
 ### Paleta principal
-| Tipo | Color | Código HEX | Uso |
+| Tipo | Color | COdigo HEX | Uso |
 |------|--------|-------------|-----|
 | **Primario** | Naranja TB | `#FF6600` | Botones, CTAs, resaltes principales |
-| **Secundario** | Gris cálido | `#F5F5F5` | Fondos neutros, bloques secundarios |
+| **Secundario** | Gris calido | `#F5F5F5` | Fondos neutros, bloques secundarios |
 | **Texto principal** | Gris antracita | `#1C1C1C` | Texto principal |
 | **Texto secundario** | Gris medio | `#5C5C5C` | Subtextos y ayudas |
-| **Éxito** | Verde TB | `#1FA971` | Estados exitosos |
-| **Advertencia** | Ámbar | `#D97706` | Fechas límite o alertas suaves |
-| **Error** | Rojo TB | `#DC2626` | Mensajes de error o validación |
+| **Exito** | Verde TB | `#1FA971` | Estados exitosos |
+| **Advertencia** | Ambar | `#D97706` | Fechas limite o alertas suaves |
+| **Error** | Rojo TB | `#DC2626` | Mensajes de error o validaciOn |
 | **Fondo base** | Blanco | `#FFFFFF` | Superficie principal |
-| **Fondo alternativo** | Gris claro | `#FAFAFA` | Áreas secundarias |
+| **Fondo alternativo** | Gris claro | `#FAFAFA` | Areas secundarias |
 
-**Gradientes y derivados**  
+* *Gradientes y derivados**  
 - Hover primario: `#FF8533`  
 - Click activo: `#E65C00`  
 - Desactivado: `#FFD8B0` (40%)
 
-**Contraste mínimo:** ratio 4.5:1 en texto normal y 3:1 en texto grande.
+* *Contraste minimo:** ratio 4.5:1 en texto normal y 3:1 en texto grande.
 
 ---
 
-## 3) Tipografía y espaciado
+## 3) Tipografia y espaciado
 
-**Fuente**: Inter (fallback: system-ui, Segoe UI, Roboto).  
-**Pesos:** 400 regular, 600 semibold, 700 bold.
+* *Fuente**: Inter (fallback: system-ui, Segoe UI, Roboto).  
+* *Pesos:** 400 regular, 600 semibold, 700 bold.
 
-| Elemento | Tamaño | Altura de línea | Peso |
+| Elemento | Tamano | Altura de linea | Peso |
 |-----------|---------|-----------------|------|
 | H1 | 34px | 40px | 700 |
 | H2 | 28px | 36px | 600 |
@@ -53,7 +53,7 @@ Plataforma que traduce documentos oficiales a lenguaje común, guiando al usuari
 | Small | 14px | 20px | 400 |
 | Caption | 12px | 18px | 400 |
 
-**Espaciado base:** 8px grid. Múltiplos de 8 para márgenes, paddings y gaps.
+* *Espaciado base:** 8px grid. MUltiplos de 8 para margenes, paddings y gaps.
 
 ---
 
@@ -62,12 +62,12 @@ Plataforma que traduce documentos oficiales a lenguaje común, guiando al usuari
 ### Tipos principales
 | Tipo | Color fondo | Color texto | Borde | Uso |
 |------|--------------|-------------|--------|-----|
-| **Primario** | `#FF6600` | `#FFFFFF` | none | Acción principal (“Subir documento”) |
-| **Secundario** | transparente | `#FF6600` | 2px sólido `#FF6600` | Acciones secundarias (“Ver pasos”) |
+| **Primario** | `#FF6600` | `#FFFFFF` | none | AcciOn principal (“Subir documento”) |
+| **Secundario** | transparente | `#FF6600` | 2px sOlido `#FF6600` | Acciones secundarias (“Ver pasos”) |
 | **Tercero / texto** | transparente | `#1C1C1C` | none | Enlaces y CTA ligeros |
 
-### Tamaños
-| Variante | Altura | Padding horizontal | Radio | Tipografía |
+### Tamanos
+| Variante | Altura | Padding horizontal | Radio | Tipografia |
 |-----------|---------|--------------------|--------|-------------|
 | **Large** | 56px | 32px | 12px | Inter 600 16px |
 | **Medium** | 48px | 24px | 12px | Inter 600 15px |
@@ -80,46 +80,46 @@ Plataforma que traduce documentos oficiales a lenguaje común, guiando al usuari
 | **Active** | Oscurecer 10% (`#E65C00`) |
 | **Disabled** | Fondo `#FFD8B0`, texto `#FFFFFF` con opacidad 60% |
 
-**Sombra base:** `0 2px 6px rgba(0,0,0,0.08)`  
-**Transición:** `all 0.2s ease-in-out`
+* *Sombra base:** `0 2px 6px rgba(0,0,0,0.08)`  
+* *TransiciOn:** `all 0.2s ease-in-out`
 
-**Icono en botón:**  
+* *Icono en botOn:**  
 - Margen entre icono y texto: 8px.  
-- Tamaño icono: 20×20px.
+- Tamano icono: 20×20px.
 
 ---
 
 ## 5) Componentes visuales
 
-**Tarjetas (cards)**  
+* *Tarjetas (cards)**  
 - Fondo blanco, borde 1px gris claro `#E5E5E5`.  
 - Radio: 16–20px.  
 - Sombra suave `0 2px 8px rgba(0,0,0,0.05)`.  
 - Padding interno 24px.  
-- En móvil: ancho 100%, margen inferior 16px.
+- En mOvil: ancho 100%, margen inferior 16px.
 
-**Inputs y formularios**  
-- Altura mínima 48px.  
+* *Inputs y formularios**  
+- Altura minima 48px.  
 - Radio 8px.  
 - Border `1px solid #E0E0E0`.  
 - Focus outline `2px solid #FF6600`.  
 - Placeholder color `#9CA3AF`.
 
-**Alertas**  
+* *Alertas**  
 | Tipo | Fondo | Texto | Icono |
 |------|--------|--------|-------|
 | Info | `#E0F2FE` | `#0369A1` | ℹ️ |
-| Éxito | `#ECFDF5` | `#065F46` | ✅ |
+| Exito | `#ECFDF5` | `#065F46` | ✅ |
 | Advertencia | `#FEF3C7` | `#92400E` | ⚠️ |
 | Error | `#FEE2E2` | `#991B1B` | ❌ |
 
 ---
 
 ## 6) Consistencia entre Web y PDF
-- Los colores primarios y tipografía **deben coincidir** entre interfaz web, PDF generado y emails.  
+- Los colores primarios y tipografia **deben coincidir** entre interfaz web, PDF generado y emails.  
 - Bordes, radios y botones siguen el mismo sistema visual para coherencia.
 
-**Plantilla de ejemplo de botón en CSS:**
+* *Plantilla de ejemplo de botOn en CSS:**
 ```css
 .btn-primary {
   background-color: #FF6600;
@@ -141,18 +141,17 @@ Plataforma que traduce documentos oficiales a lenguaje común, guiando al usuari
 ## 7) Sistema visual resumen
 - **Forma general**: bordes redondeados, sin esquinas duras.  
 - **Espaciado**: generoso, aireado, prioriza legibilidad.  
-- **Colores**: optimismo + claridad (naranja cálido + neutros).  
-- **Botones**: redondeados, sólidos, claros en jerarquía.  
-- **Tipografía**: Inter, legible, jerarquía clara.  
+- **Colores**: optimismo + claridad (naranja calido + neutros).  
+- **Botones**: redondeados, sOlidos, claros en jerarquia.  
+- **Tipografia**: Inter, legible, jerarquia clara.  
 - **Sombra**: leve, para profundidad sin ruido.
 
 ---
 
 ## 8) Gobernanza visual
-- Cualquier cambio en color, radio, tipografía o espaciado debe registrarse en **changelog del style.md**.  
-- Debe mantenerse sincronizado con el sistema de diseño (Tailwind o Figma) y exportarse como tokens si aplica.
+- Cualquier cambio en color, radio, tipografia o espaciado debe registrarse en **changelog del style.md**.  
+- Debe mantenerse sincronizado con el sistema de diseno (Tailwind o Figma) y exportarse como tokens si aplica.
 
 ---
 
-> Este documento actualiza la guía visual original, incorporando coherencia cromática, tamaños estandarizados y sistema unificado de botones para Traductor Burocrático.
-
+> Este documento actualiza la guia visual original, incorporando coherencia cromatica, tamanos estandarizados y sistema unificado de botones para Traductor Burocratico.

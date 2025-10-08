@@ -1,12 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ["class"],
-  content: [
-    './pages/**/*.{js,jsx}',
-    './components/**/*.{js,jsx}',
-    './app/**/*.{js,jsx}',
-    './src/**/*.{js,jsx}',
-  ],
+  content: ['./index.html', './src/**/*.{ts,tsx}'],
   theme: {
     container: {
       center: true,
@@ -17,10 +12,6 @@ module.exports = {
     },
     extend: {
       colors: {
-        'primary-orange': '#ff6b35',
-        'primary-orange-light': '#ff8c5a',
-        'primary-orange-dark': '#e55a2b',
-        'orange': '#ff6b35',
         tb: {
           primary: '#FF6600',
           primaryHover: '#FF8533',
@@ -38,7 +29,7 @@ module.exports = {
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
-        montserrat: ['Montserrat', 'sans-serif'],
+
         ui: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'Noto Sans', 'sans-serif'],
       },
       boxShadow: {

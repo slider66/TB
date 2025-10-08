@@ -1,4 +1,4 @@
-# Design Tokens — Traductor Burocrático
+# Design Tokens — Traductor Burocratico
 version: 1.0  
 last_updated: 2025-10-08  
 status: Ready
@@ -8,7 +8,7 @@ status: Ready
 ---
 
 ## 1) Style Dictionary — `tokens.json`
-Guárdalo en `tokens/tokens.json` y compílalo con Style Dictionary para generar CSS variables, Android, iOS, etc.
+Guardalo en `tokens/tokens.json` y compilalo con Style Dictionary para generar CSS variables, Android, iOS, etc.
 
 ```json
 {
@@ -236,7 +236,7 @@ export default {
 };
 ```
 
-**Ejemplos de uso Tailwind**
+* *Ejemplos de uso Tailwind**
 ```html
 <button class="h-[var(--tb-btn-md)] px-6 rounded-md bg-tb-primary text-white shadow-button hover:bg-tb-primaryHover active:bg-tb-primaryActive transition-all">Subir documento</button>
 
@@ -318,7 +318,7 @@ Importa este archivo en el plugin **Tokens Studio** (modo Single file).
 ---
 
 ## 5) Component recipes
-Ejemplo de botón primario usando variables (CSS puro):
+Ejemplo de botOn primario usando variables (CSS puro):
 
 ```css
 .tb-btn-primary {
@@ -338,9 +338,9 @@ Ejemplo de botón primario usando variables (CSS puro):
 
 ---
 
-## 6) Notas de implementación
+## 6) Notas de implementaciOn
 - **Tailwind**: tras actualizar `tailwind.config.js`, reinicia el dev server para ver los nuevos tokens.  
-- **Figma**: si usas Tokens Studio, mantén un solo set `core` y crea temas futuros (dark) referenciando estos tokens.  
+- **Figma**: si usas Tokens Studio, manten un solo set `core` y crea temas futuros (dark) referenciando estos tokens.  
 - **Style Dictionary**: crea builds para `css, scss, json` y vincula `tokens.css` al proyecto React/Vite.  
-- **Single Source of Truth**: mantén `tokens.json` como fuente y genera el resto automáticamente.
+- **Single Source of Truth**: manten `tokens.json` como fuente y genera el resto automaticamente.
 
