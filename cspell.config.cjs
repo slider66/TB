@@ -1,62 +1,24 @@
-/** @type {import('cspell').CSpellUserSettings} */
+﻿/** @type {import('cspell').CSpellSettings} */
 module.exports = {
   version: '0.2',
-  language: 'es-ES',
-  allowCompoundWords: true,
-  ignorePaths: [
-    'node_modules',
-    'dist',
-    '.git',
-    '.husky',
-    'supabase/.temp',
-    'package-lock.json',
-    'public',
-    '**/*.png',
-    '**/*.jpg',
-    '**/*.jpeg',
-    '**/*.svg',
-  ],
-  files: ['**/*.{md,mdx,ts,tsx,json}'],
+  language: 'es',
+  // Activa diccionarios por NOMBRE (pnpm-friendly)
   dictionaries: ['es-es', 'softwareTerms', 'companies'],
+
+  // Define cada diccionario por paquete (sin rutas locales)
   dictionaryDefinitions: [
-    {
-      name: 'es-es',
-      path: '@cspell/dict-es-es/es-es.dict',
-      description: 'Diccionario español (España)',
-    },
-    {
-      name: 'softwareTerms',
-      path: '@cspell/dict-software-terms/software-terms.dict',
-      description: 'Términos técnicos',
-    },
-    {
-      name: 'companies',
-      path: '@cspell/dict-companies/companies.dict',
-      description: 'Nombres de empresas',
-    },
+    { name: 'es-es',        package: '@cspell/dict-es-es' },
+    { name: 'softwareTerms', package: '@cspell/dict-software-terms' },
+    { name: 'companies',     package: '@cspell/dict-companies' },
   ],
+
+  // Palabras propias del proyecto (añade aquí tus “falsos positivos”)
   words: [
-    'Traductor',
-    'Burocratico',
-    'Supabase',
-    'Tailwind',
-    'Vite',
-    'TypeScript',
-    'TB',
-    'Turnstile',
-    'Recaptcha',
-    'Postgres',
-    'LLM',
-    'LLMs',
-    'frontend',
-    'backend',
-    'webhooks',
-    'Hostinger',
-    'CSP',
-    'RLS',
-    'CTA',
-    'Auth',
-    'Edge',
-    'Hotkey',
+    'Supabase', 'Tailwind', 'TypeScript', 'Zod', 'Vite',
+    'Traductor', 'Burocrático', 'Burocratico', 'Hostinger',
+  ],
+
+  ignorePaths: [
+    'node_modules', 'dist', 'build', '.git', '.husky', 'pnpm-lock.yaml'
   ],
 };

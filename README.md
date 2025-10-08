@@ -1,4 +1,4 @@
-﻿# Traductor Burocratico Web
+# Traductor Burocratico Web
 
 Este proyecto contiene el frontend y las utilidades de automatizacion para Traductor Burocratico. La aplicacion se ha reescrito en React + Vite con TypeScript, Tailwind y un sistema de routing basico.
 
@@ -41,7 +41,7 @@ Las Edge Functions se encuentran en `supabase/functions/`:
 - Cabeceras CSP/HSTS se configuran en `vite.config.ts` e `index.html`.
 - Los formularios publicos usan `CaptchaField` (Cloudflare Turnstile o reCAPTCHA) y no exponen secretos en el frontend.
 - Antes de procesar un documento se ejecuta un stub de escaneo en `process_document` (VirusTotal + antivirus local).
-- Se añadieron reglas ESLint/Prettier, cspell y un informe de consistencia (`npm run report:content`).
+- Se a�adieron reglas ESLint/Prettier, cspell y un informe de consistencia (`npm run report:content`).
 
 ## Carpetas destacadas
 - `src/App.tsx`: enrutador principal y layout comun.
