@@ -1,0 +1,94 @@
+﻿@server_local = http://127.0.0.1:54321/functions/v1
+@server_prod = https://YOUR_PROJECT_REF.functions.supabase.co
+@server = {{server_local}}
+@auth = Bearer YOUR_JWT_OR_SERVICE_TOKEN
+@correlation = 00000000-0000-4000-8000-000000000001
+
+### documents.process_document
+POST {{server}}/documents.process_document
+Authorization: {{auth}}
+Content-Type: application/json
+X-Correlation-Id: {{correlation}}
+X-Env: dev
+
+{
+  "mcp_version": "1.0.0",
+  "contract_version": "2025-10-05",
+  "id": "11111111-1111-4111-8111-111111111111",
+  "ts": "2025-10-05T10:15:30.123Z",
+  "channel": "command",
+  "verb": "documents.process_document",
+  "resource": "requests/22222222-2222-4222-8222-222222222222",
+  "actor": { "id": "system", "role": "system" },
+  "auth": { "subject": "service", "scopes": ["write:document"] },
+  "meta": { "correlation_id": "{{correlation}}", "schema": "tb.mcp.1" },
+  "privacy": { "classification": "PII", "consents": [] },
+  "payload": { "request_id": "22222222-2222-4222-8222-222222222222" }
+}
+
+### documents.simplify_document
+POST {{server}}/documents.simplify_document
+Authorization: {{auth}}
+Content-Type: application/json
+X-Correlation-Id: {{correlation}}
+X-Env: dev
+
+{
+  "mcp_version": "1.0.0",
+  "contract_version": "2025-10-05",
+  "id": "33333333-3333-4333-8333-333333333333",
+  "ts": "2025-10-05T10:15:30.123Z",
+  "channel": "command",
+  "verb": "documents.simplify_document",
+  "resource": "requests/44444444-4444-4444-8444-444444444444",
+  "actor": { "id": "system", "role": "system" },
+  "auth": { "subject": "service", "scopes": ["write:analysis"] },
+  "meta": { "correlation_id": "{{correlation}}", "schema": "tb.mcp.1" },
+  "privacy": { "classification": "SENSITIVE", "consents": [] },
+  "payload": { "request_id": "44444444-4444-4444-8444-444444444444", "language": "es" }
+}
+
+### report.generate
+POST {{server}}/report.generate
+Authorization: {{auth}}
+Content-Type: application/json
+X-Correlation-Id: {{correlation}}
+X-Env: dev
+
+{
+  "mcp_version": "1.0.0",
+  "contract_version": "2025-10-05",
+  "id": "55555555-5555-4555-8555-555555555555",
+  "ts": "2025-10-05T10:15:30.123Z",
+  "channel": "command",
+  "verb": "report.generate",
+  "resource": "analyses/66666666-6666-4666-8666-666666666666",
+  "actor": { "id": "system", "role": "system" },
+  "auth": { "subject": "service", "scopes": ["write:report"] },
+  "meta": { "correlation_id": "{{correlation}}", "schema": "tb.mcp.1" },
+  "privacy": { "classification": "SENSITIVE", "consents": [] },
+  "payload": { "analysis_id": "66666666-6666-4666-8666-666666666666" }
+}
+
+### storage.get_signed_url
+POST {{server}}/storage.get_signed_url
+Authorization: {{auth}}
+Content-Type: application/json
+X-Correlation-Id: {{correlation}}
+X-Env: dev
+
+{
+  "mcp_version": "1.0.0",
+  "contract_version": "2025-10-05",
+  "id": "77777777-7777-4777-8777-777777777777",
+  "ts": "2025-10-05T10:15:30.123Z",
+  "channel": "command",
+  "verb": "storage.get_signed_url",
+  "resource": "reports/88888888-8888-4888-8888-888888888888",
+  "actor": { "id": "system", "role": "system" },
+  "auth": { "subject": "service", "scopes": ["read:report"] },
+  "meta": { "correlation_id": "{{correlation}}", "schema": "tb.mcp.1" },
+  "privacy": { "classification": "PUBLIC", "consents": [] },
+  "payload": { "bucket": "reports", "path": "2025/10/report-abc.pdf", "expiresIn": 60 }
+}
+

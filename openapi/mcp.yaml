@@ -1,0 +1,792 @@
+﻿openapi: 3.0.3
+info:
+  title: Traductor Burocratico MCP API
+  version: 1.0.0
+  description: |
+    Especificacion OpenAPI del contrato MCP para integrar en Visual Studio.
+    Incluye comandos clave y el envelope estandarizado (trazabilidad, permisos y privacidad).
+servers:
+  - url: https://{project}.functions.supabase.co
+    description: Supabase Functions (produccion)
+    variables:
+      project:
+        default: YOUR_PROJECT_REF
+        description: Ref del proyecto Supabase
+  - url: http://127.0.0.1:54321/functions/v1
+    description: Supabase Functions (local)
+security:
+  - bearerAuth: []
+tags:
+  - name: process_document
+    description: Extraccion y normalizacion de documentos
+  - name: simplify_document
+    description: Simplificacion pedagogica mediante IA
+  - name: report
+    description: Generacion y entrega de reportes
+paths:
+  /process_document.start:
+    post:
+      operationId: ProcessDocumentStart
+      x-sunset: 2026-01-01
+      deprecated: true
+      tags: [process_document]
+      summary: Lanza extracciÃ³n (PDF/OCR) y normalizaciÃ³n
+      parameters:
+        - $ref: '#/components/parameters/XCorrelationId'
+        - $ref: '#/components/parameters/XCausationId'
+        - $ref: '#/components/parameters/XEnv'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/EnvelopeBase'
+                - type: object
+                  properties:
+                    channel:
+                      type: string
+                      enum: [command]
+                    verb:
+                      type: string
+                      example: process_document.start
+                    resource:
+                      type: string
+                      example: documents/{uuid}
+                    payload:
+                      $ref: '#/components/schemas/ProcessDocumentPayload'
+                  required: [channel, verb, payload]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOk'
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOk'
+        '4XX':
+          description: Error de cliente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorStandard'
+        '5XX':
+          description: Error de servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorStandard'
+
+  /simplify_document.run:
+    post:
+      operationId: SimplifyDocumentRun
+      x-sunset: 2026-01-01
+      deprecated: true
+      tags: [simplify_document]
+      summary: Lanza la simplificaciÃ³n pedagÃ³gica con IA
+      parameters:
+        - $ref: '#/components/parameters/XCorrelationId'
+        - $ref: '#/components/parameters/XCausationId'
+        - $ref: '#/components/parameters/XEnv'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/EnvelopeBase'
+                - type: object
+                  properties:
+                    channel:
+                      type: string
+                      enum: [command]
+                    verb:
+                      type: string
+                      example: simplify_document.run
+                    resource:
+                      type: string
+                      example: requests/{uuid}
+                    payload:
+                      $ref: '#/components/schemas/SimplifyDocumentPayload'
+                  required: [channel, verb, payload]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOk'
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOk'
+        '4XX':
+          description: Error de cliente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorStandard'
+        '5XX':
+          description: Error de servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorStandard'
+
+  /report.generate:
+    post:
+      operationId: ReportGenerate
+      tags: [report]
+      summary: Genera PDF en reports/ y guarda URL (server-side)
+      parameters:
+        - $ref: '#/components/parameters/XCorrelationId'
+        - $ref: '#/components/parameters/XCausationId'
+        - $ref: '#/components/parameters/XEnv'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/EnvelopeBase'
+                - type: object
+                  properties:
+                    channel:
+                      type: string
+                      enum: [command]
+                    verb:
+                      type: string
+                      example: report.generate
+                    resource:
+                      type: string
+                      example: analyses/{uuid}
+                    payload:
+                      $ref: '#/components/schemas/ReportGeneratePayload'
+                  required: [channel, verb, payload]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOk'
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOk'
+        '4XX':
+          description: Error de cliente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorStandard'
+        '5XX':
+          description: Error de servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorStandard'
+
+  /signed_url.issue:
+    post:
+      operationId: SignedUrlIssue
+      x-sunset: 2026-01-01
+      deprecated: true
+      tags: [report]
+      summary: Entrega segura de archivos: emite URL firmada temporal
+      parameters:
+        - $ref: '#/components/parameters/XCorrelationId'
+        - $ref: '#/components/parameters/XCausationId'
+        - $ref: '#/components/parameters/XEnv'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/EnvelopeBase'
+                - type: object
+                  properties:
+                    channel:
+                      type: string
+                      enum: [command]
+                    verb:
+                      type: string
+                      example: signed_url.issue
+                    resource:
+                      type: string
+                      example: reports/{uuid}
+                    payload:
+                      $ref: '#/components/schemas/SignedUrlIssuePayload'
+                  required: [channel, verb, payload]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOk'
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOk'
+        '4XX':
+          description: Error de cliente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorStandard'
+        '5XX':
+          description: Error de servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorStandard'
+
+  /documents.process_document:
+    post:
+      operationId: DocumentsProcessDocument
+      tags: [documents]
+      summary: Encola el procesamiento (extracciÃ³n + normalizaciÃ³n)
+      parameters:
+        - $ref: '#/components/parameters/XCorrelationId'
+        - $ref: '#/components/parameters/XCausationId'
+        - $ref: '#/components/parameters/XEnv'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/EnvelopeBase'
+                - type: object
+                  properties:
+                    channel:
+                      type: string
+                      enum: [command]
+                    verb:
+                      type: string
+                      example: documents.process_document
+                    resource:
+                      type: string
+                      example: requests/{uuid}
+                    payload:
+                      $ref: '#/components/schemas/DocumentsProcessDocumentPayload'
+                  required: [channel, verb, payload]
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOk'
+
+  /documents.simplify_document:
+    post:
+      operationId: DocumentsSimplifyDocument
+      tags: [documents]
+      summary: Ejecuta la simplificaciÃ³n pedagÃ³gica con IA
+      parameters:
+        - $ref: '#/components/parameters/XCorrelationId'
+        - $ref: '#/components/parameters/XCausationId'
+        - $ref: '#/components/parameters/XEnv'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/EnvelopeBase'
+                - type: object
+                  properties:
+                    channel:
+                      type: string
+                      enum: [command]
+                    verb:
+                      type: string
+                      example: documents.simplify_document
+                    resource:
+                      type: string
+                      example: requests/{uuid}
+                    payload:
+                      $ref: '#/components/schemas/SimplifyDocumentPayload'
+                  required: [channel, verb, payload]
+      responses:
+        '202':
+          description: Accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOk'
+
+  /storage.get_signed_url:
+    post:
+      operationId: StorageGetSignedUrl
+      tags: [storage]
+      summary: Emite una URL firmada temporal (server-side)
+      parameters:
+        - $ref: '#/components/parameters/XCorrelationId'
+        - $ref: '#/components/parameters/XCausationId'
+        - $ref: '#/components/parameters/XEnv'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/EnvelopeBase'
+                - type: object
+                  properties:
+                    channel:
+                      type: string
+                      enum: [command]
+                    verb:
+                      type: string
+                      example: storage.get_signed_url
+                    resource:
+                      type: string
+                      example: reports/{uuid}
+                    payload:
+                      $ref: '#/components/schemas/StorageGetSignedUrlPayload'
+                  required: [channel, verb, payload]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOk'
+
+  /requests.update_status:
+    post:
+      operationId: RequestsUpdateStatus
+      tags: [requests]
+      summary: Cambia el estado de una solicitud (validado)
+      parameters:
+        - $ref: '#/components/parameters/XCorrelationId'
+        - $ref: '#/components/parameters/XCausationId'
+        - $ref: '#/components/parameters/XEnv'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/EnvelopeBase'
+                - type: object
+                  properties:
+                    channel:
+                      type: string
+                      enum: [command]
+                    verb:
+                      type: string
+                      example: requests.update_status
+                    resource:
+                      type: string
+                      example: requests/{uuid}
+                    payload:
+                      $ref: '#/components/schemas/RequestsUpdateStatusPayload'
+                  required: [channel, verb, payload]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOk'
+
+  /payments.lookup:
+    post:
+      operationId: PaymentsLookup
+      tags: [payments]
+      summary: Consulta el pago asociado a un request (lectura segura)
+      parameters:
+        - $ref: '#/components/parameters/XCorrelationId'
+        - $ref: '#/components/parameters/XCausationId'
+        - $ref: '#/components/parameters/XEnv'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/EnvelopeBase'
+                - type: object
+                  properties:
+                    channel:
+                      type: string
+                      enum: [query]
+                    verb:
+                      type: string
+                      example: payments.lookup
+                    resource:
+                      type: string
+                      example: requests/{uuid}
+                    payload:
+                      $ref: '#/components/schemas/PaymentsLookupPayload'
+                  required: [channel, verb, payload]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOk'
+
+  /kb.load:
+    post:
+      operationId: KbLoad
+      tags: [kb]
+      summary: Carga documentos de la KB (sÃ³lo rutas permitidas)
+      parameters:
+        - $ref: '#/components/parameters/XCorrelationId'
+        - $ref: '#/components/parameters/XCausationId'
+        - $ref: '#/components/parameters/XEnv'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/EnvelopeBase'
+                - type: object
+                  properties:
+                    channel:
+                      type: string
+                      enum: [query]
+                    verb:
+                      type: string
+                      example: kb.load
+                    resource:
+                      type: string
+                      example: kb/{path}
+                    payload:
+                      $ref: '#/components/schemas/KbLoadPayload'
+                  required: [channel, verb, payload]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOk'
+
+  /pii.sanitize_preview:
+    post:
+      operationId: PiiSanitizePreview
+      tags: [pii]
+      summary: Simula la sanitizaciÃ³n de PII (solo vista previa)
+      parameters:
+        - $ref: '#/components/parameters/XCorrelationId'
+        - $ref: '#/components/parameters/XCausationId'
+        - $ref: '#/components/parameters/XEnv'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: '#/components/schemas/EnvelopeBase'
+                - type: object
+                  properties:
+                    channel:
+                      type: string
+                      enum: [query]
+                    verb:
+                      type: string
+                      example: pii.sanitize_preview
+                    resource:
+                      type: string
+                      example: preview
+                    payload:
+                      $ref: '#/components/schemas/PiiSanitizePreviewPayload'
+                  required: [channel, verb, payload]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseOk'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  parameters:
+    XCorrelationId:
+      name: X-Correlation-Id
+      in: header
+      required: false
+      schema:
+        type: string
+        format: uuid
+      description: Correlation ID end-to-end
+    XCausationId:
+      name: X-Causation-Id
+      in: header
+      required: false
+      schema:
+        type: string
+        format: uuid
+      description: ID del mensaje que causÃ³ esta llamada
+    XEnv:
+      name: X-Env
+      in: header
+      required: false
+      schema:
+        type: string
+        example: dev
+      description: Entorno lÃ³gico (dev|staging|prod)
+
+  schemas:
+    EnvelopeBase:
+      type: object
+      properties:
+        mcp_version:
+          type: string
+          example: 1.0.0
+        contract_version:
+          type: string
+          example: 2025-10-05
+        id:
+          type: string
+          format: uuid
+        ts:
+          type: string
+          format: date-time
+        channel:
+          type: string
+          enum: [command, event, response, error, query]
+        verb:
+          type: string
+        resource:
+          type: string
+          example: documents/{uuid}
+        actor:
+          type: object
+          properties:
+            id:
+              type: string
+              example: system
+            role:
+              type: string
+              enum: [cliente, agente, partner, admin, system]
+        auth:
+          type: object
+          properties:
+            subject:
+              type: string
+            scopes:
+              type: array
+              items: { type: string }
+        meta:
+          type: object
+          properties:
+            correlation_id:
+              type: string
+              format: uuid
+            causation_id:
+              type: string
+              nullable: true
+            replay:
+              type: boolean
+              default: false
+            schema:
+              type: string
+              example: tb.mcp.1
+        privacy:
+          type: object
+          properties:
+            classification:
+              type: string
+              enum: [PUBLIC, PII, SENSITIVE]
+            consents:
+              type: array
+              items: { type: string }
+        payload:
+          description: Carga Ãºtil especÃ­fica del comando/evento
+      required: [id, ts]
+
+    ProcessDocumentPayload:
+      type: object
+      properties:
+        document_id:
+          type: string
+          format: uuid
+      required: [document_id]
+
+    SimplifyDocumentPayload:
+      type: object
+      properties:
+        request_id:
+          type: string
+          format: uuid
+        language:
+          type: string
+          enum: [es, gl, ca, eu, en]
+          default: es
+      required: [request_id]
+
+    DocumentsProcessDocumentPayload:
+      type: object
+      properties:
+        request_id:
+          type: string
+          format: uuid
+      required: [request_id]
+
+    StorageGetSignedUrlPayload:
+      type: object
+      properties:
+        bucket:
+          type: string
+          enum: [reports, uploads]
+        path:
+          type: string
+        expiresIn:
+          type: integer
+          minimum: 30
+          maximum: 3600
+          default: 60
+      required: [bucket, path]
+
+    RequestsUpdateStatusPayload:
+      type: object
+      properties:
+        request_id:
+          type: string
+          format: uuid
+        to:
+          type: string
+          enum: [ready, rejected, archived]
+      required: [request_id, to]
+
+    PaymentsLookupPayload:
+      type: object
+      properties:
+        request_id:
+          type: string
+          format: uuid
+      required: [request_id]
+
+    KbLoadPayload:
+      type: object
+      properties:
+        path:
+          type: string
+      required: [path]
+
+    PiiSanitizePreviewPayload:
+      type: object
+      properties:
+        text:
+          type: string
+      required: [text]
+
+    ReportGeneratePayload:
+      type: object
+      properties:
+        analysis_id:
+          type: string
+          format: uuid
+      required: [analysis_id]
+
+    SignedUrlIssuePayload:
+      type: object
+      properties:
+        bucket:
+          type: string
+          enum: [reports]
+        path:
+          type: string
+        expires_in:
+          type: integer
+          minimum: 30
+          maximum: 600
+          default: 60
+      required: [bucket, path]
+
+    ResponseOk:
+      type: object
+      properties:
+        channel:
+          type: string
+          enum: [response]
+        verb:
+          type: string
+          example: process_document.start
+        status:
+          type: string
+          enum: [ok, accepted]
+        id:
+          type: string
+          format: uuid
+        meta:
+          type: object
+          properties:
+            correlation_id:
+              type: string
+              format: uuid
+        payload:
+          type: object
+          properties:
+            request_id:
+              type: string
+              format: uuid
+            next:
+              type: string
+              example: event:document.processed
+
+    ErrorStandard:
+      type: object
+      properties:
+        channel:
+          type: string
+          enum: [error]
+        verb:
+          type: string
+          example: simplify_document.run
+        status:
+          type: string
+          enum: [failed]
+        id:
+          type: string
+          format: uuid
+        meta:
+          type: object
+          properties:
+            correlation_id:
+              type: string
+              format: uuid
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              enum: [RLS_DENIED, VALIDATION, TIMEOUT, PAYMENT_REQUIRED, NOT_FOUND]
+            message:
+              type: string
+            hint:
+              type: string
+            retryable:
+              type: boolean
+      required: [channel, verb, status, id]
+
+
+
+
