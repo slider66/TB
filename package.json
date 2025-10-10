@@ -85,23 +85,20 @@
     "vite": "^7.1.9",
     "vitest": "^3.2.4"
   },
-  "lint-staged": {
-    "*.{ts,tsx,js,jsx}": [
-      "eslint --fix --quiet --cache --cache-location node_modules/.cache/eslint",
-      "prettier --write",
-      "git add"
-    ],
-    "*.md": [
-      "remark --quiet --output",
-      "cspell --no-progress --no-must-find-files --relative",
-      "prettier --write",
-      "git add"
-    ],
-    "*.{json,css,mdx}": [
-      "prettier --write",
-      "git add"
-    ]
-  },
+"lint-staged": {
+  "*.{ts,tsx,js,jsx}": [
+    "eslint --fix --quiet --cache --cache-location node_modules/.cache/eslint",
+    "prettier --write"
+  ],
+  "*.md": [
+    "remark --quiet --output",
+    "cspell --no-progress --no-must-find-files --relative",
+    "prettier --write"
+  ],
+  "*.{json,css,mdx}": [
+    "prettier --write"
+  ]
+},
   "config": {
     "commitizen": {
       "path": "cz-git"
