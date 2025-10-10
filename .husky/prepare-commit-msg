@@ -1,0 +1,31 @@
+#!/usr/bin/env sh
+
+set -e
+
+[ "${HUSKY-}" = "0" ] && exit 0
+
+HOOK_DIR="$(dirname -- "$0")"
+REPO_DIR="$(cd "$HOOK_DIR/.." && pwd)"
+
+export PATH="$REPO_DIR/node_modules/.bin:$PATH"
+
+MSG_FILE="$1"
+
+# Skip interactive flow for merge commits or when MERGE_HEAD exists
+if git rev-parse -q --verify MERGE_HEAD >/dev/null 2>&1; then
+  exit 0
+fi
+
+# Husky v9 passes the commit message path through HUSKY_GIT_PARAMS
+if [ -n "${HUSKY_GIT_PARAMS-}" ]; then
+  MSG_FILE="$HUSKY_GIT_PARAMS"
+fi
+
+MESSAGE_CONTENT=""
+if [ -n "$MSG_FILE" ] && [ -f "$MSG_FILE" ]; then
+  MESSAGE_CONTENT="$(sed -e 's/^[[:space:]]*#.*$//' "$MSG_FILE" | tr -d '[:space:]')"
+fi
+
+if [ -z "$MESSAGE_CONTENT" ]; then
+  npx --no-install cz-git --hook || exit 1
+fi
