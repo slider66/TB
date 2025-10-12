@@ -3,6 +3,8 @@ import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
 import { FileText, User, Users, Shield, DollarSign, Scale, Mail, Smile, RefreshCcw, AlertTriangle, Ban } from 'lucide-react';
 
+const LAST_UPDATED_DATE = "23 de septiembre de 2024";
+
 const Section = ({ icon, title, children }) => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
@@ -37,7 +39,7 @@ const TermsPage = () => {
             className="text-center mb-16"
           >
             <h1 className="text-4xl md:text-5xl font-bold text-neutral-800 mb-4">Términos y Condiciones</h1>
-            <p className="text-xl text-neutral-600">Última actualización: {new Date().toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
+            <p className="text-xl text-neutral-600">Última actualización: {LAST_UPDATED_DATE}</p>
           </motion.div>
 
           <Section icon={<FileText />} title="1. Identidad y objeto del servicio">

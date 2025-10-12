@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { Button } from '@/components/ui/button';
@@ -16,31 +16,21 @@ const Register = ({ onRegisterSuccess, onSwitchToLogin }) => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [passwordsMatch, setPasswordsMatch] = useState(true);
 
-  const [passwordValidation, setPasswordValidation] = useState({
-    length: false,
-    uppercase: false,
-    lowercase: false,
-    specialChar: false,
-    number: false,
-  });
-  const [isPasswordValid, setIsPasswordValid] = useState(false);
   const { signUp } = useAuth();
   const { toast } = useToast();
 
-  const validatePassword = (pass) => {
-    const length = pass.length >= 10;
-    const uppercase = /[A-Z]/.test(pass);
-    const lowercase = /[a-z]/.test(pass);
-    const specialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(pass);
-    const number = /\d/.test(pass);
-    
-    setPasswordValidation({ length, uppercase, lowercase, specialChar, number });
-    return length && uppercase && lowercase && specialChar && number;
-  };
-
-  useEffect(() => {
-    setIsPasswordValid(validatePassword(password));
+  const passwordValidation = useMemo(() => {
+    const length = password.length >= 10;
+    const uppercase = /[A-Z]/.test(password);
+    const lowercase = /[a-z]/.test(password);
+    const specialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
+    const number = /\d/.test(password);
+    return { length, uppercase, lowercase, specialChar, number };
   }, [password]);
+
+  const isPasswordValid = useMemo(() => {
+    return Object.values(passwordValidation).every(Boolean);
+  }, [passwordValidation]);
 
   useEffect(() => {
     if (confirmPassword) {

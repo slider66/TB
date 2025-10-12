@@ -3,6 +3,8 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 
+const LAST_UPDATED_DATE = "23 de septiembre de 2024";
+
 const PrivacyPolicyPage = () => {
   return (
     <>
@@ -18,7 +20,7 @@ const PrivacyPolicyPage = () => {
       >
         <div className="prose lg:prose-xl max-w-4xl mx-auto">
           <h1>Política de Privacidad</h1>
-          <p className="lead">Última actualización: 19 de septiembre de 2025</p>
+          <p className="lead">Última actualización: {LAST_UPDATED_DATE}</p>
 
           <h2>1. Responsable del tratamiento</h2>
           <p>

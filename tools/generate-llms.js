@@ -115,6 +115,7 @@ function extractHelmetData(content, filePath, routes) {
 }
 
 function generateFallbackUrl(fileName) {
+  console.warn(`⚠️  Warning: Could not find a route for component "${fileName}". Generating a fallback URL.`);
   const cleanName = fileName.replace(/Page$/, '').toLowerCase();
   return cleanName === 'app' ? '/' : `/${cleanName}`;
 }
