@@ -4,9 +4,34 @@ import toast from 'react-hot-toast';
 
 let stripePromise;
 
-const getStripe = () => {
+const STRIPE_SECRET_NAME = 'Stripe';
+
+const fetchPublishableKey = async () => {
+  const { data, error } = await supabase.functions.invoke('get-stripe-publishable-key', {
+    body: { secretName: STRIPE_SECRET_NAME },
+  });
+
+  if (error) {
+    throw new Error(`Error al obtener la clave publica de Stripe: ${error.message}`);
+  }
+
+  const publishableKey =
+    data?.key ??
+    data?.publishableKey ??
+    data?.publishable_key ??
+    data?.[STRIPE_SECRET_NAME];
+
+  if (!publishableKey) {
+    throw new Error('No se encontro la clave publica de Stripe en la respuesta.');
+  }
+
+  return publishableKey;
+};
+
+const getStripe = async () => {
   if (!stripePromise) {
-    stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
+    const publishableKey = await fetchPublishableKey();
+    stripePromise = loadStripe(publishableKey);
   }
   return stripePromise;
 };
