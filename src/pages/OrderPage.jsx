@@ -111,52 +111,12 @@ const OrderPage = () => {
     },
   });
 
-  const handleCreateOrderAndUpload = async () => {
+  const handleCreateOrderAndUpload = () => {
     if (!file) {
       toast.error("Por favor, selecciona un archivo primero.");
       return;
     }
-    setStep('processing');
-    setIsUploading(true);
-    setUploadProgress(0);
-
-    try {
-      // 1. Invocar la función para crear la orden y obtener la URL firmada
-      const { data: orderData, error: orderError } = await supabase.functions.invoke('create-order-and-checkout', {
-        body: {
-          file_name: file.name,
-          page_count: pageCount,
-          add_ons: addOns,
-        }
-      });
-
-      if (orderError) throw orderError;
-      
-      setOrderId(orderData.orderId);
-      setCaseId(orderData.caseId);
-      const { path } = orderData.uploadInfo;
-
-      // 2. Subir el archivo usando la URL firmada
-      const { error: uploadError } = await supabase.storage
-        .from('documents')
-        .upload(path, file, {
-            cacheControl: '3600',
-            upsert: false
-        });
-
-      if (uploadError) {
-        throw new Error(`Error al subir el archivo: ${uploadError.message}`);
-      }
-
-      setIsUploading(false);
-      setStep('checkout');
-
-    } catch (e) {
-      toast.error('Error al crear el pedido. Inténtalo de nuevo.');
-      console.error(e);
-      setIsUploading(false);
-      setStep('configure');
-    }
+    setStep('checkout');
   };
   
   const handleCheckout = async () => {
@@ -165,6 +125,10 @@ const OrderPage = () => {
     let finalUserId = user?.id;
 
     try {
+      if (!file) {
+        throw new Error("Por favor, selecciona un archivo antes de continuar.");
+      }
+
       if (!user) {
         if (userExists === false) { // Crear nuevo usuario (invitado o no)
           const { data, error } = await signUp(email, password || `guest_${Date.now()}`, { full_name: 'Invitado' });
@@ -181,25 +145,78 @@ const OrderPage = () => {
         throw new Error("No se pudo determinar el usuario para la orden.");
       }
 
+      setStep('processing');
+      setIsUploading(true);
+      setUploadProgress(0);
+
+      const shouldCreateOrder = !orderId || !caseId;
+      let currentOrderId = orderId;
+      let currentCaseId = caseId;
+
+      if (shouldCreateOrder) {
+        const { data: orderData, error: orderError } = await supabase.functions.invoke('create-order-and-checkout', {
+          body: {
+            file_name: file.name,
+            page_count: pageCount,
+            add_ons: addOns,
+            client_user_id: finalUserId,
+          }
+        });
+
+        if (orderError) throw orderError;
+
+        currentOrderId = orderData.orderId;
+        currentCaseId = orderData.caseId;
+        setOrderId(currentOrderId);
+        setCaseId(currentCaseId);
+        const uploadPath = orderData.uploadInfo?.path;
+
+        if (!uploadPath) {
+          throw new Error('No se pudo obtener la ruta de subida del documento.');
+        }
+
+        const { error: uploadError } = await supabase.storage
+          .from('documents')
+          .upload(uploadPath, file, {
+            cacheControl: '3600',
+            upsert: false
+          });
+
+        if (uploadError) {
+          throw new Error(`Error al subir el archivo: ${uploadError.message}`);
+        }
+
+        setUploadProgress(100);
+        setIsUploading(false);
+      }
+
+      if (!currentOrderId || !currentCaseId) {
+        throw new Error("No se pudo preparar la orden de compra.");
+      }
+
       // Asociar el usuario a la orden y al caso
       const { error: updateError } = await supabase
         .from('orders')
         .update({ client_user_id: finalUserId })
-        .eq('id', orderId);
+        .eq('id', currentOrderId);
       if (updateError) throw updateError;
 
       const { error: caseUpdateError } = await supabase
         .from('cases')
         .update({ client_user_id: finalUserId })
-        .eq('id', caseId);
+        .eq('id', currentCaseId);
       if (caseUpdateError) throw caseUpdateError;
 
-      await redirectToCheckout(orderId, finalEmail, isGuest);
+      await redirectToCheckout(currentOrderId, finalEmail, isGuest);
 
     } catch (e) {
       toast.error(e.message || "Ocurrió un error durante el proceso de pago.");
+      setStep('checkout');
+      setIsUploading(false);
     } finally {
       setIsLoading(false);
+      setUploadProgress(0);
+      setIsUploading(false);
     }
   };
 
