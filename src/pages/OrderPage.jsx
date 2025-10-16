@@ -254,16 +254,16 @@ const OrderPage = () => {
         );
       case 'configure':
         return (
-          <div className="grid md:grid-cols-2 gap-8 items-start w-full max-w-5xl">
-            <Card>
+          <div className="grid w-full max-w-5xl gap-6 md:gap-8 md:grid-cols-2 items-start">
+            <Card className="w-full">
               <CardHeader>
                 <CardTitle>Configura tu pedido</CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="flex items-center gap-3 bg-neutral-100 p-3 rounded-lg">
                   <FileText className="h-8 w-8 text-orange" />
-                  <div>
-                    <p className="font-semibold truncate">{file.name}</p>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-semibold whitespace-normal break-words md:truncate" title={file.name}>{file.name}</p>
                     <p className="text-sm text-neutral-500">{formatBytes(file.size)}</p>
                   </div>
                   <Button variant="ghost" size="icon" onClick={() => { setFile(null); setStep('upload'); }} className="ml-auto">
@@ -291,7 +291,7 @@ const OrderPage = () => {
                 </div>
               </CardContent>
             </Card>
-            <Card className="sticky top-24">
+            <Card className="w-full md:sticky md:top-24">
               <CardHeader>
                 <CardTitle>Resumen</CardTitle>
               </CardHeader>
@@ -382,7 +382,7 @@ const OrderPage = () => {
       <Helmet>
         <title>Nuevo Pedido - Traductor Burocrático</title>
       </Helmet>
-      <div className="min-h-screen flex flex-col items-center justify-center py-12 px-4 bg-neutral-50">
+      <div className="min-h-screen flex flex-col items-center justify-start md:justify-center py-8 md:py-12 px-4 sm:px-6 bg-neutral-50">
         <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8">
           <h1 className="text-4xl font-extrabold text-neutral-800">Tu Pedido</h1>
           <p className="text-lg text-neutral-600 mt-2">Un proceso sencillo y seguro.</p>
@@ -394,7 +394,7 @@ const OrderPage = () => {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3 }}
-            className="w-full flex justify-center"
+            className="w-full flex justify-center px-0 sm:px-2"
           >
             {renderStep()}
           </motion.div>
