@@ -240,7 +240,7 @@ const OrderPage = () => {
       case 'upload':
         return (
           <Card {...getRootProps()} className={`w-full max-w-2xl text-center cursor-pointer transition-all ${isDragActive ? 'border-orange shadow-orange' : 'border-dashed'}`}>
-            <CardContent className="p-10">
+            <CardContent className="p-6 sm:p-8 md:p-10 lg:p-6 flex flex-col items-center justify-center text-center">
               <input {...getInputProps()} />
               <UploadCloud className="mx-auto h-16 w-16 text-neutral-400 mb-4" />
               <h3 className="text-2xl font-semibold mb-2">Arrastra o selecciona tu documento</h3>
@@ -365,7 +365,7 @@ const OrderPage = () => {
       case 'processing':
         return (
           <Card className="w-full max-w-md text-center">
-            <CardContent className="p-10">
+            <CardContent className="p-6 sm:p-8 md:p-10 lg:p-6 flex flex-col items-center justify-center text-center">
               <Loader2 className="mx-auto h-16 w-16 text-orange animate-spin mb-4" />
               <h3 className="text-2xl font-semibold">Subiendo y procesando...</h3>
               <p className="text-neutral-500">Tu documento se está subiendo de forma segura.</p>
@@ -382,26 +382,29 @@ const OrderPage = () => {
       <Helmet>
         <title>Nuevo Pedido - Traductor Burocrático</title>
       </Helmet>
-      <div className="min-h-screen flex flex-col items-center justify-start md:justify-center py-8 md:py-12 px-4 sm:px-6 bg-neutral-50">
-        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8">
-          <h1 className="text-4xl font-extrabold text-neutral-800">Tu Pedido</h1>
-          <p className="text-lg text-neutral-600 mt-2">Un proceso sencillo y seguro.</p>
-        </motion.div>
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={step}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-            className="w-full flex justify-center px-0 sm:px-2"
-          >
-            {renderStep()}
+      <div className="flex flex-1 w-full items-center justify-center bg-neutral-50 px-4 sm:px-6 py-6 sm:py-8 md:py-4">
+        <div className="flex w-full max-w-5xl flex-1 flex-col items-center justify-center gap-6 sm:gap-8">
+          <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-center">
+            <h1 className="text-4xl font-extrabold text-neutral-800">Tu Pedido</h1>
+            <p className="text-lg text-neutral-600 mt-2">Un proceso sencillo y seguro.</p>
           </motion.div>
-        </AnimatePresence>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={step}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+              className="w-full flex justify-center px-0 sm:px-2"
+            >
+              {renderStep()}
+            </motion.div>
+          </AnimatePresence>
+        </div>
       </div>
     </>
   );
 };
 
 export default OrderPage;
+

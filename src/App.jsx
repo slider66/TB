@@ -70,10 +70,12 @@ function App() {
     }
   }, [user]);
 
+  const isOrderPage = location.pathname === '/order';
+
   return (
-    <div className="min-h-screen bg-white">
+    <div className="flex min-h-screen flex-col bg-white">
       <Header onLoginClick={openLogin} onStartClick={openOrder} />
-      <main className="pb-20 md:pb-0">
+      <main className={`flex flex-1 flex-col ${isOrderPage ? 'pb-0' : 'pb-20 md:pb-0'}`}>
         <Suspense fallback={<div className="flex justify-center items-center h-screen"><Loader2 className="h-12 w-12 animate-spin text-orange" /></div>}>
           <AnimatePresence mode="wait">
             <Routes location={location} key={location.pathname}>
