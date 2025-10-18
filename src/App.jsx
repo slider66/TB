@@ -11,6 +11,7 @@ import Register from '@/components/Register';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { Loader2 } from 'lucide-react';
 import AdminRoute from '@/components/AdminRoute';
+import PageMeta from '@/components/PageMeta';
 import StickyCta from '@/components/layout/StickyCta';
 import CookieConsentBanner from '@/components/CookieConsentBanner';
 
@@ -74,6 +75,7 @@ function App() {
 
   return (
     <div className="flex min-h-screen flex-col bg-white">
+      <PageMeta />
       <Header onLoginClick={openLogin} onStartClick={openOrder} />
       <main className={`flex flex-1 flex-col ${isOrderPage ? 'pb-0' : 'pb-20 md:pb-0'}`}>
         <Suspense fallback={<div className="flex justify-center items-center h-screen"><Loader2 className="h-12 w-12 animate-spin text-orange" /></div>}>
