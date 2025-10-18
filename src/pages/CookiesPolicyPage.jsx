@@ -1,16 +1,10 @@
 
 import React from 'react';
-import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 
 const CookiesPolicyPage = () => {
   return (
-    <>
-      <Helmet>
-        <title>Política de Cookies - Traductor Burocrático</title>
-        <meta name="description" content="Información sobre el uso de cookies en Traductor Burocrático." />
-      </Helmet>
-      <motion.div
+    <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -64,7 +58,6 @@ const CookiesPolicyPage = () => {
           </p>
         </div>
       </motion.div>
-    </>
   );
 };
 

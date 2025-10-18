@@ -1,6 +1,5 @@
 import React from 'react';
 import { NavLink, Route, Routes } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
 import { Users, CreditCard, Settings, BarChart, Home } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
@@ -19,12 +18,7 @@ const AdminPage = () => {
   ];
 
   return (
-    <>
-      <Helmet>
-        <title>Panel de Administración</title>
-        <meta name="robots" content="noindex, nofollow" />
-      </Helmet>
-      <div className="flex min-h-screen bg-neutral-100">
+    <div className="flex min-h-screen bg-neutral-100">
         <aside className="w-64 bg-neutral-800 text-white p-4 flex flex-col">
           <div className="mb-8">
             <h2 className="text-2xl font-bold text-orange">Admin Panel</h2>
@@ -65,7 +59,6 @@ const AdminPage = () => {
           </motion.div>
         </main>
       </div>
-    </>
   );
 };
 

@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { Mail, Send, Phone, MapPin, Loader2 } from 'lucide-react';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
-import { Helmet } from 'react-helmet-async';
 import { supabase } from '@/lib/customSupabaseClient';
 
 const SupportPage = () => {
@@ -87,20 +86,8 @@ const SupportPage = () => {
     }
   };
 
-  const title = "Soporte y Ayuda para tu trámite con la administración";
-  const description = "Nuestro equipo de soporte te ayuda con tu notificación de Hacienda, AEAT o Seguridad Social. Contacta para resolver dudas sobre tu trámite.";
-
   return (
-    <>
-      <Helmet>
-        <title>{title}</title>
-        <meta name="description" content={description} />
-        <link rel="canonical" href="https://traductorburocratico.es/support" />
-        <meta property="og:title" content={title} />
-        <meta property="og:description" content={description} />
-        <meta property="og:url" content="https://traductorburocratico.es/support" />
-      </Helmet>
-      <div className="min-h-screen py-20 px-4">
+    <div className="min-h-screen py-20 px-4">
         <div className="max-w-4xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -194,7 +181,6 @@ const SupportPage = () => {
           </div>
         </div>
       </div>
-    </>
   );
 };
 

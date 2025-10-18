@@ -3,23 +3,10 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { UploadCloud, ShieldCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { Helmet } from 'react-helmet-async';
 
 const HeroSection = ({ onUploadClick }) => {
-  const title = "Traduce tu documento oficial a lenguaje claro en minutos | 60 chars";
-  const description = "Sube tu archivo y recibe una explicación sencilla y revisada por un humano. Notificación hacienda, notificación administración, trámite, traducción, AEAT, Seguridad Social.";
-
   return (
-    <>
-      <Helmet>
-        <title>{title}</title>
-        <meta name="description" content={description} />
-        <link rel="canonical" href="https://traductorburocratico.es/" />
-        <meta property="og:title" content={title} />
-        <meta property="og:description" content={description} />
-        <meta property="og:url" content="https://traductorburocratico.es/" />
-      </Helmet>
-      <section className="relative w-full py-20 md:py-28 lg:py-36 bg-neutral-50 overflow-hidden hero-pattern">
+    <section className="relative w-full py-20 md:py-28 lg:py-36 bg-neutral-50 overflow-hidden hero-pattern">
         <div className="container mx-auto px-6 flex flex-col items-center text-center relative z-10">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
@@ -67,7 +54,6 @@ const HeroSection = ({ onUploadClick }) => {
           </motion.div>
         </div>
       </section>
-    </>
   );
 };
 

@@ -9,28 +9,42 @@ const PageMeta = () => {
 
   const seo = getSeoForPath(pathname);
 
-  return (
-    <Helmet>
-      {/* General Tags */}
-      <title>{seo.title}</title>
-      <meta name="description" content={seo.description} />
-      <link rel="canonical" href={seo.canonical} />
+  if (seo?.disabled) {
+    return null;
+  }
 
-      {/* Open Graph Tags (for Facebook, LinkedIn, etc.) */}
-      <meta property="og:title" content={seo.title} />
-      <meta property="og:description" content={seo.description} />
-      <meta property="og:url" content={seo.canonical} />
-      <meta property="og:image" content={seo.ogImage} />
+  return (
+    <Helmet prioritizeSeoTags>
+      {seo?.title && <title>{seo.title}</title>}
+      {seo?.description && <meta name="description" content={seo.description} />}
+      {seo?.canonical && <link rel="canonical" href={seo.canonical} />}
+      {seo?.robots && <meta name="robots" content={seo.robots} />}
+
+      {seo?.title && <meta property="og:title" content={seo.title} />}
+      {seo?.description && <meta property="og:description" content={seo.description} />}
+      {seo?.canonical && <meta property="og:url" content={seo.canonical} />}
+      {seo?.ogImage && <meta property="og:image" content={seo.ogImage} />}
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
-      <meta property="og:type" content="website" />
-      <meta property="og:site_name" content="Traductor Burocrático" />
+      {seo?.ogType && <meta property="og:type" content={seo.ogType} />}
+      {seo?.siteName && <meta property="og:site_name" content={seo.siteName} />}
 
-      {/* Twitter Card Tags */}
-      <meta name="twitter:card" content={seo.twitterCard} />
-      <meta name="twitter:title" content={seo.title} />
-      <meta name="twitter:description" content={seo.description} />
-      <meta name="twitter:image" content={seo.ogImage} />
+      {seo?.twitterCard && <meta name="twitter:card" content={seo.twitterCard} />}
+      {seo?.title && <meta name="twitter:title" content={seo.title} />}
+      {seo?.description && <meta name="twitter:description" content={seo.description} />}
+      {seo?.ogImage && <meta name="twitter:image" content={seo.ogImage} />}
+
+      {Array.isArray(seo?.extraMeta) &&
+        seo.extraMeta.map(({ name, property, content }, index) => {
+          if (!content) return null;
+          if (!name && !property) return null;
+          const key = name ? `meta-name-${name}-${index}` : `meta-property-${property}-${index}`;
+          return name ? (
+            <meta key={key} name={name} content={content} />
+          ) : (
+            <meta key={key} property={property} content={content} />
+          );
+        })}
     </Helmet>
   );
 };

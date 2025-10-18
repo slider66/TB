@@ -1,6 +1,5 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import { XCircle, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -10,12 +9,7 @@ const PaymentCancelledPage = () => {
   const navigate = useNavigate();
 
   return (
-    <>
-      <Helmet>
-        <title>Pago Cancelado - Traductor Burocrático</title>
-        <meta name="robots" content="noindex" />
-      </Helmet>
-      <div className="min-h-[60vh] flex items-center justify-center py-20 px-4 bg-neutral-50">
+    <div className="min-h-[60vh] flex items-center justify-center py-20 px-4 bg-neutral-50">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -45,7 +39,6 @@ const PaymentCancelledPage = () => {
           </Card>
         </motion.div>
       </div>
-    </>
   );
 };
 

@@ -1,6 +1,5 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { Helmet } from 'react-helmet-async';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useDropzone } from 'react-dropzone';
 import { supabase } from '@/lib/customSupabaseClient';
@@ -378,11 +377,7 @@ const OrderPage = () => {
   };
 
   return (
-    <>
-      <Helmet>
-        <title>Nuevo Pedido - Traductor Burocrático</title>
-      </Helmet>
-      <div className="flex flex-1 w-full items-center justify-center bg-neutral-50 px-4 sm:px-6 py-6 sm:py-8 md:py-4">
+    <div className="flex flex-1 w-full items-center justify-center bg-neutral-50 px-4 sm:px-6 py-6 sm:py-8 md:py-4">
         <div className="flex w-full max-w-5xl flex-1 flex-col items-center justify-center gap-6 sm:gap-8">
           <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-center">
             <h1 className="text-4xl font-extrabold text-neutral-800">Tu Pedido</h1>
@@ -402,9 +397,7 @@ const OrderPage = () => {
           </AnimatePresence>
         </div>
       </div>
-    </>
   );
 };
 
 export default OrderPage;
-

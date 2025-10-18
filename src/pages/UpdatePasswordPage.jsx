@@ -4,7 +4,6 @@ import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { Loader2, Lock, Eye, EyeOff } from 'lucide-react';
-import { Helmet } from 'react-helmet-async';
 import PasswordStrength from '@/components/PasswordStrength';
 
 const UpdatePasswordPage = () => {
@@ -75,12 +74,7 @@ const UpdatePasswordPage = () => {
   };
 
   return (
-    <>
-      <Helmet>
-        <title>Actualizar Contraseña - Traductor Burocrático</title>
-        <meta name="description" content="Actualiza tu contraseña para acceder a tu cuenta." />
-      </Helmet>
-      <div className="min-h-screen flex items-center justify-center bg-neutral-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-neutral-50 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
           <div className="bg-white p-8 rounded-xl shadow-lg">
             <h2 className="text-2xl font-bold text-center mb-2 text-neutral-800">
@@ -134,7 +128,6 @@ const UpdatePasswordPage = () => {
           </div>
         </div>
       </div>
-    </>
   );
 };
 

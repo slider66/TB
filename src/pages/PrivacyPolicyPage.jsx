@@ -1,18 +1,12 @@
 
 import React from 'react';
-import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 
 const LAST_UPDATED_DATE = "23 de septiembre de 2024";
 
 const PrivacyPolicyPage = () => {
   return (
-    <>
-      <Helmet>
-        <title>Política de Privacidad - Traductor Burocrático</title>
-        <meta name="description" content="Política de Privacidad de Traductor Burocrático. Conoce cómo tratamos tus datos personales." />
-      </Helmet>
-      <motion.div
+    <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -100,7 +94,6 @@ const PrivacyPolicyPage = () => {
           </p>
         </div>
       </motion.div>
-    </>
   );
 };
 

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Helmet } from 'react-helmet-async';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { supabase } from '@/lib/customSupabaseClient';
 import { Button } from '@/components/ui/button';
@@ -78,12 +77,7 @@ const AccountPage = () => {
   }
 
   return (
-    <>
-      <Helmet>
-        <title>Mi Cuenta - Traductor Burocrático</title>
-        <meta name="description" content="Gestiona los datos de tu cuenta y tu perfil." />
-      </Helmet>
-      <div className="min-h-screen bg-neutral-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-neutral-50 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl mx-auto">
           <h1 className="text-3xl font-bold text-neutral-800 mb-8">Mi Cuenta</h1>
           
@@ -139,7 +133,6 @@ const AccountPage = () => {
           </div>
         </div>
       </div>
-    </>
   );
 };
 

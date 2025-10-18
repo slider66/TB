@@ -1,5 +1,4 @@
 import React from 'react';
-import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
 import { FileText, User, Users, Shield, DollarSign, Scale, Mail, Smile, RefreshCcw, AlertTriangle, Ban } from 'lucide-react';
 
@@ -23,14 +22,7 @@ const Section = ({ icon, title, children }) => (
 
 const TermsPage = () => {
   return (
-    <>
-      <Helmet>
-        <title>Términos y Condiciones - Traductor Burocrático</title>
-        <meta name="description" content="Consulta los términos y condiciones de uso de la plataforma Traductor Burocrático." />
-        <meta property="og:title" content="Términos y Condiciones - Traductor Burocrático" />
-        <meta property="og:description" content="Consulta los términos y condiciones de uso de la plataforma." />
-      </Helmet>
-      <div className="min-h-screen bg-neutral-50 py-20 px-4">
+    <div className="min-h-screen bg-neutral-50 py-20 px-4">
         <div className="max-w-4xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -131,7 +123,6 @@ const TermsPage = () => {
 
         </div>
       </div>
-    </>
   );
 };
 

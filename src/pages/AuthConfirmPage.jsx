@@ -2,18 +2,10 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { CheckCircle, LogIn } from 'lucide-react';
-import { Helmet } from 'react-helmet';
 
 const AuthConfirmPage = ({ onLoginClick }) => {
   return (
-    <>
-      <Helmet>
-        <title>Confirmación de Cuenta</title>
-        <meta name="description" content="Tu cuenta ha sido confirmada exitosamente. Inicia sesión para continuar." />
-        <meta property="og:title" content="Confirmación de Cuenta" />
-        <meta property="og:description" content="Tu cuenta ha sido confirmada exitosamente. Inicia sesión para continuar." />
-      </Helmet>
-      <div className="min-h-[calc(100vh-200px)] flex items-center justify-center bg-neutral-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-[calc(100vh-200px)] flex items-center justify-center bg-neutral-50 py-12 px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -43,7 +35,6 @@ const AuthConfirmPage = ({ onLoginClick }) => {
           </div>
         </motion.div>
       </div>
-    </>
   );
 };
 

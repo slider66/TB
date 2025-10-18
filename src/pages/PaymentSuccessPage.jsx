@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import { CheckCircle, ArrowRight, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -86,12 +85,7 @@ const PaymentSuccessPage = () => {
 
 
   return (
-    <>
-      <Helmet>
-        <title>Pago Exitoso - Traductor Burocrático</title>
-        <meta name="robots" content="noindex" />
-      </Helmet>
-      <div className="min-h-[60vh] flex items-center justify-center py-20 px-4 bg-neutral-50">
+    <div className="min-h-[60vh] flex items-center justify-center py-20 px-4 bg-neutral-50">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -131,7 +125,6 @@ const PaymentSuccessPage = () => {
           </Card>
         </motion.div>
       </div>
-    </>
   );
 };
 

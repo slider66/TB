@@ -5,6 +5,7 @@ import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
+import { generalConfig } from '@/lib/seoConfig';
 
 import SummaryBar from '@/components/case/SummaryBar';
 import CaseData from '@/components/case/CaseData';
@@ -49,14 +50,18 @@ const CaseDetailPage = () => {
     
     const pageTitle = `Expediente: ${caseData.title} | Traductor Burocrático`;
     const pageDescription = `Gestiona y visualiza los detalles del expediente ${caseId}: ${caseData.title}.`;
+    const canonicalUrl = `${generalConfig.baseURL}/cases/${caseId}`;
 
     return (
         <div className="min-h-screen bg-neutral-50 py-12 px-4 sm:px-6 lg:px-8">
-            <Helmet>
+            <Helmet prioritizeSeoTags>
                 <title>{pageTitle}</title>
                 <meta name="description" content={pageDescription} />
+                <meta name="robots" content="noindex, nofollow" />
+                <link rel="canonical" href={canonicalUrl} />
                 <meta property="og:title" content={pageTitle} />
                 <meta property="og:description" content={pageDescription} />
+                <meta property="og:url" content={canonicalUrl} />
                 <meta name="twitter:title" content={pageTitle} />
                 <meta name="twitter:description" content={pageDescription} />
             </Helmet>

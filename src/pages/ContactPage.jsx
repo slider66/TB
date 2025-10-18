@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { Mail, Send, Phone, MapPin, Loader2 } from 'lucide-react';
-import { Helmet } from 'react-helmet-async';
 import { supabase } from '@/lib/customSupabaseClient';
 
 const ContactPage = () => {
@@ -72,21 +71,8 @@ const ContactPage = () => {
     }
   };
 
-  const title = 'Contacto para dudas sobre notificacion de Hacienda';
-  const description =
-    'Contacta para resolver dudas sobre tu tramite con la administracion. Te ayudamos a entender tu notificacion de Hacienda, AEAT o TGSS.';
-
   return (
-    <>
-      <Helmet>
-        <title>{title}</title>
-        <meta name="description" content={description} />
-        <link rel="canonical" href="https://traductorburocratico.es/contact" />
-        <meta property="og:title" content={title} />
-        <meta property="og:description" content={description} />
-        <meta property="og:url" content="https://traductorburocratico.es/contact" />
-      </Helmet>
-      <div className="min-h-screen py-20 px-4">
+    <div className="min-h-screen py-20 px-4">
         <div className="max-w-4xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -194,7 +180,6 @@ const ContactPage = () => {
           </div>
         </div>
       </div>
-    </>
   );
 };
 

@@ -1,5 +1,4 @@
 import React from 'react';
-import { Helmet } from 'react-helmet';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
@@ -24,12 +23,7 @@ const PanelPage = () => {
   }
 
   return (
-    <>
-      <Helmet>
-        <title>Panel de Usuario</title>
-        <meta name="description" content="Gestiona tus documentos y perfil desde tu panel de usuario." />
-      </Helmet>
-      <div className="min-h-[calc(100vh-200px)] bg-neutral-50 p-4 sm:p-6 lg:p-8">
+    <div className="min-h-[calc(100vh-200px)] bg-neutral-50 p-4 sm:p-6 lg:p-8">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -72,7 +66,6 @@ const PanelPage = () => {
           </motion.div>
         </div>
       </div>
-    </>
   );
 };
 

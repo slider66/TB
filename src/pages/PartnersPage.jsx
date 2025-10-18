@@ -14,7 +14,6 @@ import {
   Users
 } from 'lucide-react';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
-import { Helmet } from 'react-helmet-async';
 import { supabase } from '@/lib/customSupabaseClient';
 
 
@@ -61,9 +60,6 @@ const PartnersPage = () => {
 
 
   const PublicPartnersPage = () => {
-    const title = "Leads para Gestorías y Abogados | Traductor Burocrático";
-    const description = "Recibe clientes cualificados y verificados para tu gestoría o despacho. Únete como partner y accede a leads listos para contratar.";
-
     const [partner, setPartner] = useState({ name: '', email: '', phone: '', colegiado: '', experiencia: '', especialidad: '', _hp: '' });
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [ts] = useState(() => Date.now());
@@ -129,19 +125,6 @@ const PartnersPage = () => {
     };
 
     return (
-      <>
-        <Helmet>
-          <title>{title}</title>
-          <meta name="description" content={description} />
-          <meta name="robots" content="index,follow" />
-          <link rel="canonical" href="https://traductorburocratico.es/partners" />
-          <meta property="og:title" content={title} />
-          <meta property="og:description" content={description} />
-          <meta property="og:type" content="website" />
-          <meta property="og:site_name" content="Traductor Burocrático" />
-          <meta property="og:locale" content="es_ES" />
-          <meta property="og:url" content="https://traductorburocratico.es/partners" />
-        </Helmet>
         <div className="min-h-screen py-20 px-4">
           <div className="max-w-6xl mx-auto">
             <motion.div
@@ -361,7 +344,6 @@ const PartnersPage = () => {
             </motion.div>
           </div>
         </div>
-      </>
     );
   }
 

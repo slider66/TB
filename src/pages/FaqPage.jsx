@@ -8,7 +8,6 @@ import {
 } from '@/components/ui/accordion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Lightbulb, Clock, FileText, ShieldCheck, Upload, CheckCircle, MessageSquare, DollarSign, RefreshCw, Lock, Brain, Users, HeartHandshake as Handshake, User, Briefcase, Globe } from 'lucide-react';
-import { Helmet } from 'react-helmet-async';
 
 const FaqPage = () => {
   const faqItems = [
@@ -262,9 +261,6 @@ const FaqPage = () => {
     },
   ];
 
-  const title = "Preguntas Frecuentes sobre trámites y notificaciones | 59ch";
-  const description = "Resolvemos tus dudas sobre la traducción de una notificación de la administración, AEAT o Seguridad Social. Privacidad, precios y plazos.";
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -272,15 +268,6 @@ const FaqPage = () => {
       transition={{ duration: 0.5 }}
       className="container mx-auto px-4 py-12 md:py-16"
     >
-      <Helmet>
-        <title>{title}</title>
-        <meta name="description" content={description} />
-        <link rel="canonical" href="https://traductorburocratico.es/faq" />
-        <meta property="og:title" content={title} />
-        <meta property="og:description" content={description} />
-        <meta property="og:url" content="https://traductorburocratico.es/faq" />
-      </Helmet>
-
       <h1 className="text-4xl md:text-5xl font-extrabold text-center text-gray-900 mb-12 leading-tight">
         Preguntas Frecuentes
       </h1>
