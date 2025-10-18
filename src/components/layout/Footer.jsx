@@ -1,28 +1,36 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Facebook, Twitter, Linkedin } from 'lucide-react';
+import { useCookieConsent } from '@/contexts/CookieConsentContext';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const { openPreferences, hideBanner } = useCookieConsent();
+
+  const handleCookiePreferences = () => {
+    hideBanner();
+    openPreferences();
+  };
 
   const footerLinks = {
-    'Producto': [
+    Producto: [
       { text: 'Precios', to: '/pricing' },
       { text: 'Cómo funciona', to: '/#features' },
       { text: 'Empezar', to: '/order' },
     ],
-    'Empresa': [
+    Empresa: [
       { text: 'Partners', to: '/partners' },
       { text: 'Contacto', to: '/contact' },
     ],
-    'Recursos': [
+    Recursos: [
       { text: 'Preguntas Frecuentes', to: '/faq' },
       { text: 'Soporte', to: '/support' },
     ],
-    'Legal': [
+    Legal: [
       { text: 'Términos de Servicio', to: '/terms' },
       { text: 'Política de Privacidad', to: '/privacy-policy' },
       { text: 'Política de Cookies', to: '/cookies-policy' },
+      { text: 'Gestionar cookies', type: 'button', onClick: handleCookiePreferences },
     ],
   };
 
@@ -45,9 +53,19 @@ const Footer = () => {
               <ul className="space-y-3">
                 {links.map((link) => (
                   <li key={link.text}>
-                    <Link to={link.to} className="hover:text-white transition-colors duration-300">
-                      {link.text}
-                    </Link>
+                    {link.type === 'button' ? (
+                      <button
+                        type="button"
+                        onClick={link.onClick}
+                        className="hover:text-white transition-colors duration-300"
+                      >
+                        {link.text}
+                      </button>
+                    ) : (
+                      <Link to={link.to} className="hover:text-white transition-colors duration-300">
+                        {link.text}
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>
