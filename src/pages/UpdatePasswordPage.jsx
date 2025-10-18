@@ -13,7 +13,7 @@ const UpdatePasswordPage = () => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const { updateUserPassword, session } = useAuth();
+  const { updateUserPassword, session, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -21,6 +21,10 @@ const UpdatePasswordPage = () => {
     // This page should only be accessible when the user has followed a password reset link
     // which results in a session with an access_token but potentially no user object yet,
     // or when the onAuthStateChange event has fired with 'PASSWORD_RECOVERY'.
+    if (authLoading) {
+      return;
+    }
+
     if (!session?.access_token) {
       toast({
         title: 'Acceso no válido',
@@ -29,7 +33,7 @@ const UpdatePasswordPage = () => {
       });
       navigate('/');
     }
-  }, [session, navigate, toast]);
+  }, [session, navigate, toast, authLoading]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

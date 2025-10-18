@@ -54,6 +54,12 @@ export const AuthProvider = ({ children }) => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         handleSession(session);
+
+        if (event === 'PASSWORD_RECOVERY' && typeof window !== 'undefined') {
+          // Supabase sends users back to the root after verifying the recovery link.
+          // Redirect them to the dedicated password update form.
+          window.location.replace('/update-password');
+        }
       }
     );
 
@@ -120,10 +126,25 @@ export const AuthProvider = ({ children }) => {
     return { error };
   }, [toast]);
   
+  const passwordResetRedirectUrl = useMemo(() => {
+    const envUrl = import.meta.env.VITE_PASSWORD_RESET_REDIRECT_URL;
+    if (envUrl) {
+      return envUrl;
+    }
+
+    if (typeof window !== 'undefined') {
+      return `${window.location.origin}/update-password`;
+    }
+
+    return undefined;
+  }, []);
+
   const sendPasswordResetEmail = useCallback(async (email) => {
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/update-password`,
-    });
+    const options = passwordResetRedirectUrl
+      ? { redirectTo: passwordResetRedirectUrl }
+      : undefined;
+
+    const { error } = await supabase.auth.resetPasswordForEmail(email, options);
 
     if (error) {
        toast({
@@ -139,7 +160,7 @@ export const AuthProvider = ({ children }) => {
         });
     }
     return { error };
-  }, [toast]);
+  }, [toast, passwordResetRedirectUrl]);
 
   const updateUserPassword = useCallback(async (newPassword) => {
     const { data, error } = await supabase.auth.updateUser({
