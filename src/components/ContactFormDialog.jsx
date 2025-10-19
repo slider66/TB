@@ -15,6 +15,7 @@ const ContactFormDialog = ({ onClose }) => {
   const [message, setMessage] = useState('');
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [botField, setBotField] = useState('');
   const fileInputRef = useRef(null);
 
   const handleFileChange = (e) => {
@@ -30,16 +31,43 @@ const ContactFormDialog = ({ onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!name || !email || !message) {
+    if (botField && botField.trim() !== '') {
+      return;
+    }
+
+    const trimmedName = name.trim();
+    const trimmedEmail = email.trim();
+    const trimmedMessage = message.trim();
+    const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!trimmedName || !trimmedEmail || !trimmedMessage) {
       toast.error('Por favor, completa todos los campos obligatorios.');
+      return;
+    }
+
+    if (!EMAIL_REGEX.test(trimmedEmail)) {
+      toast.error('Introduce un correo con formato válido (ej. usuario@dominio.com).');
       return;
     }
     setLoading(true);
 
+    const metadata: Record<string, unknown> = {
+      route: typeof window !== 'undefined' ? window.location.pathname : undefined,
+      userAgent: typeof window !== 'undefined' ? window.navigator.userAgent : undefined,
+    };
+
+    if (file) {
+      metadata.fileName = file.name;
+      metadata.fileSize = file.size;
+      metadata.fileType = file.type;
+    }
+
     const body = {
-      name,
-      email,
-      message,
+      name: trimmedName,
+      email: trimmedEmail,
+      message: trimmedMessage,
+      source: 'contact_modal',
+      metadata,
     };
 
     // Note: supabase.functions.invoke with FormData is tricky and might not work as expected
@@ -52,10 +80,15 @@ const ContactFormDialog = ({ onClose }) => {
         body,
       });
 
-      if (error) throw error;
+     if (error) throw error;
 
       toast.success('¡Mensaje enviado! Nos pondremos en contacto contigo pronto.');
       onClose();
+      setBotField('');
+      setFile(null);
+      setName('');
+      setEmail('');
+      setMessage('');
     } catch (error) {
       console.error('Error sending contact form:', error);
       toast.error(error.message || 'Hubo un error al enviar el mensaje. Inténtalo de nuevo.');
@@ -82,6 +115,16 @@ const ContactFormDialog = ({ onClose }) => {
             <Label htmlFor="email">Email</Label>
             <Input id="email" type="email" placeholder="tu@email.com" value={email} onChange={(e) => setEmail(e.target.value)} required />
           </div>
+        </div>
+        <div className="hidden">
+          <Label htmlFor="bot-field">Déjalo en blanco</Label>
+          <Input
+            id="bot-field"
+            value={botField}
+            onChange={(e) => setBotField(e.target.value)}
+            tabIndex={-1}
+            autoComplete="off"
+          />
         </div>
         <div className="space-y-2">
           <Label htmlFor="message">Mensaje</Label>

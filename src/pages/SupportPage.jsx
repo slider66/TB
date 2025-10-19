@@ -16,7 +16,8 @@ const SupportPage = () => {
     lastName: '',
     phone: '',
     email: '',
-    message: ''
+    message: '',
+    _hp: '',
   });
 
   useEffect(() => {
@@ -44,7 +45,8 @@ const SupportPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { firstName, lastName, phone, email, message } = formData;
-    if (!firstName || !lastName || !phone || !email || !message) {
+    const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!firstName.trim() || !lastName.trim() || !phone.trim() || !email.trim() || !message.trim()) {
       toast({
         title: "Campos obligatorios",
         description: "Por favor, rellena todos los campos del formulario.",
@@ -52,16 +54,39 @@ const SupportPage = () => {
       });
       return;
     }
-    
+
+    if (!EMAIL_REGEX.test(email.trim())) {
+      toast({
+        title: 'Email no válido',
+        description: 'Introduce un correo con formato válido (ej. usuario@dominio.com).',
+        variant: 'destructive',
+      });
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
+      if (formData._hp && formData._hp.trim() !== '') {
+        setIsSubmitting(false);
+        return;
+      }
+
+      const metadata = {
+        route: '/support',
+        userAgent: typeof window !== 'undefined' ? window.navigator.userAgent : undefined,
+        userId: user?.id ?? undefined,
+      };
+
       const { error } = await supabase.functions.invoke('send-contact-email', {
         body: {
-          name: `${firstName} ${lastName}`,
-          email: email,
-          phone: phone,
-          message: message,
+          name: `${firstName} ${lastName}`.trim(),
+          email: email.trim(),
+          phone: phone.trim(),
+          message: message.trim(),
+          source: 'support_page',
+          userId: user?.id ?? undefined,
+          metadata,
         },
       });
 
@@ -73,7 +98,7 @@ const SupportPage = () => {
         title: "✅ Consulta enviada",
         description: "Gracias por contactarnos. Tu consulta ha sido recibida y te responderemos pronto.",
       });
-      setFormData(prev => ({ ...prev, message: '' }));
+      setFormData(prev => ({ ...prev, message: '', _hp: '' }));
     } catch (error) {
       console.error('Error sending support form:', error);
       toast({
@@ -116,6 +141,20 @@ const SupportPage = () => {
                     <label className="block text-sm font-medium text-neutral-700 mb-2" htmlFor="lastName">Apellidos</label>
                     <input id="lastName" value={formData.lastName} onChange={handleInputChange} type="text" placeholder="Tus apellidos" required className="w-full px-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-orange focus:outline-none" />
                   </div>
+                </div>
+                <div className="hidden">
+                  <label className="block text-sm font-medium text-neutral-700 mb-2" htmlFor="_hp">
+                    Déjalo en blanco
+                  </label>
+                  <input
+                    id="_hp"
+                    value={formData._hp}
+                    onChange={handleInputChange}
+                    type="text"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    className="w-full px-4 py-3 border border-neutral-300 rounded-lg"
+                  />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                    <div>

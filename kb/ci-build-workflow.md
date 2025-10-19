@@ -21,6 +21,7 @@ Garantizar que cada push ejecuta una build de producción con las mismas herrami
 
 ```bash
 corepack enable
+corepack prepare $(node -p "require('./package.json').packageManager.split('+')[0]") --activate
 pnpm install --frozen-lockfile --prefer-offline
 pnpm run build
 ```
@@ -32,3 +33,4 @@ Aparecerá un warning sobre `CaseDetailPage` generado por `tools/generate-llms.j
 - No mezclar con `npm install`/`npm run build`; el lockfile y el workflow esperan pnpm.
 - Si se añaden dependencias que ejecutan scripts nativos (`@swc/core`, `esbuild`), apruébalos con `pnpm approve-builds`.
 - Cualquier cambio en los scripts de build debe reflejarse también en el workflow para que la CI siga siendo representativa.
+- Si alguien ejecuta `npm install` por error, revierte `package-lock.json` y reinstala con `pnpm install --frozen-lockfile --prefer-offline` para volver al estado consistente.

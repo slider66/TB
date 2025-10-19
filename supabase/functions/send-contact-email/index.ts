@@ -15,6 +15,10 @@ type ContactPayload = {
   name?: string;
   email?: string;
   message?: string;
+  phone?: string;
+  source?: string;
+  metadata?: Record<string, unknown>;
+  userId?: string;
 };
 
 function jsonResponse(body: unknown, status = 200) {
@@ -41,6 +45,13 @@ Deno.serve(async (req) => {
     const name = payload.name?.trim();
     const email = payload.email?.trim();
     const message = payload.message?.trim();
+    const phone = payload.phone?.trim();
+    const source = payload.source?.trim() || null;
+    const userId = payload.userId?.trim() || null;
+    const metadata =
+      payload.metadata && typeof payload.metadata === 'object'
+        ? payload.metadata
+        : undefined;
 
     if (!name || !email || !message) {
       return jsonResponse(
@@ -49,11 +60,28 @@ Deno.serve(async (req) => {
       );
     }
 
+    const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!EMAIL_REGEX.test(email)) {
+      return jsonResponse({ error: 'Invalid email format.' }, 400);
+    }
+
+    if (message.length > 5000) {
+      return jsonResponse({ error: 'Message is too long.' }, 400);
+    }
+
     if (supabaseAdmin) {
+      const composedMetadata: Record<string, unknown> = {
+        ...(metadata ?? {}),
+        ...(phone ? { phone } : {}),
+        ...(userId ? { userId } : {}),
+      };
+
       const insertPayload: Record<string, unknown> = {
         name,
         email,
         message,
+        source,
+        metadata: Object.keys(composedMetadata).length > 0 ? composedMetadata : null,
       };
 
       const { error: insertError } = await supabaseAdmin

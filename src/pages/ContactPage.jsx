@@ -7,7 +7,7 @@ import { supabase } from '@/lib/customSupabaseClient';
 
 const ContactPage = () => {
   const { toast } = useToast();
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', message: '', _hp: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleInputChange = (event) => {
@@ -18,7 +18,16 @@ const ContactPage = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (!formData.name || !formData.email || !formData.message) {
+    if (formData._hp && formData._hp.trim() !== '') {
+      return;
+    }
+
+    const trimmedName = formData.name.trim();
+    const trimmedEmail = formData.email.trim();
+    const trimmedMessage = formData.message.trim();
+    const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!trimmedName || !trimmedEmail || !trimmedMessage) {
       toast({
         title: 'Campos obligatorios',
         description: 'Por favor, rellena todos los campos.',
@@ -27,14 +36,30 @@ const ContactPage = () => {
       return;
     }
 
+    if (!EMAIL_REGEX.test(trimmedEmail)) {
+      toast({
+        title: 'Email no válido',
+        description: 'Introduce un correo con formato válido (ej. usuario@dominio.com).',
+        variant: 'destructive',
+      });
+      return;
+    }
+
     setIsSubmitting(true);
 
     try {
+      const metadata = {
+        route: '/contact',
+        userAgent: typeof window !== 'undefined' ? window.navigator.userAgent : undefined,
+      };
+
       const { error } = await supabase.functions.invoke('send-contact-email', {
         body: {
-          name: formData.name,
-          email: formData.email,
-          message: formData.message,
+          name: trimmedName,
+          email: trimmedEmail,
+          message: trimmedMessage,
+          source: 'contact_page',
+          metadata,
         },
       });
 
@@ -46,7 +71,7 @@ const ContactPage = () => {
         title: 'Mensaje enviado',
         description: 'Gracias por contactarnos. Te responderemos pronto.',
       });
-      setFormData({ name: '', email: '', message: '' });
+      setFormData({ name: '', email: '', message: '', _hp: '' });
     } catch (error) {
       const context = error?.context ?? {};
       const detailedMessage =
@@ -94,6 +119,18 @@ const ContactPage = () => {
             >
               <h2 className="text-2xl font-bold text-neutral-800 mb-6 font-montserrat">Envianos un mensaje</h2>
               <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="hidden">
+                  <label className="block text-sm font-medium text-neutral-700 mb-2">Déjalo en blanco</label>
+                  <input
+                    type="text"
+                    name="_hp"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    value={formData._hp}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 border border-neutral-300 rounded-lg"
+                  />
+                </div>
                 <div>
                   <label className="block text-sm font-medium text-neutral-700 mb-2">Nombre</label>
                   <input
