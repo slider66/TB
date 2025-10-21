@@ -15,7 +15,7 @@
 - `api/mcp.http` — Ejemplos de invocaciones HTTP (local/prod) para pruebas manuales.
 
 ## Seguridad y cumplimiento
-- `docs/PLACEHOLDERS.md` — Política de placeholders y nombres explícitos.
+- `docs/placeholders-policy.md` — Política de placeholders y nombres explícitos.
 - _(añadir futuros documentos de hardening, RGPD, etc.)_
 
 ## Base de datos y RLS
@@ -28,4 +28,4 @@
 
 ## Notas
 - Cada vez que una de estas fuentes cambie, revisa si hay que actualizar esta lista (nuevas tools MCP, nuevas guías, etc.).
-- Si aparece una nueva fuente canónica en otra carpeta (por ejemplo `kb/`), enlázala aquí para que las IAs sepan dónde consultar la información más reciente.
+- Si aparece una nueva fuente canónica en otra carpeta (por ejemplo alguna subcarpeta de `docs/`), enlázala aquí para que las IAs sepan dónde consultar la información más reciente.

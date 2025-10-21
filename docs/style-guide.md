@@ -1,4 +1,4 @@
-# style.md — Traductor Burocrático
+# style-guide.md — Traductor Burocrático
 
 version: 1.1  
 last_updated: 2025-10-08  
@@ -149,7 +149,7 @@ Plataforma que traduce documentos oficiales a lenguaje común, guiando al usuari
 ---
 
 ## 8) Gobernanza visual
-- Cualquier cambio en color, radio, tipografía o espaciado debe registrarse en **changelog del style.md**.  
+- Cualquier cambio en color, radio, tipografía o espaciado debe registrarse en **changelog del style-guide.md**.  
 - Debe mantenerse sincronizado con el sistema de diseño (Tailwind o Figma) y exportarse como tokens si aplica.
 
 ---

@@ -1,4 +1,4 @@
-﻿---
+---
 
 ## title: "Traductor Burocrático – Requisitos (Contexto) y Plan de Tareas"
 
@@ -523,7 +523,7 @@ const documentUrl = data?.signedUrl;
 
    - **Descripción**: Carga documentos de **KB** (ruta allow‑list) para contextos de IA.
    - **Args**: `{ path: string }`.
-   - **Seguridad**: sólo rutas del repo `kb/`.
+   - **Seguridad**: sólo rutas del repo `docs/`.
 
 7. `pii.sanitize_preview`
 
@@ -535,7 +535,7 @@ const documentUrl = data?.signedUrl;
 
 ### Resources (lectura)
 
-- `fs.read` (workspace del repo, allow‑list `src/`, `kb/`, `sql/`).
+- `fs.read` (workspace del repo, allow‑list `src/`, `docs/`, `sql/`).
 - `http.fetch` (allow‑list: `https://<supabase>/functions/v1/*`, `https://api.stripe.com/*` **sólo GET** con claves *restricted*).
 - `git.*` (lecturas de ramas y diffs).
 
@@ -573,7 +573,7 @@ const documentUrl = data?.signedUrl;
 - Server `tb-mcp` con **Node.js v20** y tests básicos.
 - Tools anteriores implementadas (stub si procede) + **allow‑list** de endpoints.
 - `.env.example` actualizado (sin valores reales).
-- **Docs** en `kb/mcp.md` con usos, ejemplos y roles.
+- **Docs** en `docs/visual-studio-mcp.md` con usos, ejemplos y roles.
 - Prueba manual en Cursor: invocación `storage.get_signed_url` y `documents.process_document` con respuesta 202.
 
 ---
@@ -693,6 +693,6 @@ const documentUrl = data?.signedUrl;
 
 12. **Signed URLs (server‑side only)**: Para reports/, la generación de URLs firmadas debe estar encapsulada en get_signed_url; el FE no debe usar supabase.storage.createSignedUrl() directamente.
 
-13. **Fuentes canónicas (KB)**: Antes de proponer cambios, consulta y prioriza las rutas de `kb/canonical_sources.md`. Si un cambio afecta a requisitos/esquema/MCP, actualiza ese fichero en la PR.
-14. Placeholders y nombres: consulta la politica en docs/PLACEHOLDERS.md
+13. **Fuentes canónicas (KB)**: Antes de proponer cambios, consulta y prioriza las rutas de `docs/canonical-sources.md`. Si un cambio afecta a requisitos/esquema/MCP, actualiza ese fichero en la PR.
+14. Placeholders y nombres: consulta la politica en docs/placeholders-policy.md
 

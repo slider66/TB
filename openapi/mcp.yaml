@@ -470,7 +470,7 @@ paths:
                       example: kb.load
                     resource:
                       type: string
-                      example: kb/{path}
+                      example: docs/{path}
                     payload:
                       $ref: '#/components/schemas/KbLoadPayload'
                   required: [channel, verb, payload]

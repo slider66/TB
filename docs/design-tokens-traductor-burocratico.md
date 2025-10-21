@@ -3,7 +3,7 @@ version: 1.0
 last_updated: 2025-10-08  
 status: Ready
 
-> Paquete de tokens listo para **Tailwind**, **Style Dictionary** y **Figma Tokens (Tokens Studio)**, basado en `style.md v1.1`.
+> Paquete de tokens listo para **Tailwind**, **Style Dictionary** y **Figma Tokens (Tokens Studio)**, basado en `style-guide.md v1.1`.
 
 ---
 

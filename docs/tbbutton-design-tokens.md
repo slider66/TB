@@ -30,7 +30,7 @@ project-root/
 ```md
 # Traductor Burocrático — Design Tokens & UI
 
-Este paquete define **tokens de diseño** y un ejemplo de componente **TBButton** coherente con `style.md`.
+Este paquete define **tokens de diseño** y un ejemplo de componente **TBButton** coherente con `style-guide.md`.
 
 ## Requisitos
 - Node 18+
@@ -82,7 +82,7 @@ npm run tokens
 
 ## Notas
 - `tokens.json` es la **fuente única de verdad**. `styles/tokens.css` puede generarse o pegarse manualmente.
-- Mantén `style.md` y estos tokens sincronizados.
+- Mantén `style-guide.md` y estos tokens sincronizados.
 ```
 ```
 
@@ -257,5 +257,5 @@ export default function App() {
 ## Notas finales
 - Carga la tipografía **Inter** (woff2) en `index.html` o con `@font-face` para evitar FOUC.
 - Los estilos usan **variables CSS**; funcionan con o sin Tailwind.
-- Mantén sincronía con `style.md` y los **Design Tokens** del canvas.
+- Mantén sincronía con `style-guide.md` y los **Design Tokens** del canvas.
 
