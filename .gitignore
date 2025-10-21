@@ -144,3 +144,6 @@ vite.config.ts.timestamp-*
 TB.git/
 
 *.zip
+.DS_Store
+supabase/.branches/
+supabase/.temp/
