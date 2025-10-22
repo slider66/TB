@@ -17,6 +17,50 @@
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content="https://traductorburocratico.es/og-default.jpg" />
+    <script>
+      (function () {
+        const patchDefineLocale = (momentInstance) => {
+          if (!momentInstance || typeof momentInstance.defineLocale !== 'function' || typeof momentInstance.updateLocale !== 'function') {
+            return;
+          }
+
+          const originalDefineLocale = momentInstance.defineLocale.bind(momentInstance);
+          momentInstance.defineLocale = (localeName, config) => {
+            try {
+              if (momentInstance.locales && momentInstance.locales().includes(localeName)) {
+                return momentInstance.updateLocale(localeName, config);
+              }
+            } catch (error) {
+              console.warn('Moment locale patch warning:', error);
+            }
+            return originalDefineLocale(localeName, config);
+          };
+        };
+
+        if (Object.prototype.hasOwnProperty.call(window, 'moment') && window.moment) {
+          patchDefineLocale(window.moment);
+          return;
+        }
+
+        Object.defineProperty(window, 'moment', {
+          configurable: true,
+          get() {
+            return this.__momentInstance;
+          },
+          set(value) {
+            this.__momentInstance = value;
+            patchDefineLocale(value);
+            Object.defineProperty(window, 'moment', {
+              configurable: true,
+              enumerable: true,
+              writable: true,
+              value
+            });
+            delete this.__momentInstance;
+          }
+        });
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

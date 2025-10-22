@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useDropzone } from 'react-dropzone';
 import { supabase } from '@/lib/customSupabaseClient';
@@ -15,8 +15,9 @@ import { Progress } from '@/components/ui/progress';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import {
   UploadCloud, FileText, X, Loader2, CheckCircle, AlertTriangle,
-  Zap, Languages, Plus, Minus, CreditCard, Mail, Key, UserPlus, ShieldCheck
+  Zap, Languages, Plus, Minus, CreditCard, ShieldCheck, Eye, EyeOff
 } from 'lucide-react';
+import PasswordStrength, { computeValidation } from '@/components/PasswordStrength';
 
 const formatBytes = (bytes, decimals = 2) => {
   if (bytes === 0) return '0 Bytes';
@@ -25,6 +26,11 @@ const formatBytes = (bytes, decimals = 2) => {
   const sizes = ['Bytes', 'KB', 'MB', 'GB'];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+};
+
+const generateGuestPassword = () => {
+  const randomSegment = Math.random().toString(36).slice(2, 8);
+  return `Guest-${Date.now()}-${randomSegment}!A1`;
 };
 
 const OrderPage = () => {
@@ -40,6 +46,8 @@ const OrderPage = () => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showLoginPassword, setShowLoginPassword] = useState(false);
+  const [showCreatePassword, setShowCreatePassword] = useState(false);
   const [isGuest, setIsGuest] = useState(true);
   const [userExists, setUserExists] = useState(null); // null, true, false
   const [isLoading, setIsLoading] = useState(false);
@@ -49,6 +57,12 @@ const OrderPage = () => {
 
   const { user, signIn, signUp } = useAuth();
 
+  const createPasswordValidation = useMemo(() => computeValidation(password), [password]);
+  const isCreatePasswordValid = useMemo(
+    () => Object.values(createPasswordValidation).every(Boolean),
+    [createPasswordValidation]
+  );
+
   useEffect(() => {
     if (user) {
       setEmail(user.email);
@@ -56,6 +70,12 @@ const OrderPage = () => {
       setUserExists(true);
     }
   }, [user]);
+
+  useEffect(() => {
+    setPassword('');
+    setShowLoginPassword(false);
+    setShowCreatePassword(false);
+  }, [userExists]);
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -130,13 +150,25 @@ const OrderPage = () => {
 
       if (!user) {
         if (userExists === false) { // Crear nuevo usuario (invitado o no)
-          const { data, error } = await signUp(email, password || `guest_${Date.now()}`, { full_name: 'Invitado' });
+          if (!isGuest) {
+            if (!password) {
+              throw new Error("Por favor, crea una contrasena para tu cuenta.");
+            }
+            if (!isCreatePasswordValid) {
+              throw new Error("La contrasena debe tener 12 caracteres, mayuscula, minuscula, numero y simbolo.");
+            }
+          }
+
+          const generatedPassword = isGuest ? generateGuestPassword() : password;
+          const { data, error } = await signUp(email, generatedPassword, { full_name: 'Invitado' });
           if (error) throw error;
-          finalUserId = data.user.id;
-        } else if (userExists === true) { // Iniciar sesión
+          finalUserId = data?.user?.id ?? data?.session?.user?.id;
+          finalEmail = data?.user?.email ?? finalEmail;
+        } else if (userExists === true) { // Iniciar sesion
           const { data, error } = await signIn(email, password);
           if (error) throw error;
-          finalUserId = data.user.id;
+          finalUserId = data?.user?.id ?? data?.session?.user?.id;
+          finalEmail = data?.user?.email ?? finalEmail;
         }
       }
 
@@ -334,20 +366,62 @@ const OrderPage = () => {
                   <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="space-y-4 overflow-hidden">
                     {userExists ? (
                       <div className="space-y-2">
-                        <Label htmlFor="password">Contraseña</Label>
-                        <Input id="password" type="password" placeholder="Tu contraseña" value={password} onChange={e => setPassword(e.target.value)} />
-                        <p className="text-sm text-green-600">Hemos detectado una cuenta. Inicia sesión para continuar.</p>
+                        <Label htmlFor="checkout-password">Contrasena</Label>
+                        <div className="relative">
+                          <Input
+                            id="checkout-password"
+                            type={showLoginPassword ? 'text' : 'password'}
+                            placeholder="Tu contrasena"
+                            value={password}
+                            onChange={e => setPassword(e.target.value)}
+                            className="pr-10"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowLoginPassword(prev => !prev)}
+                            className="absolute inset-y-0 right-0 flex items-center pr-3 text-neutral-400 hover:text-neutral-600"
+                          >
+                            {showLoginPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                          </button>
+                        </div>
+                        <p className="text-sm text-green-600">Hemos detectado una cuenta. Inicia sesion para continuar.</p>
                       </div>
                     ) : (
                       <>
                         <div className="flex items-center space-x-2">
-                          <Checkbox id="guest" checked={isGuest} onCheckedChange={setIsGuest} />
+                          <Checkbox
+                            id="guest"
+                            checked={isGuest}
+                            onCheckedChange={(checked) => {
+                              const nextGuest = checked === true;
+                              setIsGuest(nextGuest);
+                              setPassword('');
+                              setShowCreatePassword(false);
+                            }}
+                          />
                           <Label htmlFor="guest">Continuar como invitado (sin crear cuenta)</Label>
                         </div>
                         {!isGuest && (
                           <div className="space-y-2">
-                            <Label htmlFor="password">Crear una contraseña</Label>
-                            <Input id="password" type="password" placeholder="Crea una contraseña para acceder luego" value={password} onChange={e => setPassword(e.target.value)} />
+                            <Label htmlFor="new-password">Crear una contrasena</Label>
+                            <div className="relative">
+                              <Input
+                                id="new-password"
+                                type={showCreatePassword ? 'text' : 'password'}
+                                placeholder="Crea una contrasena para acceder luego"
+                                value={password}
+                                onChange={e => setPassword(e.target.value)}
+                                className="pr-10"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => setShowCreatePassword(prev => !prev)}
+                                className="absolute inset-y-0 right-0 flex items-center pr-3 text-neutral-400 hover:text-neutral-600"
+                              >
+                                {showCreatePassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                              </button>
+                            </div>
+                            <PasswordStrength validation={createPasswordValidation} />
                           </div>
                         )}
                       </>
@@ -355,7 +429,15 @@ const OrderPage = () => {
                   </motion.div>
                 )}
               </AnimatePresence>
-              <Button onClick={handleCheckout} className="w-full btn-primary" disabled={isLoading || (userExists === null && !user)}>
+              <Button
+                onClick={handleCheckout}
+                className="w-full btn-primary"
+                disabled={
+                  isLoading ||
+                  (userExists === null && !user) ||
+                  (!user && userExists === false && !isGuest && !isCreatePasswordValid)
+                }
+              >
                 {isLoading ? <Loader2 className="animate-spin" /> : <><CreditCard className="mr-2 h-4 w-4" /> Pagar {(totalPrice / 100).toFixed(2)}€</>}
               </Button>
             </CardContent>

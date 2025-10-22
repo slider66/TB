@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { Loader2, Lock, Eye, EyeOff } from 'lucide-react';
-import PasswordStrength from '@/components/PasswordStrength';
+import PasswordStrength, { computeValidation } from '@/components/PasswordStrength';
 
 const UpdatePasswordPage = () => {
   const [password, setPassword] = useState('');
@@ -15,6 +15,12 @@ const UpdatePasswordPage = () => {
   const { updateUserPassword, session, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  const validation = useMemo(() => computeValidation(password), [password]);
+  const isPasswordValid = useMemo(
+    () => Object.values(validation).every(Boolean),
+    [validation]
+  );
 
   useEffect(() => {
     // This page should only be accessible when the user has followed a password reset link
@@ -27,7 +33,7 @@ const UpdatePasswordPage = () => {
     if (!session?.access_token) {
       toast({
         title: 'Acceso no válido',
-        description: 'Usa el enlace de tu email para restablecer la contraseña.',
+        description: 'Usa el enlace de tu email para restablecer la Contrasena.',
         variant: 'destructive',
       });
       navigate('/');
@@ -36,18 +42,18 @@ const UpdatePasswordPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (password.length < 8) {
+    if (!isPasswordValid) {
       toast({
-        title: 'Contraseña débil',
-        description: 'La contraseña debe tener al menos 8 caracteres.',
+        title: 'Contrasena no valida',
+        description: 'Necesitas 12 caracteres, mayuscula, minuscula, numero y simbolo.',
         variant: 'destructive',
       });
       return;
     }
     if (password !== confirmPassword) {
       toast({
-        title: 'Las contraseñas no coinciden',
-        description: 'Por favor, asegúrate de que ambas contraseñas son iguales.',
+        title: 'Las Contrasenas no coinciden',
+        description: 'Por favor, asegúrate de que ambas Contrasenas son iguales.',
         variant: 'destructive',
       });
       return;
@@ -60,13 +66,13 @@ const UpdatePasswordPage = () => {
     if (error) {
       toast({
         title: 'Error al actualizar',
-        description: error.message || 'No se pudo actualizar la contraseña.',
+        description: error.message || 'No se pudo actualizar la Contrasena.',
         variant: 'destructive',
       });
     } else {
       toast({
-        title: '¡Contraseña actualizada!',
-        description: 'Tu contraseña ha sido cambiada. Ya puedes iniciar sesión.',
+        title: '¡Contrasena actualizada!',
+        description: 'Tu Contrasena ha sido cambiada. Ya puedes iniciar sesión.',
         className: 'bg-green-500 text-white',
       });
       navigate('/');
@@ -78,7 +84,7 @@ const UpdatePasswordPage = () => {
         <div className="max-w-md w-full space-y-8">
           <div className="bg-white p-8 rounded-xl shadow-lg">
             <h2 className="text-2xl font-bold text-center mb-2 text-neutral-800">
-              Crea tu nueva contraseña
+              Crea tu nueva Contrasena
             </h2>
             <p className="text-center text-neutral-500 mb-6">
               Asegúrate de que sea segura y la recuerdes.
@@ -88,7 +94,7 @@ const UpdatePasswordPage = () => {
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-neutral-400" />
                 <input
                   type={showPassword ? 'text' : 'password'}
-                  placeholder="Nueva contraseña"
+                  placeholder="Nueva Contrasena"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full pl-10 pr-10 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-orange focus:outline-none"
@@ -102,12 +108,12 @@ const UpdatePasswordPage = () => {
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
-              <PasswordStrength password={password} />
+              <PasswordStrength validation={validation} />
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-neutral-400" />
                 <input
                   type={showConfirmPassword ? 'text' : 'password'}
-                  placeholder="Confirmar nueva contraseña"
+                  placeholder="Confirmar nueva Contrasena"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   className="w-full pl-10 pr-10 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-orange focus:outline-none"
@@ -121,8 +127,12 @@ const UpdatePasswordPage = () => {
                   {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                 </button>
               </div>
-              <Button type="submit" className="btn-primary w-full text-lg py-4" disabled={loading || !password || password !== confirmPassword}>
-                {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Actualizar Contraseña'}
+              <Button
+                type="submit"
+                className="btn-primary w-full text-lg py-4"
+                disabled={loading || !password || password !== confirmPassword || !isPasswordValid}
+              >
+                {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Actualizar Contrasena'}
               </Button>
             </form>
           </div>

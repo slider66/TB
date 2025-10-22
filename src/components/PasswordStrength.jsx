@@ -1,10 +1,29 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { Check, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-const PasswordStrength = ({ validation }) => {
-  const { length, uppercase, lowercase, specialChar, number } = validation;
+const computeValidation = (value = '') => ({
+  length: value.length >= 12,
+  uppercase: /[A-Z]/.test(value),
+  lowercase: /[a-z]/.test(value),
+  number: /\d/.test(value),
+  specialChar: /[^A-Za-z0-9]/.test(value),
+});
+
+const PasswordStrength = ({ password = '', validation }) => {
+  const metrics = useMemo(() => {
+    if (validation) {
+      return validation;
+    }
+    return computeValidation(password);
+  }, [password, validation]);
+
+  if (!metrics) {
+    return null;
+  }
+
+  const { length, uppercase, lowercase, specialChar, number } = metrics;
   const strength = [length, uppercase, lowercase, specialChar, number].filter(Boolean).length;
 
   const strengthColors = [
@@ -16,14 +35,14 @@ const PasswordStrength = ({ validation }) => {
     'bg-green-500',    // 5
   ];
 
-  const strengthLabels = ['Débil', 'Débil', 'Regular', 'Media', 'Fuerte', 'Excelente'];
+  const strengthLabels = ['Muy baja', 'Baja', 'Regular', 'Aceptable', 'Fuerte', 'Cumple'];
 
   const requirements = [
-    { key: 'length', label: 'Al menos 10 caracteres', valid: length },
-    { key: 'uppercase', label: 'Una letra mayúscula', valid: uppercase },
-    { key: 'lowercase', label: 'Una letra minúscula', valid: lowercase },
-    { key: 'number', label: 'Un número', valid: number },
-    { key: 'specialChar', label: 'Un carácter especial', valid: specialChar },
+    { key: 'length', label: 'Al menos 12 caracteres', valid: length },
+    { key: 'uppercase', label: 'Una letra mayuscula', valid: uppercase },
+    { key: 'lowercase', label: 'Una letra minuscula', valid: lowercase },
+    { key: 'number', label: 'Un numero', valid: number },
+    { key: 'specialChar', label: 'Un caracter especial', valid: specialChar },
   ];
 
   return (
@@ -37,7 +56,7 @@ const PasswordStrength = ({ validation }) => {
       <div className="flex items-center gap-2">
         <div className="w-full bg-neutral-200 rounded-full h-2.5">
           <motion.div
-            className={cn("h-2.5 rounded-full transition-all duration-300", strengthColors[strength])}
+            className={cn('h-2.5 rounded-full transition-all duration-300', strengthColors[strength])}
             initial={{ width: '0%' }}
             animate={{ width: `${strength * 20}%` }}
           />
@@ -47,11 +66,7 @@ const PasswordStrength = ({ validation }) => {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1">
         {requirements.map((req) => (
           <div key={req.key} className="flex items-center text-sm">
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              key={req.valid ? 'check' : 'x'}
-            >
+            <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} key={req.valid ? 'check' : 'x'}>
               {req.valid ? (
                 <Check className="h-4 w-4 text-green-500 mr-2" />
               ) : (
@@ -68,4 +83,5 @@ const PasswordStrength = ({ validation }) => {
   );
 };
 
+export { computeValidation };
 export default PasswordStrength;

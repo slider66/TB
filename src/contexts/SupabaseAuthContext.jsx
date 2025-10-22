@@ -67,7 +67,7 @@ export const AuthProvider = ({ children }) => {
   }, [handleSession]);
 
   const signUp = useCallback(async (email, password, metadata) => {
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -82,13 +82,14 @@ export const AuthProvider = ({ children }) => {
         title: "Sign up Failed",
         description: error.message || "Something went wrong",
       });
+      return { data: null, error };
     }
 
-    return { error };
+    return { data, error: null };
   }, [toast]);
 
   const signIn = useCallback(async (email, password) => {
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
@@ -107,9 +108,10 @@ export const AuthProvider = ({ children }) => {
           description: error.message || "Ocurrió un error inesperado.",
         });
       }
+      return { data: null, error };
     }
 
-    return { error };
+    return { data, error: null };
   }, [toast]);
 
   const signOut = useCallback(async () => {

@@ -5,6 +5,7 @@ import { useToast } from '@/components/ui/use-toast';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { User, Mail, Phone, MapPin, Lock, Save, Loader2 } from 'lucide-react';
 import { supabase } from '@/lib/customSupabaseClient';
+import { computeValidation } from '@/components/PasswordStrength';
 
 const ClientProfile = () => {
   const { user, updateUserPassword } = useAuth();
@@ -127,15 +128,17 @@ const ClientProfile = () => {
     if (passwordData.newPassword !== passwordData.confirmPassword) {
       toast({
         title: "Error",
-        description: "Las nuevas contraseñas no coinciden.",
+        description: "Las nuevas contrasenas no coinciden.",
         variant: "destructive"
       });
       return;
     }
-    if (passwordData.newPassword.length < 10) {
-        toast({
-        title: "Contraseña demasiado corta",
-        description: "La nueva contraseña debe tener al menos 10 caracteres.",
+    const validation = computeValidation(passwordData.newPassword);
+    const meetsRequirements = Object.values(validation).every(Boolean);
+    if (!meetsRequirements) {
+      toast({
+        title: "Contrasena no valida",
+        description: "Necesitas 12 caracteres, mayuscula, minuscula, numero y simbolo.",
         variant: "destructive"
       });
       return;
@@ -146,14 +149,14 @@ const ClientProfile = () => {
 
     if (error) {
        toast({
-        title: "Error al cambiar la contraseña",
+        title: "Error al cambiar la Contrasena",
         description: error.message,
         variant: "destructive"
       });
     } else {
        toast({
-        title: "¡Contraseña actualizada!",
-        description: "Tu contraseña ha sido cambiada con éxito.",
+        title: "¡Contrasena actualizada!",
+        description: "Tu Contrasena ha sido cambiada con éxito.",
         className: "bg-green-500 text-white",
       });
       setPasswordData({ newPassword: '', confirmPassword: '' });
@@ -230,13 +233,13 @@ const ClientProfile = () => {
       </div>
 
       <div className="document-card">
-        <h2 className="text-2xl font-bold text-neutral-800 mb-6">Cambiar Contraseña</h2>
+        <h2 className="text-2xl font-bold text-neutral-800 mb-6">Cambiar Contrasena</h2>
         <form onSubmit={handlePasswordSubmit} className="space-y-4">
-          <InputField icon={<Lock />} name="newPassword" placeholder="Nueva Contraseña" value={passwordData.newPassword} onChange={handlePasswordChange} type="password" disabled={loadingPassword}/>
-          <InputField icon={<Lock />} name="confirmPassword" placeholder="Confirmar Nueva Contraseña" value={passwordData.confirmPassword} onChange={handlePasswordChange} type="password" disabled={loadingPassword}/>
+          <InputField icon={<Lock />} name="newPassword" placeholder="Nueva Contrasena" value={passwordData.newPassword} onChange={handlePasswordChange} type="password" disabled={loadingPassword}/>
+          <InputField icon={<Lock />} name="confirmPassword" placeholder="Confirmar Nueva Contrasena" value={passwordData.confirmPassword} onChange={handlePasswordChange} type="password" disabled={loadingPassword}/>
           
           <Button type="submit" className="btn-secondary w-full text-lg py-4 mt-4" disabled={loadingPassword}>
-            {loadingPassword ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : 'Actualizar Contraseña'}
+            {loadingPassword ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : 'Actualizar Contrasena'}
           </Button>
         </form>
       </div>

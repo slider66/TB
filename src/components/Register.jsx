@@ -20,7 +20,7 @@ const Register = ({ onRegisterSuccess, onSwitchToLogin }) => {
   const { toast } = useToast();
 
   const passwordValidation = useMemo(() => {
-    const length = password.length >= 10;
+    const length = password.length >= 12;
     const uppercase = /[A-Z]/.test(password);
     const lowercase = /[a-z]/.test(password);
     const specialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
@@ -52,16 +52,16 @@ const Register = ({ onRegisterSuccess, onSwitchToLogin }) => {
     }
     if (!isPasswordValid) {
       toast({
-        title: "Contraseña débil",
-        description: "La contraseña no cumple con los requisitos de seguridad.",
+        title: "Contrasena debil",
+        description: "Necesitas 12 caracteres, mayuscula, minuscula, numero y simbolo.",
         variant: "destructive",
       });
       return;
     }
     if (!passwordsMatch) {
       toast({
-        title: "Error de contraseña",
-        description: "Las contraseñas no coinciden.",
+        title: "Error de Contrasena",
+        description: "Las Contrasenas no coinciden.",
         variant: "destructive",
       });
       return;
@@ -152,7 +152,7 @@ const Register = ({ onRegisterSuccess, onSwitchToLogin }) => {
               initial="rest"
               animate="rest"
               type={showPassword ? 'text' : 'password'}
-              placeholder="Contraseña"
+              placeholder="Contrasena"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full pl-10 pr-10 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-orange focus:outline-none"
@@ -177,7 +177,7 @@ const Register = ({ onRegisterSuccess, onSwitchToLogin }) => {
               initial="rest"
               animate="rest"
               type={showConfirmPassword ? 'text' : 'password'}
-              placeholder="Confirmar contraseña"
+              placeholder="Confirmar Contrasena"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               className={`w-full pl-10 pr-10 py-3 border rounded-lg focus:ring-2 focus:ring-orange focus:outline-none ${!passwordsMatch ? 'border-red-500' : 'border-neutral-300'}`}
@@ -194,7 +194,7 @@ const Register = ({ onRegisterSuccess, onSwitchToLogin }) => {
           {!passwordsMatch && (
             <div className="flex items-center text-red-600 text-sm">
               <AlertCircle size={16} className="mr-1" />
-              Las contraseñas no coinciden.
+              Las Contrasenas no coinciden.
             </div>
           )}
           <Button type="submit" className="btn-primary w-full text-lg py-4" disabled={loading || !isPasswordValid || !passwordsMatch}>
