@@ -1,12 +1,11 @@
 ---
-
-## title: "Traductor Burocrático – Requisitos (Contexto) y Plan de Tareas"
-
-version: 1.3\
-last\_updated: 2025-10-05\
-owners: ["Producto: Usuario", "Tech: Usuario"]\
-status: Draft\
-kb\_scope: ["Traductor Burocrático", "Directorios de profesionales", "IA asistentes (Cursor, ChatGPT)"]
+title: "Traductor Burocrático – Requisitos (Contexto) y Plan de Tareas"
+version: 1.3
+last_updated: 2025-10-05
+owners: ["Producto: Usuario", "Tech: Usuario"]
+status: Draft
+kb_scope: ["Traductor Burocrático", "Directorios de profesionales", "IA asistentes (Cursor, ChatGPT)"]
+---
 
 ## Índice
 
