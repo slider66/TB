@@ -381,6 +381,12 @@ const OrderPage = () => {
             page_count: pageCount,
             add_ons: addOns,
             client_user_id: finalUserId,
+            malware_scan: {
+              analysis_id: scanDetails?.analysisId ?? null,
+              verdict: scanStatus,
+              sha256: scanDetails?.sha256 ?? null,
+              md5: scanDetails?.md5 ?? null,
+            },
           }
         });
 

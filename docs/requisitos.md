@@ -1,10 +1,11 @@
 ---
-title: "Traductor Burocrático – Requisitos (Contexto) y Plan de Tareas"
+title: 'Traductor Burocrático – Requisitos (Contexto) y Plan de Tareas'
 version: 1.3
 last_updated: 2025-10-05
-owners: ["Producto: Usuario", "Tech: Usuario"]
+owners: ['Producto: Usuario', 'Tech: Usuario']
 status: Draft
-kb_scope: ["Traductor Burocrático", "Directorios de profesionales", "IA asistentes (Cursor, ChatGPT)"]
+kb_scope:
+  ['Traductor Burocrático', 'Directorios de profesionales', 'IA asistentes (Cursor, ChatGPT)']
 ---
 
 ## Índice
@@ -39,7 +40,7 @@ kb_scope: ["Traductor Burocrático", "Directorios de profesionales", "IA asisten
 
 > Finalidad: servir como **base de conocimiento** para IAs de desarrollo (Cursor, ChatGPT) y para el equipo. No contiene asesoramiento legal; el servicio **no** presta asesoría jurídica/fiscal, solo **traducción pedagógica** y conexión con profesionales.
 
-**Principio DRY y consolidación**: este documento evita redundancias; cada tema se define una única vez y las demás secciones remiten aquí. *Excepción*: se mantiene el **texto resumen del proyecto** para comunicación a usuarios no técnicos.
+**Principio DRY y consolidación**: este documento evita redundancias; cada tema se define una única vez y las demás secciones remiten aquí. _Excepción_: se mantiene el **texto resumen del proyecto** para comunicación a usuarios no técnicos.
 
 ## 1) Problema a resolver y contexto
 
@@ -73,7 +74,7 @@ kb_scope: ["Traductor Burocrático", "Directorios de profesionales", "IA asisten
 
 - Formularios **Contacto** y **Partners** plenamente operativos.
 - Subida de documentos (PDF/JPG/PNG), extracción de texto y **traducción pedagógica**.
-- **Recepción y tratamiento por agente**: en **fase inicial**, los documentos se **almacenan en la base de datos** y se **notifica por email al equipo** ([**hola@traductorburocratico.es**](mailto\:hola@traductorburocratico.es)) para revisión; el usuario recibe el **informe por email**. En una **fase avanzada**, se guardan en DB, pasan por **interpretación previa de IA**, **revisión humana** y aparecen **botones de Validación/Rechazo** para gestionar pedidos y asegurar máxima calidad.
+- **Recepción y tratamiento por agente**: en **fase inicial**, los documentos se **almacenan en la base de datos** y se **notifica por email al equipo** ([**hola@traductorburocratico.es**](mailto:hola@traductorburocratico.es)) para revisión; el usuario recibe el **informe por email**. En una **fase avanzada**, se guardan en DB, pasan por **interpretación previa de IA**, **revisión humana** y aparecen **botones de Validación/Rechazo** para gestionar pedidos y asegurar máxima calidad.
 - **Pagos** (Stripe) para servicios bajo demanda.
 - **Área de usuario** (historial, descargas, facturas) + **Panel admin/operaciones** básico.
 - **Directorio de partners** con captación de leads.
@@ -90,7 +91,7 @@ kb_scope: ["Traductor Burocrático", "Directorios de profesionales", "IA asisten
 - **Backend**: Supabase (Postgres + Auth + Storage **para el almacenamiento de documentos**) + **Edge Functions** (TypeScript). **Node.js v20 LTS** para **Edge Functions** y scripts/CLI.
 - **AI**: ChatGPT / OpenAI API (textos), pipelines para extracción de texto (pdfparse/ocr) y normalización.
 - **Pagos**: Stripe (Checkout + Webhooks).
-- **Infra/Hosting**: **Hostinger** (despliegue **actual**). **Frontend** React + Vite servido como sitio estático en Hostinger. **Backend** en **Supabase** gestionado: Postgres/Auth/Storage y **Edge Functions**. *(Alternativa futura para FE: Vercel/Netlify).*
+- **Infra/Hosting**: **Hostinger** (despliegue **actual**). **Frontend** React + Vite servido como sitio estático en Hostinger. **Backend** en **Supabase** gestionado: Postgres/Auth/Storage y **Edge Functions**. _(Alternativa futura para FE: Vercel/Netlify)._
 - **Email**: Proveedor SMTP/transactional; DNS con **SPF, DKIM, DMARC** activos; dominio de envío: **mail.traductorburocratico.es**.
 - **DevEx**: GitHub, ramas `feat/`, `fix/`, `chore/`. CI/CD (ESLint + Prettier; Vitest/Playwright donde aplique). `.env`, `.env.local`, `.env.example`.
 
@@ -98,25 +99,25 @@ kb_scope: ["Traductor Burocrático", "Directorios de profesionales", "IA asisten
 
 **Alojamiento y despliegue**: Frontend **React+Vite** alojado en **Hostinger** (estático). Backend en **Supabase Edge Functions** con **Postgres/Auth/Storage** gestionado por Supabase.
 
-**Orquestador externo (no crítico)**: Para **workflows operativos no críticos** (p. ej., *screening* de nuevos partners, informes periódicos de KPIs, tareas programadas), se usará un **Orquestador** (p. ej., *n8n*, *Temporal*, *cron workers*). Mantener las **Edge Functions** centradas en la **ruta crítica** (seguridad/rendimiento): ``, ``, ``, **procesamiento asíncrono** y **prompts LLM**.
+**Orquestador externo (no crítico)**: Para **workflows operativos no críticos** (p. ej., _screening_ de nuevos partners, informes periódicos de KPIs, tareas programadas), se usará un **Orquestador** (p. ej., _n8n_, _Temporal_, _cron workers_). Mantener las **Edge Functions** centradas en la **ruta crítica** (seguridad/rendimiento): `, `, ``, **procesamiento asíncrono** y **prompts LLM**.
 
-**Flujo B2C**: Usuario → FE (React) → Supabase Auth → Storage (`uploads/`, privado; subida directa desde FE) → DB (`documents`, insert con `storage_path`) → Activación (A: FE llama `process_document`; B **recomendado**: Realtime/DB tras *INSERT*; C: trigger Postgres http/pg\_net opcional) → Edge (extracción/IA) → DB (`analyses` + actualización de `requests`) → Storage (`reports/`, privado; entrega mediante **Signed URL**) → Email/Stripe → FE (resultado/descarga) → derivación a partner.
+**Flujo B2C**: Usuario → FE (React) → Supabase Auth → Storage (`uploads/`, privado; subida directa desde FE) → DB (`documents`, insert con `storage_path`) → Activación (A: FE llama `process_document`; B **recomendado**: Realtime/DB tras _INSERT_; C: trigger Postgres http/pg_net opcional) → Edge (extracción/IA) → DB (`analyses` + actualización de `requests`) → Storage (`reports/`, privado; entrega mediante **Signed URL**) → Email/Stripe → FE (resultado/descarga) → derivación a partner.
 
 **Flujo Partners**: Form → validación interna → alta en directorio → recepción de leads → panel básico de estado.
 
 ### Pipeline de documentos (detallado)
 
 1. **Subida (Frontend)**: componente React selecciona archivo y lo sube **directo a Supabase Storage** (`uploads/`).
-2. **Registro (DB)**: FE crea fila en `` con `storage_path`, `mime`, `sha256`, y asocia/crea ``.
+2. **Registro (DB)**: FE crea fila en ``con `storage_path`, `mime`, `sha256`, y asocia/crea``.
 3. **Activación**:
-   - **A. Llamada directa** desde FE a **Edge Function **`` con `storage_path` y `request_id`.
-   - **B. Realtime/DB (recomendado)**: suscripción a `documents` que, tras *INSERT*, **notifica/lanza** el procesamiento en servidor (sin exponer endpoint ni depender de extensiones).
-   - **C. Trigger DB (opcional)**: *INSERT* en `documents` dispara **trigger Postgres** (ext. http/pg\_net) que invoca la Edge Function.
+   - **A. Llamada directa** desde FE a **Edge Function **``con`storage_path`y`request_id`.
+   - **B. Realtime/DB (recomendado)**: suscripción a `documents` que, tras _INSERT_, **notifica/lanza** el procesamiento en servidor (sin exponer endpoint ni depender de extensiones).
+   - **C. Trigger DB (opcional)**: _INSERT_ en `documents` dispara **trigger Postgres** (ext. http/pg_net) que invoca la Edge Function.
 4. **Descarga del archivo (Edge)**: la función obtiene el binario desde Storage. 4.5 **Optimización (opcional)**: si el `mime` es **imagen** y el tamaño supera el umbral (p. ej., > **X MB**), la Edge Function **reduce resolución/peso** antes de OCR para acelerar el procesamiento.
 5. **Extracción**: según tipo de archivo → PDF (`pdf-parse`/`pdfjs`), imagen (OCR), DOCX (`mammoth`), CSV/JSON (parsers nativos). **Normaliza** texto (encoding, ruido, idioma).
 6. **Sanitización/Anonimización de PII (obligatoria)**: antes de invocar al LLM, la Edge Function **filtra/anonimiza** PII **no necesaria** para la traducción pedagógica.
 7. **Análisis IA (opcional)**: envía el texto al LLM (API) para **resumen**, **flags** (plazos/importes) y ``** (orientativo)**.
-8. **Persistencia**: guarda en `` y actualiza `` (`processing`→`needs_review`).
+8. **Persistencia**: guarda en `y actualiza` (`processing`→`needs_review`).
 9. **Revisión humana**: el agente valida/edita y marca **Validar/Rechazar**; si valida, genera **PDF** en `reports/` y entrega vía **Signed URL**.
 
 ### Automatización Futura: Simplificación de Jerga (El Agente de IA) 🤖
@@ -130,7 +131,7 @@ kb_scope: ["Traductor Burocrático", "Directorios de profesionales", "IA asisten
 
 **B) Procesamiento de Jerga (Edge – Agente de IA)**
 
-- **Llamada al LLM**: se envía el texto a un **LLM** (OpenAI/Gemini u otro) con una **instrucción precisa** (*prompt*) que define tareas y límites.
+- **Llamada al LLM**: se envía el texto a un **LLM** (OpenAI/Gemini u otro) con una **instrucción precisa** (_prompt_) que define tareas y límites.
 - **Prompt ejemplo**:
 
 > Eres un experto en comunicación legal y administrativa. Toma el siguiente texto y **simplifica su jerga**. Debes crear un documento con cada cláusula o párrafo en **términos sencillos** y comprensibles para un ciudadano **sin conocimientos legales**, manteniendo la **exactitud** del significado original y realizando un **resumen de fechas de entrega**, **documentos o datos que reclaman** (si procede) así como un **texto breve** con las **mejores opciones** o alternativas a tomar. Si se necesitan **alegaciones**, indica **por dónde se puede atacar**, **siempre** con un **disclaimer** de que **esto no es asesoría**, solo **pedagógico**.
@@ -153,7 +154,7 @@ kb_scope: ["Traductor Burocrático", "Directorios de profesionales", "IA asisten
 **A) Estrategias de acceso**
 
 - **Opción 1 — (No aplicable)**: **No se usarán buckets públicos para documentos de usuarios; todos son sensibles**.
-- **Opción 2 — URLs firmadas (obligatorio)**: bucket **privado** → generar **URL firmada temporal** (p. ej., 60 s) **siempre** desde **Edge Function **`` tras verificar **RLS/consentimientos/pagos** y registrar en `audit_logs`.
+- **Opción 2 — URLs firmadas (obligatorio)**: bucket **privado** → generar **URL firmada temporal** (p. ej., 60 s) **siempre** desde **Edge Function **``tras verificar **RLS/consentimientos/pagos** y registrar en`audit_logs`.
   - **En Edge Function (obligatorio en prod)** para no exponer rutas ni lógicas, verificar permisos y auditar accesos.
   - **Desde el cliente** con supabase-js **(NO permitido en producción para documentos de usuario)**; solo válido en demos/sandbox.
 
@@ -170,17 +171,19 @@ kb_scope: ["Traductor Burocrático", "Directorios de profesionales", "IA asisten
 - **Visualización** (PDF en `<iframe>`, imágenes con `<img>`):
 
 ```jsx
-{fileType === 'pdf' && (
-  <iframe src={documentUrl} width="100%" height="600" title="Visualizador de Documento" />
-)}
+{
+  fileType === 'pdf' && (
+    <iframe src={documentUrl} width="100%" height="600" title="Visualizador de Documento" />
+  )
+}
 ```
 
 - **Obtener URL firmada (solo demo, NO producción)**:
 
 ```ts
 // Evitar en producción para documentos de usuario
-const { data } = await supabase.storage.from('reports').createSignedUrl(storagePath, 60);
-const documentUrl = data?.signedUrl;
+const { data } = await supabase.storage.from('reports').createSignedUrl(storagePath, 60)
+const documentUrl = data?.signedUrl
 ```
 
 - **Edge Function recomendada (esquema)**:
@@ -246,7 +249,7 @@ const documentUrl = data?.signedUrl;
 1. **Auth/Perfiles**: registro/email OTP, roles: `cliente`, `agente`, `partner`, `admin`.
 2. **Subida de documentos** con validación de tamaño/formatos; hash para duplicados.
 3. **Extracción de texto** (pdf, ocr si imagen) y normalización (limpieza, detección de idioma).
-4. **Traducción pedagógica** con IA (prompting estandarizado) y **flags de riesgo** (plazos, importes, sanciones, **recursos\_posibles orientativos**).
+4. **Traducción pedagógica** con IA (prompting estandarizado) y **flags de riesgo** (plazos, importes, sanciones, **recursos_posibles orientativos**).
 5. **Revisión humana**: checklist de QA, edición del informe y **botones Validar/Rechazar** (transiciones `needs_review` → `ready`/`archived`; registro en `audit_logs`).
 6. **Entrega**: vista web + **PDF** descargable con branding y disclaimer.
 7. **Pagos**: precio por servicio, packs y **add‑ons**. Facturación y recibos vía Stripe.
@@ -273,18 +276,19 @@ const documentUrl = data?.signedUrl;
 - **Supabase**: **RLS ON en todas las tablas**; tests de políticas; claves `anon`/`service_role` rotadas y nunca expuestas en FE; buckets privados con **Signed URLs**.
 - **Secretos & Config**: variables en gestor de secretos; rotación trimestral; nada de secretos en el repo; partición de permisos por entorno (dev/pre/prod).
 - **Red & AppSec**: TLS ≥1.2 + **HSTS**; **CSP** restrictiva; `X-Content-Type-Options: nosniff`; `Referrer-Policy: no-referrer`; `Permissions-Policy` mínima; `frame-ancestors` limitado; **CORS** con allowlist; WAF/rate‑limit para endpoints y webhooks.
-- **Abuso/Formularios**: validación server‑side; límites de tamaño; comprobación MIME; antivirus/clamd opcional; **CAPTCHA** (Turnstile/reCAPTCHA) en formularios públicos.
+- **Abuso/Formularios**: validacion serverside; limites de tamano; comprobacion MIME; antivirus/clamd opcional; **CAPTCHA** (Turnstile/reCAPTCHA) en formularios publicos.
+- **Escaneo de malware**: Limite de 20MB por archivo; envio via Supabase Edge Function; verificacion en VirusTotal en segundo plano; bloqueo y descarte inmediato si el verdict es malicious.
 - **Pagos**: verificación de firma de **Stripe Webhooks** + idempotency keys; lógica sensible solo en servidor/Edge.
 - **Datos & Backups**: cifrado en reposo; backups diarios cifrados (retención ≥30 días); prueba de restauración mensual; política de retención/borrado.
 - **Dependencias**: Dependabot/SCA activado; lockfiles y versiones fijadas; revisión de licencias.
-- **Monitorización/Auditoría**: logs estructurados; **audit\_logs** para acciones admin/partner; alertas por picos 401/403/5xx.
+- **Monitorización/Auditoría**: logs estructurados; **audit_logs** para acciones admin/partner; alertas por picos 401/403/5xx.
 
 ### SLA de Seguridad (resumen)
 
-- **Sev 0 – Brecha activa/PII exfiltrada**: *ACK ≤1h*, mitigación inmediata, notificación a afectados/autoridad **≤72h** (RGPD).
-- **Sev 1 – Vulnerabilidad crítica explotable**: *ACK ≤4h*, corrección o mitigación **≤24h**.
-- **Sev 2 – Alta sin explotación confirmada**: *ACK ≤8h*, corrección **≤3 días**.
-- **Sev 3 – Media/Baja**: *ACK ≤2 días*, corrección **≤14 días**.
+- **Sev 0 – Brecha activa/PII exfiltrada**: _ACK ≤1h_, mitigación inmediata, notificación a afectados/autoridad **≤72h** (RGPD).
+- **Sev 1 – Vulnerabilidad crítica explotable**: _ACK ≤4h_, corrección o mitigación **≤24h**.
+- **Sev 2 – Alta sin explotación confirmada**: _ACK ≤8h_, corrección **≤3 días**.
+- **Sev 3 – Media/Baja**: _ACK ≤2 días_, corrección **≤14 días**.
 - **Backups/DR**: **RPO 24h**, **RTO 24h**; restauración probada mensualmente.
 - **Parches**: ventana mensual de actualizaciones de seguridad.
 
@@ -302,91 +306,77 @@ const documentUrl = data?.signedUrl;
 
 > Notación simplificada; tipos Postgres. **RLS = ON** por defecto.
 
-- **profiles** *(1:1 con auth.users)*
-
+- **profiles** _(1:1 con auth.users)_
   - id **uuid** PK (ref auth.users)
   - role **text** CHECK IN ('cliente','agente','partner','admin')
-  - full\_name **text**, phone **text**, province **text**
-  - created\_at **timestamptz**
+  - full_name **text**, phone **text**, province **text**
+  - created_at **timestamptz**
 
 - **documents**
-
-  - id **uuid** PK, user\_id **uuid** FK→profiles
-  - storage\_path **text**, mime **text**, sha256 **text** UNIQUE
+  - id **uuid** PK, user_id **uuid** FK→profiles
+  - storage_path **text**, mime **text**, sha256 **text** UNIQUE
   - source **text** CHECK IN ('upload','email')
-  - created\_at **timestamptz**
+  - created_at **timestamptz**
 
 - **requests**
-
-  - id **uuid** PK, user\_id **uuid** FK→profiles, document\_id **uuid** FK→documents, agent\_id **uuid** NULL FK→profiles
-  - status **text** CHECK IN ('new','processing','needs\_review','ready','delivered','rejected','archived')
-  - priority **int** DEFAULT 0, partner\_id **uuid** NULL FK→partners
-  - created\_at **timestamptz**
+  - id **uuid** PK, user_id **uuid** FK→profiles, document_id **uuid** FK→documents, agent_id **uuid** NULL FK→profiles
+  - status **text** CHECK IN ('new','processing','needs_review','ready','delivered','rejected','archived')
+  - priority **int** DEFAULT 0, partner_id **uuid** NULL FK→partners
+  - created_at **timestamptz**
 
 - **analyses**
-
-  - id **uuid** PK, request\_id **uuid** FK→requests
-  - ai\_summary **text**, ai\_flags **jsonb** (deadlines, amounts, risk\_level)
-  - human\_review **bool**, reviewer\_id **uuid** NULL FK→profiles
-  - final\_report\_url **text**
-  - updated\_at **timestamptz**
+  - id **uuid** PK, request_id **uuid** FK→requests
+  - ai_summary **text**, ai_flags **jsonb** (deadlines, amounts, risk_level)
+  - human_review **bool**, reviewer_id **uuid** NULL FK→profiles
+  - final_report_url **text**
+  - updated_at **timestamptz**
 
 - **payments**
+  - id **uuid** PK, request_id **uuid** FK→requests
+  - stripe_pi **text**, amount_cents **int**, currency **text** DEFAULT 'EUR'
+  - status **text** CHECK IN ('requires_payment','paid','refunded','failed')
+  - purpose **text** CHECK IN ('initial_service','follow_up_qa')
+  - created_at **timestamptz**
 
-  - id **uuid** PK, request\_id **uuid** FK→requests
-  - stripe\_pi **text**, amount\_cents **int**, currency **text** DEFAULT 'EUR'
-  - status **text** CHECK IN ('requires\_payment','paid','refunded','failed')
-  - purpose **text** CHECK IN ('initial\_service','follow\_up\_qa')
-  - created\_at **timestamptz**
-
-- **pricing\_plans** (catálogo de planes)
-
+- **pricing_plans** (catálogo de planes)
   - id **uuid** PK, name **text**, description **text**
-  - kind **text** CHECK IN ('unit','pack'), docs\_included **int** NULL
-  - stripe\_product\_id **text**, stripe\_price\_id **text**, currency **text** DEFAULT 'EUR', amount\_cents **int**
-  - active **bool** DEFAULT true, visible **bool** DEFAULT true, created\_at **timestamptz**
+  - kind **text** CHECK IN ('unit','pack'), docs_included **int** NULL
+  - stripe_product_id **text**, stripe_price_id **text**, currency **text** DEFAULT 'EUR', amount_cents **int**
+  - active **bool** DEFAULT true, visible **bool** DEFAULT true, created_at **timestamptz**
 
-- **pricing\_addons** (catálogo de add‑ons)
-
+- **pricing_addons** (catálogo de add‑ons)
   - id **uuid** PK, name **text**, description **text**
-  - stripe\_product\_id **text**, stripe\_price\_id **text**, currency **text** DEFAULT 'EUR', amount\_cents **int**
-  - active **bool** DEFAULT true, visible **bool** DEFAULT true, created\_at **timestamptz**
+  - stripe_product_id **text**, stripe_price_id **text**, currency **text** DEFAULT 'EUR', amount_cents **int**
+  - active **bool** DEFAULT true, visible **bool** DEFAULT true, created_at **timestamptz**
 
-- **purchase\_items** (detalle de compra)
-
-  - id **uuid** PK, payment\_id **uuid** FK→payments
-  - item\_type **text** CHECK IN ('plan','addon'), item\_id **uuid** (FK lógico a `pricing_plans`/`pricing_addons`)
-  - quantity **int** DEFAULT 1, metadata **jsonb**, created\_at **timestamptz**
+- **purchase_items** (detalle de compra)
+  - id **uuid** PK, payment_id **uuid** FK→payments
+  - item_type **text** CHECK IN ('plan','addon'), item_id **uuid** (FK lógico a `pricing_plans`/`pricing_addons`)
+  - quantity **int** DEFAULT 1, metadata **jsonb**, created_at **timestamptz**
 
 - **partners**
+  - id **uuid** PK, user_id **uuid** FK→profiles
+  - firm_name **text**, specialties **text[]**, verified **bool**
 
-  - id **uuid** PK, user\_id **uuid** FK→profiles
-  - firm\_name **text**, specialties **text[]**, verified **bool**
-
-- **partner\_applications** (formulario de alta)
-
+- **partner_applications** (formulario de alta)
   - id **uuid** PK, name **text**, email **text**, phone **text**
   - specialties **text[]**, province **text**, notes **text**
   - status **text** CHECK IN ('received','screening','approved','rejected')
-  - created\_at **timestamptz**
+  - created_at **timestamptz**
 
-- **contact\_messages** (formulario contacto)
-
+- **contact_messages** (formulario contacto)
   - id **uuid** PK, name **text**, email **text**, subject **text**, message **text**
   - status **text** CHECK IN ('received','replied','closed')
-  - created\_at **timestamptz**
+  - created_at **timestamptz**
 
 - **webhooks**
+  - id **uuid** PK, provider **text**, event_type **text**, payload **jsonb**, received_at **timestamptz**
 
-  - id **uuid** PK, provider **text**, event\_type **text**, payload **jsonb**, received\_at **timestamptz**
-
-- **audit\_logs**
-
-  - id **uuid** PK, actor\_id **uuid** FK→profiles, action **text**, entity **text**, entity\_id **uuid**, at **timestamptz**
+- **audit_logs**
+  - id **uuid** PK, actor_id **uuid** FK→profiles, action **text**, entity **text**, entity_id **uuid**, at **timestamptz**
 
 - **consents**
-
-  - id **uuid** PK, user\_id **uuid** FK→profiles, scope **text**, granted\_at **timestamptz**
+  - id **uuid** PK, user_id **uuid** FK→profiles, scope **text**, granted_at **timestamptz**
 
 **Buckets de Storage**: `uploads/` (privado; documentos de entrada), `reports/` (privado; PDFs entregables vía **Signed URL**), `public/branding/` (público lectura; solo admin escribe). **Nunca** almacenar documentos de usuario en buckets públicos. **Retención** alineada con §11 (12 meses por defecto).
 
@@ -412,7 +402,7 @@ const documentUrl = data?.signedUrl;
 
 ## 13) Definición de Hecho (DoD)
 
-- **TDD obligatorio**: *tests primero*. La suite debe cubrir los **criterios de aceptación** de cada historia.
+- **TDD obligatorio**: _tests primero_. La suite debe cubrir los **criterios de aceptación** de cada historia.
 - Código con lint/tests, cobertura clave (unit + e2e donde aplique).
 - Logs + métricas de uso básicos.
 - Textos legales y consentimientos visibles.
@@ -425,7 +415,7 @@ const documentUrl = data?.signedUrl;
 - **Calidad**: ESLint + Prettier; PR con checklist (seguridad, RLS, RGPD, DX).
 - **Config**: `.env.example` completo; nunca secretos en repo.
 - **Nomenclatura**:
-  - Código/archivos/rutas → **snake\_case**.
+  - Código/archivos/rutas → **snake_case**.
   - Componentes React/clases → **PascalCase**.
 - **Docs**: cada cambio relevante → actualización de esta KB.
 - **Runtime**: **Node.js v20 LTS** (Edge Functions y tooling). Define `engines.node: ">=20 <21"` en `package.json`, añade `.nvmrc` con `20` y usa `actions/setup-node@v4` con `node-version: 20` en CI.
@@ -475,57 +465,58 @@ const documentUrl = data?.signedUrl;
 
 ### Componentes
 
-- **Servidor MCP**: `tb-mcp` (Node.js v20). Provee *tools* y *resources* a Cursor.
+- **Servidor MCP**: `tb-mcp` (Node.js v20). Provee _tools_ y _resources_ a Cursor.
 - **Proveedores**: Supabase (DB/Storage/Edge), Stripe (pagos), FS (workspace), HTTP (allow‑list de endpoints internos), GitHub (repos), Email provider (sólo plantillas).
 
 ### Tools expuestas (catálogo mínimo)
 
 1. `storage.get_signed_url`
-
    - **Descripción**: Obtiene **URL firmada** llamando a **Edge **`` (server‑side).
    - **Args (JSON Schema)**:
      ```json
-     {"type":"object","properties":{"bucket":{"type":"string","enum":["reports","uploads"]},"path":{"type":"string"},"expiresIn":{"type":"integer","minimum":30,"maximum":3600}},"required":["bucket","path"]}
+     {
+       "type": "object",
+       "properties": {
+         "bucket": { "type": "string", "enum": ["reports", "uploads"] },
+         "path": { "type": "string" },
+         "expiresIn": { "type": "integer", "minimum": 30, "maximum": 3600 }
+       },
+       "required": ["bucket", "path"]
+     }
      ```
    - **Permisos**: requiere `auth.user` y comprobaciones (RLS/consentimientos/pagos).
    - **Rate limit**: 5/min por usuario.
    - **Audit**: registra en `audit_logs`.
 
 2. `documents.process_document`
-
    - **Descripción**: Encola el **procesamiento** (extracción + normalización + IA opcional).
    - **Args**: `{ request_id: uuid }`.
    - **Ejecución**: delega en **Edge **``.
    - **Salida**: `{ status: 'accepted' | 'running' | 'done' | 'error' }`.
 
 3. `documents.simplify_document`
-
    - **Descripción**: Ejecuta la **simplificación de jerga**.
    - **Args**: `{ request_id: uuid, language?: 'es' | 'en' }`.
    - **Ejecución**: **Edge **`` (incluye **sanitización PII** previa).
    - **Salida**: URL/ID del informe en `reports/`.
 
 4. `requests.update_status`
-
    - **Descripción**: Cambia `requests.status` sólo a través de **Edge **`` (valida transiciones y rol).
    - **Args**: `{ request_id: uuid, to: 'ready' | 'rejected' | 'archived' }`.
    - **Permisos**: `agente`/`admin`.
 
 5. `payments.lookup`
-
    - **Descripción**: Lectura segura del pago asociado a `request_id`.
    - **Args**: `{ request_id: uuid }`.
    - **Fuente**: DB `payments` (lectura con RLS).
    - **Salida**: estado + `purpose` + `amount_cents`.
 
 6. `kb.load`
-
    - **Descripción**: Carga documentos de **KB** (ruta allow‑list) para contextos de IA.
    - **Args**: `{ path: string }`.
    - **Seguridad**: sólo rutas del repo `docs/`.
 
 7. `pii.sanitize_preview`
-
    - **Descripción**: Simula sanitización (en local) para revisar redacciones antes de enviar al LLM.
    - **Args**: `{ text: string }`.
    - **Nota**: la sanitización **real** ocurre en Edge.
@@ -535,7 +526,7 @@ const documentUrl = data?.signedUrl;
 ### Resources (lectura)
 
 - `fs.read` (workspace del repo, allow‑list `src/`, `docs/`, `sql/`).
-- `http.fetch` (allow‑list: `https://<supabase>/functions/v1/*`, `https://api.stripe.com/*` **sólo GET** con claves *restricted*).
+- `http.fetch` (allow‑list: `https://<supabase>/functions/v1/*`, `https://api.stripe.com/*` **sólo GET** con claves _restricted_).
 - `git.*` (lecturas de ramas y diffs).
 
 ### Seguridad y cumplimiento (MCP)
@@ -584,95 +575,93 @@ const documentUrl = data?.signedUrl;
 ## Sprint 0 — Fundaciones (1 semana)
 
 1. **Repo & CI/CD**\
-   *Hacer*: Configurar GitHub, ramas, ESLint/Prettier, Vitest, workflows CI.\
-   *Aceptación*: PR crea app React+Vite base, CI verde, `README` y `.env.example`.
+   _Hacer_: Configurar GitHub, ramas, ESLint/Prettier, Vitest, workflows CI.\
+   _Aceptación_: PR crea app React+Vite base, CI verde, `README` y `.env.example`.
 2. **Supabase bootstrap**\
-   *Hacer*: Proyecto, auth email, RLS ON, tablas mínimas (§10), buckets.\
-   *Aceptación*: Seeds + políticas RLS probadas con dos roles.
+   _Hacer_: Proyecto, auth email, RLS ON, tablas mínimas (§10), buckets.\
+   _Aceptación_: Seeds + políticas RLS probadas con dos roles.
 3. **Entregabilidad email**\
-   *Hacer*: Proveedor SMTP/transactional, DNS SPF/DKIM/DMARC, plantillas.\
-   *Aceptación*: 3 correos de prueba entregados (contacto, alta, ticket).
+   _Hacer_: Proveedor SMTP/transactional, DNS SPF/DKIM/DMARC, plantillas.\
+   _Aceptación_: 3 correos de prueba entregados (contacto, alta, ticket).
 4. **MCP – Servidor **``** (bootstrap)**\
-   *Hacer*: Estructura `mcp/server.ts|js`, configuración `cursor.mcp.json`, tool `storage.get_signed_url` → Edge.\
-   *Aceptación*: Invocación desde Cursor devuelve URL firmada válida (demo) sin exponer secretos.
+*Hacer*: Estructura `mcp/server.ts|js`, configuración `cursor.mcp.json`, tool `storage.get_signed_url` → Edge.\
+   _Aceptación_: Invocación desde Cursor devuelve URL firmada válida (demo) sin exponer secretos.
 
 ## Sprint 1 — Formularios y Operativa básica (1–2 semanas)
 
 5. **Formulario Contacto**\
-   *Hacer*: Validación FE, Edge Function `send-contact-email`, inserción `contact_messages`.\
-   *Aceptación*: Registro en DB + email al equipo + respuesta automática al usuario.
+   _Hacer_: Validación FE, Edge Function `send-contact-email`, inserción `contact_messages`.\
+   _Aceptación_: Registro en DB + email al equipo + respuesta automática al usuario.
 6. **Formulario Partners**\
-   *Hacer*: Alta en `partner_applications`, validación, notificaciones.\
-   *Aceptación*: Cambiar estado `received→screening` desde panel admin.
+   _Hacer_: Alta en `partner_applications`, validación, notificaciones.\
+   _Aceptación_: Cambiar estado `received→screening` desde panel admin.
 7. **Panel Operaciones (mínimo)**\
-   *Hacer*: Lista de `contact_messages` y `partner_applications`, filtros, estados.\
-   *Aceptación*: Cambios de estado persistidos y auditados.
+   _Hacer_: Lista de `contact_messages` y `partner_applications`, filtros, estados.\
+   _Aceptación_: Cambios de estado persistidos y auditados.
 
 ## Sprint 2 — Documentos y Traducción pedagógica (2–3 semanas)
 
 8. **Upload & Storage**\
-   *Hacer*: Subida segura (20MB), hash duplicados, vista previa.\
-   *Aceptación*: Archivo en `uploads/`, registro en `documents`, **disparo de **``** vía Realtime/DB (recomendado)** o **llamada FE** (fallback); **trigger http/pg\_net opcional**. Respuesta **202 Accepted** y seguimiento de estado en UI.
+   _Hacer_: Subida segura (20MB), hash duplicados, vista previa.\
+   _Aceptación_: Archivo en `uploads/`, registro en `documents`, **disparo de **``** vía Realtime/DB (recomendado)** o **llamada FE** (fallback); **trigger http/pg_net opcional**. Respuesta **202 Accepted** y seguimiento de estado en UI.
 9. **Extracción de texto (PDF/OCR)**\
-   *Hacer*: Pipeline TS en Edge Function; fallback OCR para imágenes.\
-   *Aceptación*: Texto normalizado guardado en `analyses`.
+   _Hacer_: Pipeline TS en Edge Function; fallback OCR para imágenes.\
+   _Aceptación_: Texto normalizado guardado en `analyses`.
 10. **Sanitización de PII (obligatoria)**\
-    *Hacer*: Implementar rutina previa al LLM (en Edge) para filtrar/anonimizar PII no necesaria.\
-    *Aceptación*: Logs de auditoría + tests unitarios de sanitización.
+    _Hacer_: Implementar rutina previa al LLM (en Edge) para filtrar/anonimizar PII no necesaria.\
+    _Aceptación_: Logs de auditoría + tests unitarios de sanitización.
 11. **Traducción pedagógica IA**\
-    *Hacer*: Prompt estandarizado + flags (plazos/importes).\
-    *Aceptación*: Resumen en lectura fácil + lista de acciones.
+    _Hacer_: Prompt estandarizado + flags (plazos/importes).\
+    _Aceptación_: Resumen en lectura fácil + lista de acciones.
 12. **Auditoría de Seguridad (Agente Auditor)**\
-    *Hacer*: Revisión del código de Sprint 2 (RLS + Hardening checklist).\
-    *Aceptación*: Informe de hallazgos + fixes priorizados.
+    _Hacer_: Revisión del código de Sprint 2 (RLS + Hardening checklist).\
+    _Aceptación_: Informe de hallazgos + fixes priorizados.
 
 ## Sprint 3 — Pagos, Área de usuario y Partners (2 semanas)
 
 13. **Stripe Checkout + Webhooks**\
-    *Hacer*: Pago por servicio; `payments` y conciliación webhook.\
-    *Aceptación*: Flujo end‑to‑end: sin pago no hay descarga final.
+    _Hacer_: Pago por servicio; `payments` y conciliación webhook.\
+    _Aceptación_: Flujo end‑to‑end: sin pago no hay descarga final.
 14. **Catálogo de Planes y Add‑ons (Admin)**\
-    *Hacer*: CRUD de planes (unitario, pack) y add‑ons; asociar Stripe Product/Price; flags de visibilidad.\
-    *Aceptación*: Planes y add‑ons configurables por Admin, visibles en checkout; webhooks asignan **créditos** (1 o N) y marcan add‑ons por request.
+    _Hacer_: CRUD de planes (unitario, pack) y add‑ons; asociar Stripe Product/Price; flags de visibilidad.\
+    _Aceptación_: Planes y add‑ons configurables por Admin, visibles en checkout; webhooks asignan **créditos** (1 o N) y marcan add‑ons por request.
 15. **Área Usuario**\
-    *Hacer*: Historial de solicitudes, descargas, facturas, estados en tiempo real.\
-    *Aceptación*: Usuario ve sus requests (RLS), su estado y puede re‑descargar informes.
+    _Hacer_: Historial de solicitudes, descargas, facturas, estados en tiempo real.\
+    _Aceptación_: Usuario ve sus requests (RLS), su estado y puede re‑descargar informes.
 16. **Auditoría de Seguridad (Agente Auditor)**\
-    *Hacer*: Revisión del código de Sprint 3 (Stripe + permisos de acceso + Signed URLs).\
-    *Aceptación*: Informe de hallazgos + fixes priorizados.
+    _Hacer_: Revisión del código de Sprint 3 (Stripe + permisos de acceso + Signed URLs).\
+    _Aceptación_: Informe de hallazgos + fixes priorizados.
 
 ## Sprint 4 — Automatización: Simplificación de Jerga (1–2 semanas)
 
 17. **Botón “Simplificar documento” (FE)**\
-    *Hacer*: Añadir CTA en detalle de request; estado de procesamiento; mensajes de éxito/error.\
-    *Aceptación*: Lanza `simplify_document` y muestra estado hasta “listo para ver/descargar”.
+    _Hacer_: Añadir CTA en detalle de request; estado de procesamiento; mensajes de éxito/error.\
+    _Aceptación_: Lanza `simplify_document` y muestra estado hasta “listo para ver/descargar”.
 18. **Edge Function **``\
-    *Hacer*: Descargar desde Storage, extraer texto, **sanitizar PII**, invocar LLM con prompt, guardar versión simplificada en `analyses`, generar PDF en `reports/`.\
-    *Aceptación*: Registro completo en DB + fichero en `reports/` accesible vía Signed URL.
+*Hacer*: Descargar desde Storage, extraer texto, **sanitizar PII**, invocar LLM con prompt, guardar versión simplificada en `analyses`, generar PDF en `reports/`.\
+*Aceptación*: Registro completo en DB + fichero en `reports/` accesible vía Signed URL.
 19. **Realtime & permisos**\
-    *Hacer*: Notificación Realtime al cliente; verificación RLS/consentimientos/pagos antes de emitir URL firmada.\
-    *Aceptación*: UI recibe evento y habilita ver/descargar; `audit_logs` registra acceso.
+    _Hacer_: Notificación Realtime al cliente; verificación RLS/consentimientos/pagos antes de emitir URL firmada.\
+    _Aceptación_: UI recibe evento y habilita ver/descargar; `audit_logs` registra acceso.
 
 ---
 
 ## Convenciones para la IA (Cursor/ChatGPT)
 
-> Usa esto como *prompt de sistema* al trabajar con este repositorio.
+> Usa esto como _prompt de sistema_ al trabajar con este repositorio.
 
-1. **Rol principal**: *AI Dev Assistant* para Traductor Burocrático. Entrega código **listo para PR**, seguro (RLS/inputs), con comentarios breves y *DoD* cumplido.
+1. **Rol principal**: _AI Dev Assistant_ para Traductor Burocrático. Entrega código **listo para PR**, seguro (RLS/inputs), con comentarios breves y _DoD_ cumplido.
 
 2. **Subagentes especializados**:
-
    - **Agente Arquitecto**: valida arquitectura, genera **diagramas** (componentes, datos, permisos) y detecta puntos únicos de fallo; propone mitigaciones.
    - **Agente Auditor de Seguridad**: revisa código, **RLS**, **Hardening checklist**, cabeceras, CSP, CORS, Signed URLs y flujos de pago; emite informe y fixes.
    - **Agente PM**: genera planes de proyecto, estimaciones, **riesgos** y dependencias a partir de esta KB.
 
-3. **Orquestación**: Las tareas **no críticas** (p. ej., *screening* de partners, informes de KPIs, recordatorios) pueden delegarse a un **Orquestador** externo. Las **Edge Functions** se reservan para **lógica crítica** (seguridad, rendimiento, LLM, Signed URLs, asíncronos).
+3. **Orquestación**: Las tareas **no críticas** (p. ej., _screening_ de partners, informes de KPIs, recordatorios) pueden delegarse a un **Orquestador** externo. Las **Edge Functions** se reservan para **lógica crítica** (seguridad, rendimiento, LLM, Signed URLs, asíncronos).
 
 4. **Estándares**: React+Vite, TypeScript, ESLint/Prettier, Vitest, **Node.js v20 LTS**. Supabase (Auth/DB/Storage, RLS). Stripe.
 
 5. **Salidas**:
-
    - Código + explicación corta.
    - Migraciones SQL y políticas RLS.
    - Actualiza `.env.example` si introduces nuevas vars.
@@ -680,7 +669,7 @@ const documentUrl = data?.signedUrl;
 
 6. **Seguridad & RGPD**: No registres datos sensibles en logs. Aplica **minimización**, **sanitización de PII previa al LLM** y **controles por rol**.
 
-7. **Mensajería**: UI con **disclaimer** de no asesoría. Evita jerga; sé claro. Para **multas/recursos**, añade: *"El siguiente checklist de posibles recursos es ****orientativo****. Su procedencia puede requerir ****actuaciones o justificantes previos**** y ****no garantiza**** el éxito del recurso. Para una valoración profesional, contacta con un partner."*
+7. **Mensajería**: UI con **disclaimer** de no asesoría. Evita jerga; sé claro. Para **multas/recursos**, añade: _"El siguiente checklist de posibles recursos es \***\*orientativo\*\***. Su procedencia puede requerir \***\*actuaciones o justificantes previos\*\*** y \***\*no garantiza\*\*** el éxito del recurso. Para una valoración profesional, contacta con un partner."_
 
 8. **Ramas/Commits**: Conventional Commits (`feat:`, `fix:`). PR con checklist.
 
@@ -694,4 +683,3 @@ const documentUrl = data?.signedUrl;
 
 13. **Fuentes canónicas (KB)**: Antes de proponer cambios, consulta y prioriza las rutas de `docs/canonical-sources.md`. Si un cambio afecta a requisitos/esquema/MCP, actualiza ese fichero en la PR.
 14. Placeholders y nombres: consulta la politica en docs/placeholders-policy.md
-

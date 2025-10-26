@@ -39,7 +39,7 @@ El producto se desarrolla sobre un stack moderno (React + Vite, Tailwind CSS, Su
 ## ✨ Características
 
 - 📄 **Procesamiento de documentos**: Extracción, normalización y clasificación de textos oficiales.
-- 🛡️ **Escaneo de seguridad**: VirusTotal analiza los adjuntos antes de iniciar el procesamiento para proteger a las personas usuarias.
+- 🛡️ **Escaneo de seguridad**: VirusTotal analiza los adjuntos (hasta 20MB) en segundo plano antes de iniciar el procesamiento y bloquea cualquier archivo malicioso.
 - 🤖 **Simplificación con IA**: Genera versiones pedagógicas, claras y accionables del contenido burocrático.
 - 🎨 **Design System**: Tokens de diseño y librería de componentes reutilizables alineados al estilo TB.
 - 🔐 **Autenticación**: Integración con Supabase Auth para sesiones seguras y multi-dispositivo.
@@ -65,9 +65,7 @@ pnpm install
 
 # 2. Configurar variables de entorno
 cp .env.example .env
-# Completa las variables (Supabase, API VirusTotal, etc.)
-
-# 3. Levantar el entorno de desarrollo
+# Completa las variables (Supabase, API VirusTotal, etc.)\n# Para el escaneo, define la clave en Supabase (no se guarda en .env local)\n# supabase secrets set VIRUSTOTAL_API_KEY=tu_clave_virustotal\n\n# 3. Levantar el entorno de desarrollo
 pnpm dev
 ```
 
