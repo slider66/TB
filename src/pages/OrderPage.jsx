@@ -1,8 +1,8 @@
 
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useDropzone } from 'react-dropzone';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabase, getSupabaseFunctionUrl } from '@/lib/customSupabaseClient';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { redirectToCheckout } from '@/lib/stripe';
 import toast from 'react-hot-toast';
@@ -33,6 +33,10 @@ const generateGuestPassword = () => {
   return `Guest-${Date.now()}-${randomSegment}!A1`;
 };
 
+const MAX_FILE_BYTES = 20 * 1024 * 1024;
+const VIRUS_SCAN_POLL_INTERVAL = 4000;
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
 const OrderPage = () => {
   const [step, setStep] = useState('upload'); // upload, configure, checkout, processing, success
   const [file, setFile] = useState(null);
@@ -54,6 +58,10 @@ const OrderPage = () => {
   
   const [orderId, setOrderId] = useState(null);
   const [caseId, setCaseId] = useState(null);
+  const [scanStatus, setScanStatus] = useState('idle'); // idle | pending | clean | malicious | error
+  const [scanDetails, setScanDetails] = useState(null);
+  const [scanError, setScanError] = useState(null);
+  const scanPollRef = useRef(null);
 
   const { user, signIn, signUp } = useAuth();
 
@@ -93,6 +101,144 @@ const OrderPage = () => {
     fetchServices();
   }, []);
 
+  const clearScanPoll = useCallback(() => {
+    if (scanPollRef.current) {
+      clearInterval(scanPollRef.current);
+      scanPollRef.current = null;
+    }
+  }, []);
+
+  const resetScanState = useCallback(() => {
+    clearScanPoll();
+    setScanStatus('idle');
+    setScanDetails(null);
+    setScanError(null);
+  }, [clearScanPoll]);
+
+  useEffect(() => () => clearScanPoll(), [clearScanPoll]);
+
+  const startMalwareScan = useCallback(
+    async (fileToScan) => {
+      if (!fileToScan) return;
+
+      resetScanState();
+      setScanStatus('pending');
+
+      let functionUrl;
+      try {
+        functionUrl = getSupabaseFunctionUrl('scan-document');
+      } catch (err) {
+        console.error('Scan function URL error:', err);
+        setScanStatus('error');
+        setScanError('No se pudo preparar la verificación de seguridad.');
+        toast.error('No se pudo iniciar la verificación de seguridad del archivo.');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('file', fileToScan, fileToScan.name);
+
+      try {
+        const { data: sessionData } = await supabase.auth.getSession();
+        const accessToken = sessionData?.session?.access_token ?? null;
+
+        const headers = new Headers();
+        if (SUPABASE_ANON_KEY) {
+          headers.set('apikey', SUPABASE_ANON_KEY);
+        }
+        if (accessToken) {
+          headers.set('Authorization', `Bearer ${accessToken}`);
+        }
+
+        const response = await fetch(functionUrl, {
+          method: 'POST',
+          headers,
+          body: formData,
+        });
+
+        const payload = await response.json().catch(() => null);
+
+        if (!response.ok || !payload) {
+          const message = payload?.error || 'No se pudo iniciar la verificación del archivo.';
+          throw new Error(message);
+        }
+
+        setScanDetails(payload);
+
+        if (!payload.analysisId) {
+          throw new Error('No se pudo obtener el identificador del análisis.');
+        }
+
+        const pollEndpoint = `${functionUrl}?analysisId=${encodeURIComponent(payload.analysisId)}`;
+
+        const pollOnce = async () => {
+          const statusResponse = await fetch(pollEndpoint, {
+            method: 'GET',
+            headers,
+          });
+
+          const statusJson = await statusResponse.json().catch(() => null);
+
+          if (!statusResponse.ok || !statusJson) {
+            const message = statusJson?.error || 'No se pudo obtener el estado del análisis.';
+            throw new Error(message);
+          }
+
+          setScanDetails(statusJson);
+
+          if (statusJson.status === 'completed') {
+            clearScanPoll();
+            if (statusJson.verdict === 'malicious') {
+              setScanStatus('malicious');
+              setScanError('El archivo fue identificado como malicioso.');
+              setFile(null);
+              setStep('upload');
+              toast.error('Detectamos que el archivo es malicioso y lo hemos descartado.');
+            } else {
+              setScanStatus('clean');
+            }
+            return true;
+          }
+
+          setScanStatus('pending');
+          return false;
+        };
+
+        const finishedImmediately = await pollOnce();
+
+        if (!finishedImmediately) {
+          scanPollRef.current = setInterval(async () => {
+            try {
+              const done = await pollOnce();
+              if (done) {
+                clearScanPoll();
+              }
+            } catch (pollError) {
+              console.error('Error polling malware scan:', pollError);
+              clearScanPoll();
+              setScanStatus('error');
+              const message =
+                pollError instanceof Error
+                  ? pollError.message
+                  : 'Error en la verificación del archivo.';
+              setScanError(message);
+              toast.error('No pudimos completar la verificación del archivo. Inténtalo de nuevo.');
+            }
+          }, VIRUS_SCAN_POLL_INTERVAL);
+        }
+      } catch (error) {
+        console.error('Error starting malware scan:', error);
+        clearScanPoll();
+        setScanStatus('error');
+        const message =
+          error instanceof Error ? error.message : 'No se pudo iniciar la verificación del archivo.';
+        setScanError(message);
+        toast.error(message);
+      }
+    },
+    [clearScanPoll, resetScanState, setFile, setStep],
+  );
+
   useEffect(() => {
     if (!services.UNICO) return;
     let total = services.UNICO.base_price_cents;
@@ -109,23 +255,33 @@ const OrderPage = () => {
     setTotalPrice(total);
   }, [pageCount, addOns, services]);
 
-  const onDrop = useCallback(async (acceptedFiles) => {
-    const selectedFile = acceptedFiles[0];
-    if (!selectedFile) return;
-    setFile(selectedFile);
-    setStep('configure');
-  }, []);
+  const onDrop = useCallback(
+    (acceptedFiles) => {
+      const selectedFile = acceptedFiles[0];
+      if (!selectedFile) return;
+
+      if (selectedFile.size > MAX_FILE_BYTES) {
+        toast.error('El archivo es demasiado grande. Máximo 20MB.');
+        return;
+      }
+
+      setFile(selectedFile);
+      setStep('configure');
+      void startMalwareScan(selectedFile);
+    },
+    [startMalwareScan],
+  );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: { 'application/pdf': ['.pdf'], 'image/jpeg': ['.jpg', '.jpeg'], 'image/png': ['.png'] },
-    maxSize: 15 * 1024 * 1024, // 15MB
+    maxSize: MAX_FILE_BYTES,
     multiple: false,
     onDropRejected: (files) => {
       if (files[0].errors[0].code === 'file-too-large') {
-        toast.error('El archivo es demasiado grande. Máximo 15MB.');
+        toast.error('El archivo es demasiado grande. Maximo 20MB.');
       } else {
-        toast.error('Tipo de archivo no válido. Solo PDF, JPG o PNG.');
+        toast.error('Tipo de archivo no valido. Solo PDF, JPG o PNG.');
       }
     },
   });
@@ -135,19 +291,53 @@ const OrderPage = () => {
       toast.error("Por favor, selecciona un archivo primero.");
       return;
     }
+
+    if (scanStatus === 'malicious') {
+      toast.error('El archivo fue descartado por seguridad. Sube un documento diferente.');
+      return;
+    }
+
+    if (scanStatus === 'error') {
+      toast.error(scanError || 'No pudimos verificar el archivo. Sube un documento nuevo.');
+      return;
+    }
+
+    if (scanStatus === 'idle') {
+      void startMalwareScan(file);
+      toast('Estamos verificando el documento en segundo plano.');
+    } else if (scanStatus === 'pending') {
+      toast('Estamos terminando de comprobar tu archivo. Puedes continuar mientras finaliza.');
+    }
+
     setStep('checkout');
   };
   
   const handleCheckout = async () => {
+    if (!file) {
+      toast.error("Por favor, selecciona un archivo antes de continuar.");
+      return;
+    }
+
+    if (scanStatus === 'pending') {
+      toast.error('Estamos terminando de verificar tu documento. Espera unos segundos e intentalo de nuevo.');
+      return;
+    }
+
+    if (scanStatus === 'malicious') {
+      toast.error('El documento fue descartado por seguridad. Sube otro archivo para continuar.');
+      return;
+    }
+
+    if (scanStatus !== 'clean') {
+      toast.error(scanError || 'No pudimos validar el documento. Sube un archivo nuevo.');
+      return;
+    }
+
     setIsLoading(true);
     let finalEmail = email;
     let finalUserId = user?.id;
 
     try {
-      if (!file) {
-        throw new Error("Por favor, selecciona un archivo antes de continuar.");
-      }
-
       if (!user) {
         if (userExists === false) { // Crear nuevo usuario (invitado o no)
           if (!isGuest) {
@@ -275,7 +465,7 @@ const OrderPage = () => {
               <input {...getInputProps()} />
               <UploadCloud className="mx-auto h-16 w-16 text-neutral-400 mb-4" />
               <h3 className="text-2xl font-semibold mb-2">Arrastra o selecciona tu documento</h3>
-              <p className="text-neutral-500">Formatos admitidos: PDF, JPG, PNG. Peso máximo: 15MB.</p>
+              <p className="text-neutral-500">Formatos admitidos: PDF, JPG, PNG. Peso maximo: 20MB.</p>
               <p className="flex items-center justify-center gap-2 text-xs text-neutral-500 mt-4">
                 <ShieldCheck className="h-4 w-4 text-green-600" />
                 Tus documentos se eliminan automáticamente tras 7 días.
@@ -297,9 +487,50 @@ const OrderPage = () => {
                     <p className="font-semibold whitespace-normal break-words md:truncate" title={file.name}>{file.name}</p>
                     <p className="text-sm text-neutral-500">{formatBytes(file.size)}</p>
                   </div>
-                  <Button variant="ghost" size="icon" onClick={() => { setFile(null); setStep('upload'); }} className="ml-auto">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => {
+                      setFile(null);
+                      setStep('upload');
+                      resetScanState();
+                    }}
+                    className="ml-auto"
+                  >
                     <X className="h-4 w-4" />
                   </Button>
+                </div>
+                <div className="rounded-lg border border-dashed p-3 bg-neutral-50">
+                  {scanStatus === 'pending' && (
+                    <div className="flex items-center gap-2 text-sm text-neutral-600">
+                      <Loader2 className="h-4 w-4 animate-spin text-orange" />
+                      <span>Comprobando el documento en segundo plano...</span>
+                    </div>
+                  )}
+                  {scanStatus === 'clean' && (
+                    <div className="flex items-center gap-2 text-sm text-green-600">
+                      <ShieldCheck className="h-4 w-4" />
+                      <span>Documento verificado. No se detectaron amenazas.</span>
+                    </div>
+                  )}
+                  {scanStatus === 'malicious' && (
+                    <div className="flex items-center gap-2 text-sm text-red-600">
+                      <AlertTriangle className="h-4 w-4" />
+                      <span>El archivo no es seguro y se ha descartado.</span>
+                    </div>
+                  )}
+                  {scanStatus === 'error' && (
+                    <div className="flex items-center gap-2 text-sm text-amber-600">
+                      <AlertTriangle className="h-4 w-4" />
+                      <span>{scanError || 'No pudimos verificar la seguridad del archivo.'}</span>
+                    </div>
+                  )}
+                  {scanStatus === 'idle' && (
+                    <div className="flex items-center gap-2 text-sm text-neutral-500">
+                      <ShieldCheck className="h-4 w-4" />
+                      <span>Verificaremos la seguridad del archivo en cuanto lo subas.</span>
+                    </div>
+                  )}
                 </div>
                 <div className="space-y-2">
                   <Label>Número de páginas</Label>

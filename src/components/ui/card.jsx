@@ -22,16 +22,30 @@ const CardHeader = React.forwardRef(({ className, ...props }, ref) => (
 ));
 CardHeader.displayName = "CardHeader";
 
-const CardTitle = React.forwardRef(({ className, ...props }, ref) => (
-  <h3
-    ref={ref}
-    className={cn(
-      "text-2xl font-semibold leading-none tracking-tight",
-      className
-    )}
-    {...props}
-  />
-));
+const CARD_TITLE_FALLBACK =
+  "si has recibido una notificación legal y no sabes que quiere decir, somos tu mejor aliado";
+
+const CardTitle = React.forwardRef(({ className, children, ...props }, ref) => {
+  const resolvedChildren =
+    children === null ||
+    children === undefined ||
+    (typeof children === "string" && children.trim() === "")
+      ? CARD_TITLE_FALLBACK
+      : children;
+
+  return (
+    <h3
+      ref={ref}
+      className={cn(
+        "text-2xl font-semibold leading-none tracking-tight",
+        className
+      )}
+      {...props}
+    >
+      {resolvedChildren}
+    </h3>
+  );
+});
 CardTitle.displayName = "CardTitle";
 
 const CardDescription = React.forwardRef(({ className, ...props }, ref) => (

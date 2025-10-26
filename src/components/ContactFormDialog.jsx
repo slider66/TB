@@ -79,10 +79,17 @@ const ContactFormDialog = ({ onClose }) => {
       const { data, error } = await supabase.functions.invoke('send-contact-email', {
         body,
       });
+      if (error) throw error;
+      if (data?.error) {
+        throw new Error(typeof data.error === 'string' ? data.error : 'No se pudo enviar el mensaje.');
+      }
 
-     if (error) throw error;
+      const successMessage =
+        typeof data?.message === 'string'
+          ? data.message
+          : 'Mensaje enviado. Nos pondremos en contacto contigo pronto.';
 
-      toast.success('¡Mensaje enviado! Nos pondremos en contacto contigo pronto.');
+      toast.success(successMessage);
       onClose();
       setBotField('');
       setFile(null);
@@ -91,7 +98,11 @@ const ContactFormDialog = ({ onClose }) => {
       setMessage('');
     } catch (error) {
       console.error('Error sending contact form:', error);
-      toast.error(error.message || 'Hubo un error al enviar el mensaje. Inténtalo de nuevo.');
+      const errorMessage =
+        error instanceof Error && error.message
+          ? error.message
+          : 'Hubo un error al enviar el mensaje. Intentalo de nuevo.';
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
