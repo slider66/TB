@@ -2,16 +2,10 @@ import React from 'react';
 import { TBButton } from '@/components/ui';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Check, Zap, FileText, Languages, PlusCircle } from 'lucide-react';
-import { useAuth } from '@/contexts/SupabaseAuthContext';
-import { redirectToCheckout } from '@/lib/stripe';
 
 const PricingSection = ({ onStartClick, isPage = false }) => {
-  const { user } = useAuth();
-
-  const handleStartClick = (plan) => {
-    if (user) {
-      redirectToCheckout(plan);
-    } else {
+  const handleStartClick = () => {
+    if (onStartClick) {
       onStartClick();
     }
   };
@@ -58,7 +52,7 @@ const PricingSection = ({ onStartClick, isPage = false }) => {
                   </li>
                 ))}
               </ul>
-              <TBButton variant="primary" size="lg" className="w-full" onClick={() => handleStartClick('UNICO')}>
+              <TBButton variant="primary" size="lg" className="w-full" onClick={handleStartClick}>
                 Empezar ahora
               </TBButton>
             </CardContent>

@@ -109,6 +109,40 @@ const PartnersPage = () => {
             especialidad: safeEspecialidad,
           });
         if (error) throw error;
+
+        const messageLines = [
+          'Nueva solicitud de partnership recibida.',
+          `Nombre: ${safeName}`,
+          `Email: ${safeEmail}`,
+          safePhone ? `Telefono: ${safePhone}` : null,
+          safeEspecialidad ? `Especialidad: ${safeEspecialidad}` : 'Especialidad: no indicada',
+          safeColegiado
+            ? `Numero de colegiado: ${safeColegiado}`
+            : 'Numero de colegiado: no proporcionado',
+          '',
+          'Experiencia:',
+          safeExperiencia,
+        ].filter(Boolean);
+
+        try {
+          await supabase.functions.invoke('send-contact-email', {
+            body: {
+              name: safeName,
+              email: safeEmail,
+              phone: safePhone || undefined,
+              message: messageLines.join('\n'),
+              source: 'partner_form',
+              metadata: {
+                colegiado: safeColegiado || null,
+                especialidad: safeEspecialidad,
+                experiencia: safeExperiencia,
+              },
+            },
+          });
+        } catch (notifyError) {
+          console.error('Error sending partner notification email:', notifyError);
+        }
+
         toast({ title: 'Solicitud enviada', description: 'Te contactaremos pronto.' });
         setPartner({ name: '', email: '', phone: '', colegiado: '', experiencia: '', especialidad: '', _hp: '' });
       } catch (err) {
