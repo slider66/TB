@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from '@/components/ui/button';
+import { TBButton } from '@/components/ui';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Check, Zap, FileText, Languages, PlusCircle } from 'lucide-react';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
@@ -25,9 +25,9 @@ const PricingSection = ({ onStartClick, isPage = false }) => {
   ];
 
   const addons = [
-    { icon: <Zap className="h-6 w-6 text-orange" />, title: "Servicio Urgente 4h", price: "+9,90 €" },
-    { icon: <FileText className="h-6 w-6 text-orange" />, title: "Documento largo", price: "+4,90 € / 10 pág. extra" },
-    { icon: <Languages className="h-6 w-6 text-orange" />, title: "Traducción (EN/FR/PT)", price: "+6,90 €" },
+    { icon: <Zap className="h-6 w-6 text-tb-primary" />, title: "Servicio Urgente 4h", price: "+9,90 €" },
+    { icon: <FileText className="h-6 w-6 text-tb-primary" />, title: "Documento largo", price: "+4,90 € / 10 pág. extra" },
+    { icon: <Languages className="h-6 w-6 text-tb-primary" />, title: "Traducción (EN/FR/PT)", price: "+6,90 €" },
   ];
 
   const TitleComponent = isPage ? 'h1' : 'h2';
@@ -43,13 +43,13 @@ const PricingSection = ({ onStartClick, isPage = false }) => {
         </div>
 
         <div className="grid lg:grid-cols-5 gap-8 items-start">
-          <Card className="lg:col-span-3 pricing-card highlighted border-2 border-orange shadow-orange">
+          <Card className="lg:col-span-3 pricing-card highlighted border-2 border-tb-primary shadow-tb-primary">
             <CardHeader>
               <CardTitle className="text-2xl font-bold">Plan Único</CardTitle>
               <CardDescription>La solución completa para entender tu burocracia.</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="text-5xl font-bold text-orange mb-6">14,90 € <span className="text-lg font-normal text-neutral-500">IVA incl.</span></div>
+              <div className="text-5xl font-bold text-tb-primary mb-6">14,90 € <span className="text-lg font-normal text-neutral-500">IVA incl.</span></div>
               <ul className="space-y-4 mb-8">
                 {features.map((feature, index) => (
                   <li key={index} className="flex items-start">
@@ -58,16 +58,16 @@ const PricingSection = ({ onStartClick, isPage = false }) => {
                   </li>
                 ))}
               </ul>
-              <Button className="btn-primary w-full text-lg py-6" onClick={() => handleStartClick('UNICO')}>
+              <TBButton variant="primary" size="lg" className="w-full" onClick={() => handleStartClick('UNICO')}>
                 Empezar ahora
-              </Button>
+              </TBButton>
             </CardContent>
           </Card>
 
           <div className="lg:col-span-2 space-y-6">
              <Card className="bg-white">
                 <CardHeader>
-                    <CardTitle className="flex items-center gap-2 text-xl font-bold"><PlusCircle className="text-orange" />Add-ons Opcionales</CardTitle>
+                    <CardTitle className="flex items-center gap-2 text-xl font-bold"><PlusCircle className="text-tb-primary" />Add-ons Opcionales</CardTitle>
                     <CardDescription>Personaliza tu servicio según tus necesidades.</CardDescription>
                 </CardHeader>
                 <CardContent>

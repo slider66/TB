@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Button } from '@/components/ui/button';
+import { TBButton } from '@/components/ui';
 import { UploadCloud, ShieldCheck } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -30,13 +30,15 @@ const HeroSection = ({ onUploadClick }) => {
             transition={{ duration: 0.7, delay: 0.4 }}
             className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-6"
           >
-            <Button
-              className="btn-primary flex items-center justify-center gap-2 text-lg py-4 px-6 md:px-8 w-full sm:w-auto text-wrap"
+            <TBButton
+              variant="primary"
+              size="lg"
+              leadingIcon={<UploadCloud className="h-6 w-6" />}
+              className="w-full sm:w-auto"
               onClick={onUploadClick}
             >
-              <UploadCloud className="h-6 w-6" />
               Subir documento
-            </Button>
+            </TBButton>
           </motion.div>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -48,7 +50,7 @@ const HeroSection = ({ onUploadClick }) => {
               No es asesoría legal, es información práctica para que entiendas tus trámites.
             </p>
             <p className="flex items-center justify-center gap-2 text-xs text-neutral-500">
-              <ShieldCheck className="h-4 w-4 text-green-600" />
+              <ShieldCheck className="h-2 w-2 text-green-600" />
               Tus documentos se eliminan automáticamente tras 7 días.
             </p>
           </motion.div>

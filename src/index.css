@@ -1,4 +1,7 @@
 
+/* Traductor Burocrático - Design Tokens */
+@import './styles/tokens.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -6,9 +9,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --primary-orange: #ff6b35;
-  --primary-orange-light: #ff8c5a;
-  --primary-orange-dark: #e55a2b;
+  /* Colores actualizados - usar tokens tb.* en Tailwind o var(--tb-*) en CSS */
+  --primary-orange: #FF6600;
+  --primary-orange-light: #FF8533;
+  --primary-orange-dark: #E65C00;
+  
+  /* Colores neutros (mantener por compatibilidad) */
   --neutral-50: #fafafa;
   --neutral-100: #f5f5f5;
   --neutral-200: #e5e5e5;

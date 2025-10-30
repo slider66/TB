@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
-import { Button } from '@/components/ui/button';
+import { TBButton } from '@/components/ui';
 import { useToast } from '@/components/ui/use-toast';
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Mail, Lock, User, Briefcase, Loader2, ArrowLeft } from 'lucide-react';
@@ -100,7 +100,7 @@ const Login = ({ onLoginSuccess, onSwitchToRegister }) => {
                     placeholder="Email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-orange focus:outline-none"
+                    className="w-full pl-10 pr-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-tb-primary focus:outline-none"
                     disabled={loading}
                   />
                 </div>
@@ -115,22 +115,22 @@ const Login = ({ onLoginSuccess, onSwitchToRegister }) => {
                     placeholder="Contraseña"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-orange focus:outline-none"
+                    className="w-full pl-10 pr-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-tb-primary focus:outline-none"
                     disabled={loading}
                   />
                 </div>
-                <Button type="submit" className="btn-primary w-full text-lg py-4" disabled={loading}>
+                <TBButton type="submit" variant="primary" size="lg" className="w-full" disabled={loading}>
                   {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Acceder'}
-                </Button>
+                </TBButton>
               </form>
 
               <div className="text-center mt-6 space-y-2">
-                <button onClick={() => setView('forgotPassword')} className="text-sm text-orange hover:underline">
+                <button onClick={() => setView('forgotPassword')} className="text-sm text-tb-primary hover:underline">
                   ¿Has olvidado tu contraseña?
                 </button>
                 <p className="text-sm text-neutral-500">
                   ¿Aún no estas registrado?{' '}
-                  <button onClick={onSwitchToRegister} className="font-semibold text-orange hover:underline" disabled={loading}>
+                  <button onClick={onSwitchToRegister} className="font-semibold text-tb-primary hover:underline" disabled={loading}>
                     Crea una cuenta
                   </button>
                 </p>
@@ -141,7 +141,7 @@ const Login = ({ onLoginSuccess, onSwitchToRegister }) => {
 
         {view === 'forgotPassword' && (
           <div className="p-8">
-             <button onClick={() => setView('login')} className="flex items-center text-sm text-neutral-600 hover:text-orange mb-4">
+             <button onClick={() => setView('login')} className="flex items-center text-sm text-neutral-600 hover:text-tb-primary mb-4">
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Volver a inicio de sesión
             </button>
@@ -163,13 +163,13 @@ const Login = ({ onLoginSuccess, onSwitchToRegister }) => {
                   placeholder="Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-orange focus:outline-none"
+                  className="w-full pl-10 pr-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-tb-primary focus:outline-none"
                   disabled={loading}
                 />
               </div>
-              <Button type="submit" className="btn-primary w-full text-lg py-4" disabled={loading}>
+              <TBButton type="submit" variant="primary" size="lg" className="w-full" disabled={loading}>
                 {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Enviar instrucciones'}
-              </Button>
+              </TBButton>
             </form>
           </div>
         )}

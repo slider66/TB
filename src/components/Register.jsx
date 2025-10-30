@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
-import { Button } from '@/components/ui/button';
+import { TBButton } from '@/components/ui';
 import { useToast } from '@/components/ui/use-toast';
 import { Mail, Lock, User, Loader2, Eye, EyeOff, AlertCircle } from 'lucide-react';
 import PasswordStrength from '@/components/PasswordStrength';
@@ -125,7 +125,7 @@ const Register = ({ onRegisterSuccess, onSwitchToLogin }) => {
               placeholder="Nombre completo"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-orange focus:outline-none"
+              className="w-full pl-10 pr-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-tb-primary focus:outline-none"
               disabled={loading}
             />
           </div>
@@ -140,7 +140,7 @@ const Register = ({ onRegisterSuccess, onSwitchToLogin }) => {
               placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-orange focus:outline-none"
+              className="w-full pl-10 pr-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-tb-primary focus:outline-none"
               disabled={loading}
             />
           </div>
@@ -155,7 +155,7 @@ const Register = ({ onRegisterSuccess, onSwitchToLogin }) => {
               placeholder="Contrasena"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full pl-10 pr-10 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-orange focus:outline-none"
+              className="w-full pl-10 pr-10 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-tb-primary focus:outline-none"
               disabled={loading}
             />
             <button
@@ -180,7 +180,7 @@ const Register = ({ onRegisterSuccess, onSwitchToLogin }) => {
               placeholder="Confirmar Contrasena"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
-              className={`w-full pl-10 pr-10 py-3 border rounded-lg focus:ring-2 focus:ring-orange focus:outline-none ${!passwordsMatch ? 'border-red-500' : 'border-neutral-300'}`}
+              className={`w-full pl-10 pr-10 py-3 border rounded-lg focus:ring-2 focus:ring-tb-primary focus:outline-none ${!passwordsMatch ? 'border-red-500' : 'border-neutral-300'}`}
               disabled={loading}
             />
             <button
@@ -197,15 +197,15 @@ const Register = ({ onRegisterSuccess, onSwitchToLogin }) => {
               Las Contrasenas no coinciden.
             </div>
           )}
-          <Button type="submit" className="btn-primary w-full text-lg py-4" disabled={loading || !isPasswordValid || !passwordsMatch}>
+          <TBButton type="submit" variant="primary" size="lg" className="w-full" disabled={loading || !isPasswordValid || !passwordsMatch}>
             {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Registrarse'}
-          </Button>
+          </TBButton>
         </form>
 
         <div className="text-center mt-6">
           <p className="text-sm text-neutral-500">
             ¿Ya tienes una cuenta?{' '}
-            <button onClick={onSwitchToLogin} className="font-semibold text-orange hover:underline" disabled={loading}>
+            <button onClick={onSwitchToLogin} className="font-semibold text-tb-primary hover:underline" disabled={loading}>
               Inicia sesión
             </button>
           </p>

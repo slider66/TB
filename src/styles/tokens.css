@@ -1,41 +1,81 @@
+/**
+ * Traductor Burocrático - Design Tokens
+ * 
+ * Variables CSS generadas desde el sistema de tokens.
+ * Sincronizado con: docs/design-tokens-traductor-burocratico.md
+ * Última actualización: 2025-10-30
+ */
+
 :root {
-  /* Color */
+  /* ===========================
+   * COLORES
+   * =========================== */
+  
+  /* Primarios */
   --tb-color-primary: #FF6600;
   --tb-color-primary-hover: #FF8533;
   --tb-color-primary-active: #E65C00;
   --tb-color-disabled: #FFD8B0;
+
+  /* Textos */
   --tb-text-base: #1C1C1C;
   --tb-text-muted: #5C5C5C;
   --tb-text-inverse: #FFFFFF;
+
+  /* Fondos */
   --tb-bg-base: #FFFFFF;
   --tb-bg-alt: #FAFAFA;
+  --tb-bg-card: #FFFFFF;
+
+  /* Bordes */
   --tb-border-subtle: #E5E5E5;
+
+  /* Estados */
   --tb-success: #1FA971;
   --tb-warning: #D97706;
   --tb-error: #DC2626;
 
-  /* Radius */
+  /* ===========================
+   * BORDES Y RADIOS
+   * =========================== */
+  
   --tb-radius-xs: 8px;
   --tb-radius-sm: 10px;
   --tb-radius-md: 12px;
   --tb-radius-lg: 16px;
   --tb-radius-xl: 20px;
 
-  /* Sizes & Spacing */
+  /* ===========================
+   * TAMAÑOS Y ESPACIADO
+   * =========================== */
+  
+  /* Botones */
   --tb-btn-sm: 40px;
   --tb-btn-md: 48px;
   --tb-btn-lg: 56px;
+
+  /* Iconos */
   --tb-icon-md: 20px;
+
+  /* Espaciado (grid de 8px) */
   --tb-space-1: 8px;
   --tb-space-2: 16px;
   --tb-space-3: 24px;
   --tb-space-4: 32px;
 
-  /* Type */
+  /* ===========================
+   * TIPOGRAFÍA
+   * =========================== */
+  
+  /* Familias */
   --tb-font-ui: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans', sans-serif;
+
+  /* Pesos */
   --tb-weight-regular: 400;
   --tb-weight-semibold: 600;
   --tb-weight-bold: 700;
+
+  /* Tamaños y alturas de línea */
   --tb-h1: 34px;
   --tb-h1-lh: 40px;
   --tb-h2: 28px;
@@ -49,9 +89,140 @@
   --tb-caption: 12px;
   --tb-caption-lh: 18px;
 
-  /* Motion & Elevation */
+  /* ===========================
+   * SOMBRAS
+   * =========================== */
+  
+  --tb-shadow-card: 0 2px 8px rgba(0, 0, 0, 0.05);
+  --tb-shadow-button: 0 2px 6px rgba(0, 0, 0, 0.08);
+
+  /* ===========================
+   * MOVIMIENTO Y TRANSICIONES
+   * =========================== */
+  
   --tb-ease: ease-in-out;
   --tb-duration-fast: 200ms;
-  --tb-shadow-card: 0 2px 8px rgba(0,0,0,0.05);
-  --tb-shadow-button: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+/* ===========================
+ * CLASES AUXILIARES
+ * =========================== */
+
+/* Tipografía base */
+.tb-text-h1 {
+  font-size: var(--tb-h1);
+  line-height: var(--tb-h1-lh);
+  font-weight: var(--tb-weight-bold);
+}
+
+.tb-text-h2 {
+  font-size: var(--tb-h2);
+  line-height: var(--tb-h2-lh);
+  font-weight: var(--tb-weight-semibold);
+}
+
+.tb-text-h3 {
+  font-size: var(--tb-h3);
+  line-height: var(--tb-h3-lh);
+  font-weight: var(--tb-weight-semibold);
+}
+
+.tb-text-body {
+  font-size: var(--tb-body);
+  line-height: var(--tb-body-lh);
+  font-weight: var(--tb-weight-regular);
+}
+
+.tb-text-small {
+  font-size: var(--tb-small);
+  line-height: var(--tb-small-lh);
+  font-weight: var(--tb-weight-regular);
+}
+
+.tb-text-caption {
+  font-size: var(--tb-caption);
+  line-height: var(--tb-caption-lh);
+  font-weight: var(--tb-weight-regular);
+}
+
+/* Botones base (si no se usa componente React) */
+.tb-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--tb-font-ui);
+  font-weight: var(--tb-weight-semibold);
+  border-radius: var(--tb-radius-md);
+  transition: all var(--tb-duration-fast) var(--tb-ease);
+  cursor: pointer;
+  border: none;
+}
+
+.tb-btn-primary {
+  background-color: var(--tb-color-primary);
+  color: var(--tb-text-inverse);
+  box-shadow: var(--tb-shadow-button);
+}
+
+.tb-btn-primary:hover:not(:disabled) {
+  background-color: var(--tb-color-primary-hover);
+}
+
+.tb-btn-primary:active:not(:disabled) {
+  background-color: var(--tb-color-primary-active);
+}
+
+.tb-btn-primary:disabled {
+  background-color: var(--tb-color-disabled);
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.tb-btn-secondary {
+  background-color: transparent;
+  color: var(--tb-color-primary);
+  border: 2px solid var(--tb-color-primary);
+}
+
+.tb-btn-secondary:hover:not(:disabled) {
+  background-color: rgba(255, 102, 0, 0.05);
+}
+
+.tb-btn-ghost {
+  background-color: transparent;
+  color: var(--tb-text-base);
+}
+
+.tb-btn-ghost:hover:not(:disabled) {
+  background-color: var(--tb-bg-alt);
+}
+
+/* Tamaños de botones */
+.tb-btn-sm {
+  height: var(--tb-btn-sm);
+  padding: 0 20px;
+  font-size: 14px;
+  border-radius: var(--tb-radius-sm);
+}
+
+.tb-btn-md {
+  height: var(--tb-btn-md);
+  padding: 0 24px;
+  font-size: 15px;
+}
+
+.tb-btn-lg {
+  height: var(--tb-btn-lg);
+  padding: 0 32px;
+  font-size: 16px;
+}
+
+/* Tarjetas */
+.tb-card {
+  background-color: var(--tb-bg-card);
+  border: 1px solid var(--tb-border-subtle);
+  border-radius: var(--tb-radius-lg);
+  box-shadow: var(--tb-shadow-card);
+  padding: var(--tb-space-3);
 }

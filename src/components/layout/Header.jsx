@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { TBButton } from '@/components/ui';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { LogOut, User, LayoutDashboard, Menu, X } from 'lucide-react';
 import {
@@ -55,19 +56,19 @@ const Header = ({ onLoginClick, onStartClick }) => {
         isScrolled || isMobileMenuOpen ? 'bg-white/95 shadow-md backdrop-blur-lg' : 'bg-transparent'
       }`}
     >
-      <div className="container mx-auto px-6 h-20 flex justify-between items-center">
-        <Link to="/" className="flex items-center">
+      <div className="container mx-auto px-6 h-20 flex justify-between items-center relative">
+        <Link to="/" className="flex items-center z-10">
           <img src="https://horizons-cdn.hostinger.com/5d895b2d-33c5-4462-8a9e-665d2e957763/806325b9ee47551f89d11b2417c2653a.png" alt="Traductor Burocrático Logo" className="h-8 w-auto" />
         </Link>
 
-        <nav className="hidden md:flex items-center gap-8">
+        <nav className="hidden md:flex items-center gap-8 absolute left-1/2 transform -translate-x-1/2">
           {navLinks.map((link) => (
             <NavLink
               key={link.to}
               to={link.to}
               className={({ isActive }) =>
-                `font-medium text-neutral-600 hover:text-orange transition-colors ${
-                  isActive ? 'text-orange' : ''
+                `font-medium text-neutral-600 hover:text-tb-primary transition-colors ${
+                  isActive ? 'text-tb-primary' : ''
                 }`
               }
             >
@@ -76,7 +77,7 @@ const Header = ({ onLoginClick, onStartClick }) => {
           ))}
         </nav>
 
-        <div className="hidden md:flex items-center gap-4">
+        <div className="hidden md:flex items-center gap-4 z-10">
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -114,9 +115,9 @@ const Header = ({ onLoginClick, onStartClick }) => {
               <Button variant="ghost" onClick={onLoginClick}>
                 Iniciar Sesión
               </Button>
-              <Button className="btn-primary" onClick={onStartClick}>
+              <TBButton variant="primary" size="md" onClick={onStartClick}>
                 Empezar ahora
-              </Button>
+              </TBButton>
             </>
           )}
         </div>
@@ -144,8 +145,8 @@ const Header = ({ onLoginClick, onStartClick }) => {
                     to={link.to}
                     onClick={() => setIsMobileMenuOpen(false)}
                     className={({ isActive }) =>
-                      `text-lg font-medium text-neutral-700 hover:text-orange transition-colors ${
-                        isActive ? 'text-orange' : ''
+                      `text-lg font-medium text-neutral-700 hover:text-tb-primary transition-colors ${
+                        isActive ? 'text-tb-primary' : ''
                       }`
                     }
                   >
@@ -163,7 +164,7 @@ const Header = ({ onLoginClick, onStartClick }) => {
                 ) : (
                   <div className="flex flex-col gap-4">
                     <Button variant="outline" className="w-full" onClick={() => { onLoginClick(); setIsMobileMenuOpen(false); }}>Iniciar Sesión</Button>
-                    <Button className="btn-primary w-full" onClick={() => { onStartClick(); setIsMobileMenuOpen(false); }}>Empezar ahora</Button>
+                    <TBButton variant="primary" size="md" className="w-full" onClick={() => { onStartClick(); setIsMobileMenuOpen(false); }}>Empezar ahora</TBButton>
                   </div>
                 )}
               </motion.div>
