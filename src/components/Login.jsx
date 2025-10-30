@@ -3,8 +3,30 @@ import { motion } from 'framer-motion';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { TBButton } from '@/components/ui';
 import { useToast } from '@/components/ui/use-toast';
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Mail, Lock, User, Briefcase, Loader2, ArrowLeft } from 'lucide-react';
+import { Mail, Lock, Loader2, ArrowLeft } from 'lucide-react';
+
+const inputVariants = {
+  rest: { scale: 1, borderColor: '#d4d4d4' },
+  focus: { scale: 1.02, borderColor: '#ff6b35' },
+};
+
+const EmailInput = ({ value, onChange, disabled }) => (
+  <div className="relative">
+    <Mail className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-neutral-400" />
+    <motion.input
+      variants={inputVariants}
+      whileFocus="focus"
+      initial="rest"
+      animate="rest"
+      type="email"
+      placeholder="Email"
+      value={value}
+      onChange={onChange}
+      className="w-full pl-8 pr-3 py-2.5 text-sm border border-neutral-300 rounded-lg focus:ring-2 focus:ring-tb-primary focus:outline-none placeholder:text-neutral-400"
+      disabled={disabled}
+    />
+  </div>
+);
 
 const Login = ({ onLoginSuccess, onSwitchToRegister }) => {
   const [email, setEmail] = useState('');
@@ -57,55 +79,29 @@ const Login = ({ onLoginSuccess, onSwitchToRegister }) => {
     setView('login');
   }
 
-  const inputVariants = {
-    rest: { scale: 1, borderColor: '#d4d4d4' },
-    focus: { scale: 1.02, borderColor: '#ff6b35' },
-  };
-
   return (
-    <div>
+    <div className="p-6">
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
         {view === 'login' && (
-          <Tabs defaultValue="client" className="w-full">
-            <TabsList className="grid w-full grid-cols-2 rounded-t-xl rounded-b-none p-0 bg-neutral-100">
-              <TabsTrigger value="client" className="py-4 data-[state=active]:bg-white rounded-tl-xl">
-                <User className="mr-2 h-4 w-4" />
-                Cliente
-              </TabsTrigger>
-              <TabsTrigger value="partner" className="py-4 data-[state=active]:bg-white rounded-tr-xl">
-                <Briefcase className="mr-2 h-4 w-4" />
-                Partner
-              </TabsTrigger>
-            </TabsList>
-            <div className="p-8">
-              <h2 className="text-2xl font-bold text-center mb-2 text-neutral-800">
-                Iniciar Sesión
-              </h2>
-              <p className="text-center text-neutral-500 mb-6">
-                Accede a tu cuenta para gestionar tus documentos.
-              </p>
-              <form onSubmit={handleLogin} className="space-y-4">
+          <div>
+            <h2 className="text-xl font-bold text-center mb-1 text-neutral-800">
+              Iniciar Sesión
+            </h2>
+            <p className="text-center text-neutral-500 text-sm mb-5">
+              Accede a tu cuenta para gestionar tus documentos.
+            </p>
+            <form onSubmit={handleLogin} className="space-y-3">
+                <EmailInput 
+                  value={email} 
+                  onChange={(e) => setEmail(e.target.value)} 
+                  disabled={loading}
+                />
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-neutral-400" />
-                  <motion.input
-                    variants={inputVariants}
-                    whileFocus="focus"
-                    initial="rest"
-                    animate="rest"
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-tb-primary focus:outline-none"
-                    disabled={loading}
-                  />
-                </div>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-neutral-400" />
+                  <Lock className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-neutral-400" />
                   <motion.input
                     variants={inputVariants}
                     whileFocus="focus"
@@ -115,58 +111,47 @@ const Login = ({ onLoginSuccess, onSwitchToRegister }) => {
                     placeholder="Contraseña"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-tb-primary focus:outline-none"
+                    className="w-full pl-8 pr-3 py-2.5 text-sm border border-neutral-300 rounded-lg focus:ring-2 focus:ring-tb-primary focus:outline-none placeholder:text-neutral-400"
                     disabled={loading}
                   />
                 </div>
-                <TBButton type="submit" variant="primary" size="lg" className="w-full" disabled={loading}>
-                  {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Acceder'}
-                </TBButton>
-              </form>
+              <TBButton type="submit" variant="primary" size="lg" className="w-full" disabled={loading}>
+                {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Acceder'}
+              </TBButton>
+            </form>
 
-              <div className="text-center mt-6 space-y-2">
-                <button onClick={() => setView('forgotPassword')} className="text-sm text-tb-primary hover:underline">
-                  ¿Has olvidado tu contraseña?
+            <div className="text-center mt-4 space-y-2">
+              <button onClick={() => setView('forgotPassword')} className="text-sm text-tb-primary hover:underline">
+                ¿Has olvidado tu contraseña?
+              </button>
+              <p className="text-sm text-neutral-500">
+                ¿Aún no estas registrado?{' '}
+                <button onClick={onSwitchToRegister} className="font-semibold text-tb-primary hover:underline" disabled={loading}>
+                  Crea una cuenta
                 </button>
-                <p className="text-sm text-neutral-500">
-                  ¿Aún no estas registrado?{' '}
-                  <button onClick={onSwitchToRegister} className="font-semibold text-tb-primary hover:underline" disabled={loading}>
-                    Crea una cuenta
-                  </button>
-                </p>
-              </div>
+              </p>
             </div>
-          </Tabs>
+          </div>
         )}
 
         {view === 'forgotPassword' && (
-          <div className="p-8">
-             <button onClick={() => setView('login')} className="flex items-center text-sm text-neutral-600 hover:text-tb-primary mb-4">
+          <div>
+             <button onClick={() => setView('login')} className="flex items-center text-sm text-neutral-600 hover:text-tb-primary mb-3">
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Volver a inicio de sesión
             </button>
-            <h2 className="text-2xl font-bold text-center mb-2 text-neutral-800">
+            <h2 className="text-xl font-bold text-center mb-1 text-neutral-800">
               Restablecer Contraseña
             </h2>
-            <p className="text-center text-neutral-500 mb-6">
+            <p className="text-center text-neutral-500 text-sm mb-5">
               Introduce tu email para recibir instrucciones.
             </p>
-            <form onSubmit={handlePasswordReset} className="space-y-4">
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-neutral-400" />
-                <motion.input
-                  variants={inputVariants}
-                  whileFocus="focus"
-                  initial="rest"
-                  animate="rest"
-                  type="email"
-                  placeholder="Email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 border border-neutral-300 rounded-lg focus:ring-2 focus:ring-tb-primary focus:outline-none"
-                  disabled={loading}
-                />
-              </div>
+            <form onSubmit={handlePasswordReset} className="space-y-3">
+              <EmailInput 
+                value={email} 
+                onChange={(e) => setEmail(e.target.value)} 
+                disabled={loading}
+              />
               <TBButton type="submit" variant="primary" size="lg" className="w-full" disabled={loading}>
                 {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : 'Enviar instrucciones'}
               </TBButton>

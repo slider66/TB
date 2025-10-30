@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { useToast } from '@/components/ui/use-toast';
@@ -9,6 +9,7 @@ const AuthCallbackPage = () => {
   const { session, loading } = useAuth();
   const { toast } = useToast();
   const [searchParams] = useSearchParams();
+  const [verifying, setVerifying] = useState(true);
 
   useEffect(() => {
     // This effect runs when the component mounts and whenever the session or loading state changes.
@@ -21,10 +22,12 @@ const AuthCallbackPage = () => {
 
     // Check for an error passed in the URL from Supabase (e.g., expired token)
     const error = searchParams.get('error');
+    const errorDescription = searchParams.get('error_description');
+    
     if (error) {
         toast({
             title: 'Error de Autenticación',
-            description: 'El enlace de verificación ha expirado o no es válido. Por favor, intenta iniciar sesión de nuevo.',
+            description: errorDescription || 'El enlace de verificación ha expirado o no es válido. Por favor, intenta iniciar sesión de nuevo.',
             variant: 'destructive',
             duration: 8000,
         });
@@ -32,11 +35,19 @@ const AuthCallbackPage = () => {
         return;
     }
 
+    // Check the type parameter to determine if this is an email confirmation
+    const type = searchParams.get('type');
+    
     // Once loading is complete, check if a session exists.
     if (session) {
-      // If a session is established, it means the user is successfully authenticated.
-      // Redirect them to their dashboard/panel.
-      navigate('/panel');
+      // If this is an email confirmation (signup), show the success page
+      if (type === 'signup' || type === 'email') {
+        setVerifying(false);
+        navigate('/auth/confirm?verified=true');
+      } else {
+        // For other auth types (password recovery, etc.), go to panel
+        navigate('/panel');
+      }
     } else {
       // If there's no session after the auth flow, something went wrong.
       // This could be due to an invalid link, an expired token, or other issues.

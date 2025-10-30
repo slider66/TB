@@ -5,7 +5,7 @@ import { Toaster } from '@/components/ui/toaster';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { AnimatePresence } from 'framer-motion';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import Login from '@/components/Login';
 import Register from '@/components/Register';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
@@ -116,11 +116,19 @@ function App() {
       <StickyCta onUploadClick={openOrder} />
       <Dialog open={isLoginOpen} onOpenChange={setLoginOpen}>
         <DialogContent className="sm:max-w-[425px] p-0 bg-white rounded-xl">
+          <DialogHeader className="sr-only">
+            <DialogTitle>Iniciar sesión</DialogTitle>
+            <DialogDescription>Introduce tus credenciales para acceder.</DialogDescription>
+          </DialogHeader>
           <Login onLoginSuccess={closeModals} onSwitchToRegister={openRegister} />
         </DialogContent>
       </Dialog>
       <Dialog open={isRegisterOpen} onOpenChange={setRegisterOpen}>
         <DialogContent className="sm:max-w-[425px] p-0 bg-white rounded-xl">
+          <DialogHeader className="sr-only">
+            <DialogTitle>Crear cuenta</DialogTitle>
+            <DialogDescription>Regístrate para seguir con tu pedido.</DialogDescription>
+          </DialogHeader>
           <Register onRegisterSuccess={closeModals} onSwitchToLogin={openLogin} />
         </DialogContent>
       </Dialog>

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useDropzone } from 'react-dropzone';
@@ -37,8 +36,8 @@ const MAX_FILE_BYTES = 20 * 1024 * 1024;
 const VIRUS_SCAN_POLL_INTERVAL = 4000;
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-const OrderPage = () => {
-  const [step, setStep] = useState('upload'); // upload, configure, checkout, processing, success
+const OrderFlow = ({ embedded = false }) => {
+  const [step, setStep] = useState('upload');
   const [file, setFile] = useState(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
@@ -53,12 +52,12 @@ const OrderPage = () => {
   const [showLoginPassword, setShowLoginPassword] = useState(false);
   const [showCreatePassword, setShowCreatePassword] = useState(false);
   const [isGuest, setIsGuest] = useState(true);
-  const [userExists, setUserExists] = useState(null); // null, true, false
+  const [userExists, setUserExists] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   
   const [orderId, setOrderId] = useState(null);
   const [caseId, setCaseId] = useState(null);
-  const [scanStatus, setScanStatus] = useState('idle'); // idle | pending | clean | malicious | error
+  const [scanStatus, setScanStatus] = useState('idle');
   const [scanDetails, setScanDetails] = useState(null);
   const [scanError, setScanError] = useState(null);
   const scanPollRef = useRef(null);
@@ -340,7 +339,7 @@ const OrderPage = () => {
 
     try {
       if (!user) {
-        if (userExists === false) { // Crear nuevo usuario (invitado o no)
+        if (userExists === false) {
           if (!isGuest) {
             if (!password) {
               throw new Error("Por favor, crea una contrasena para tu cuenta.");
@@ -355,7 +354,7 @@ const OrderPage = () => {
           if (error) throw error;
           finalUserId = data?.user?.id ?? data?.session?.user?.id;
           finalEmail = data?.user?.email ?? finalEmail;
-        } else if (userExists === true) { // Iniciar sesion
+        } else if (userExists === true) {
           const { data, error } = await signIn(email, password);
           if (error) throw error;
           finalUserId = data?.user?.id ?? data?.session?.user?.id;
@@ -422,7 +421,6 @@ const OrderPage = () => {
         throw new Error("No se pudo preparar la orden de compra.");
       }
 
-      // Asociar el usuario a la orden y al caso
       const { error: updateError } = await supabase
         .from('orders')
         .update({ client_user_id: finalUserId })
@@ -457,7 +455,7 @@ const OrderPage = () => {
     } else {
       setUserExists(data.exists);
       if (!data.exists) {
-        setIsGuest(true); // Force guest mode if user doesn't exist
+        setIsGuest(true);
       }
     }
     setIsLoading(false);
@@ -721,27 +719,29 @@ const OrderPage = () => {
   };
 
   return (
-    <div className="flex flex-1 w-full items-center justify-center bg-neutral-50 px-4 sm:px-6 py-6 sm:py-8 md:py-4">
-        <div className="flex w-full max-w-5xl flex-1 flex-col items-center justify-center gap-6 sm:gap-8">
+    <div className={`flex flex-1 w-full items-center justify-center ${embedded ? '' : 'bg-neutral-50 px-4 sm:px-6 py-6 sm:py-8 md:py-4'}`}>
+      <div className="flex w-full max-w-5xl flex-1 flex-col items-center justify-center gap-6 sm:gap-8">
+        {!embedded && (
           <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="text-center">
             <h1 className="text-4xl font-extrabold text-neutral-800">Tu Pedido</h1>
             <p className="text-lg text-neutral-600 mt-2">Un proceso sencillo y seguro.</p>
           </motion.div>
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={step}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.3 }}
-              className="w-full flex justify-center px-0 sm:px-2"
-            >
-              {renderStep()}
-            </motion.div>
-          </AnimatePresence>
-        </div>
+        )}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={step}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className="w-full flex justify-center px-0 sm:px-2"
+          >
+            {renderStep()}
+          </motion.div>
+        </AnimatePresence>
       </div>
+    </div>
   );
 };
 
-export default OrderPage;
+export default OrderFlow;
