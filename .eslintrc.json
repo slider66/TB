@@ -1,10 +1,89 @@
 {
-  "extends": [
-    "react-app"
-  ],
+  "extends": ["react-app", "plugin:import/recommended"],
+  "plugins": ["import"],
   "settings": {
     "react": {
       "version": "detect"
+    },
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx", ".ts", ".tsx"],
+        "paths": ["src"]
+      },
+      "alias": {
+        "map": [["@", "./src"]],
+        "extensions": [".js", ".jsx", ".ts", ".tsx", ".json"]
+      }
     }
-  }
+  },
+  "rules": {
+    "import/no-restricted-paths": [
+      "error",
+      {
+        "zones": [
+          {
+            "target": "./src/!(features)/**/*",
+            "from": "./src/features/**/!(index).{js,jsx,ts,tsx}",
+            "message": "No puedes importar directamente desde el interior de una feature. Usa el barrel export (index.ts/js) de la feature."
+          }
+        ]
+      }
+    ],
+    "no-restricted-imports": [
+      "warn",
+      {
+        "patterns": [
+          {
+            "group": [
+              "@/features/*/components/*",
+              "@/features/*/hooks/*",
+              "@/features/*/services/*",
+              "@/features/*/utils/*",
+              "@/features/*/model/*",
+              "@/features/*/ui/*"
+            ],
+            "message": "No importes directamente desde subdirectorios de features. Usa el barrel export (index.ts/js) de la feature."
+          }
+        ]
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["src/features/**/*.{js,jsx,ts,tsx}"],
+      "excludedFiles": [
+        "**/__tests__/**/*",
+        "**/*.test.{js,jsx,ts,tsx}",
+        "**/*.spec.{js,jsx,ts,tsx}"
+      ],
+      "rules": {
+        "no-restricted-imports": [
+          "error",
+          {
+            "patterns": [
+              {
+                "group": [
+                  "@/features/*/components/*",
+                  "@/features/*/hooks/*",
+                  "@/features/*/services/*",
+                  "@/features/*/utils/*",
+                  "@/features/*/model/*"
+                ],
+                "message": "No importes directamente desde subdirectorios de otras features. Usa el barrel export (index.ts/js) de la feature."
+              },
+              {
+                "group": [
+                  "../../features/*/components/*",
+                  "../../features/*/hooks/*",
+                  "../../features/*/services/*",
+                  "../../features/*/utils/*"
+                ],
+                "message": "No importes directamente desde subdirectorios de otras features. Usa el barrel export (index.ts/js)."
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
 }

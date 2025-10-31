@@ -1,9 +1,29 @@
 import path from 'node:path';
 import react from '@vitejs/plugin-react';
 import { createLogger, defineConfig } from 'vite';
-import inlineEditPlugin from './plugins/visual-editor/vite-plugin-react-inline-editor.js';
-import editModeDevPlugin from './plugins/visual-editor/vite-plugin-edit-mode.js';
-import iframeRouteRestorationPlugin from './plugins/vite-plugin-iframe-route-restoration.js';
+
+/**
+ * NOTA: Plugins de Visual Editor deshabilitados temporalmente
+ * 
+ * Los siguientes plugins están comentados por decisión de arquitectura:
+ * - inlineEditPlugin: Editor inline de React (dev only)
+ * - editModeDevPlugin: Modo de edición en desarrollo (dev only)
+ * - iframeRouteRestorationPlugin: Restauración de rutas en iframe
+ * 
+ * Razón: Estos plugins son específicos para entornos de desarrollo visual/editor
+ * que no están siendo utilizados actualmente en el flujo de trabajo del proyecto.
+ * 
+ * Si necesitas reactivarlos en el futuro, descomenta las siguientes líneas:
+ * ```
+ * import inlineEditPlugin from './plugins/visual-editor/vite-plugin-react-inline-editor.js';
+ * import editModeDevPlugin from './plugins/visual-editor/vite-plugin-edit-mode.js';
+ * import iframeRouteRestorationPlugin from './plugins/vite-plugin-iframe-route-restoration.js';
+ * ```
+ * Y en la sección de plugins:
+ * ```
+ * ...(isDev ? [inlineEditPlugin(), editModeDevPlugin(), iframeRouteRestorationPlugin()] : []),
+ * ```
+ */
 
 const isDev = process.env.NODE_ENV !== 'production';
 
@@ -129,7 +149,7 @@ window.fetch = function(...args) {
 			return response;
 		})
 		.catch(error => {
-			if (!url.match(/\.html?$/i)) {
+			if (!url.match(/.html?$/i)) {
 				console.error(error);
 			}
 
@@ -138,6 +158,32 @@ window.fetch = function(...args) {
 };
 `;
 
+/**
+ * NOTA: Plugin addTransformIndexHtml deshabilitado temporalmente
+ * 
+ * Este plugin inyecta scripts de manejo de errores y monitoreo para entornos
+ * embebidos (como iframes en plataformas de desarrollo visual).
+ * 
+ * Funcionalidades que proporciona:
+ * - Captura de errores de Vite overlay
+ * - Manejo de errores de runtime
+ * - Captura de console.error
+ * - Monkey patch de window.fetch para logging
+ * - Banner de template (solo en producción)
+ * 
+ * Razón de deshabilitación: No se requiere para el flujo de desarrollo estándar.
+ * Solo es necesario cuando la aplicación se ejecuta embebida en un iframe con
+ * comunicación parent-child vía postMessage.
+ * 
+ * Para reactivarlo, descomenta en la sección de plugins:
+ * ```
+ * plugins: [
+ *   react(),
+ *   addTransformIndexHtml
+ * ]
+ * ```
+ */
+// eslint-disable-next-line no-unused-vars
 const addTransformIndexHtml = {
 	name: 'add-transform-index-html',
 	transformIndexHtml(html) {

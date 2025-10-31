@@ -24,13 +24,18 @@ src/
 
 **Salida requerida:** README acordados, checklist completada, y validación del equipo.
 
-### Fase 1 · Nuevas features ya nacen en `features/`
+### Fase 1 · Nuevas features ya nacen en `features/` ✅ ACTIVA
 
-- Todo desarrollo nuevo se crea bajo `features/<feature>/`.
-- Se documenta en el README de la feature qué expone el barrel `index.ts`.
-- Se añaden pruebas co-localizadas (`__tests__/`) para el código nuevo.
+- ✅ Todo desarrollo nuevo se crea bajo `features/<feature>/`.
+- ✅ Se documenta en el README de la feature qué expone el barrel `index.ts`.
+- ✅ Se añaden pruebas co-localizadas (`__tests__/`) para el código nuevo.
+- ✅ **ESLint rules configuradas** para validar imports de barrels automáticamente.
+- ✅ **Documentación completa** en `docs/phase1-new-features-guide.md`.
+- ✅ **Feature de ejemplo** disponible en `src/features/example-feature/`.
 
-**Validador:** ningún import nuevo apunta a `src/components` o `src/hooks` genéricos.
+**Estado:** IMPLEMENTADA - A partir de ahora, toda nueva funcionalidad debe seguir este patrón.
+
+**Validador:** ESLint bloquea imports directos a subdirectorios de features (obligando a usar barrels).
 
 ### Fase 2 · Refactor progresivo de features existentes
 

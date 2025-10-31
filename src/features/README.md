@@ -43,4 +43,34 @@ features/<feature>/
 
 ### Estado actual
 
-No se ha movido código todavía. Esta guía servirá para preparar la transición. Cualquier iniciativa debe pasar primero por el plan de migración documentado en `docs/migration-to-features.md`.
+**Fase 1 ACTIVA:** A partir de ahora, todas las nuevas funcionalidades deben crearse bajo `features/` siguiendo la estructura documentada.
+
+- ✅ **Documentación completa:** Ver [`docs/phase1-new-features-guide.md`](../../docs/phase1-new-features-guide.md)
+- ✅ **Lint rules configuradas:** ESLint validará automáticamente los imports de barrels
+- ✅ **Feature de ejemplo disponible:** Ver [`example-feature/`](./example-feature) como referencia
+- ⏳ **Código legacy:** Permanece en su ubicación actual hasta Fase 2
+
+### Próximos Pasos para Desarrolladores
+
+1. **¿Vas a crear nueva funcionalidad?**
+   - Lee [`docs/phase1-new-features-guide.md`](../../docs/phase1-new-features-guide.md)
+   - Verifica que cumple los criterios de "nueva feature"
+   - Usa `example-feature/` como plantilla
+   - Sigue la estructura obligatoria documentada
+
+2. **¿Necesitas modificar código existente?**
+   - Continúa trabajando en las ubicaciones actuales (`src/components`, `src/hooks`, etc.)
+   - NO muevas código todavía, eso será parte de Fase 2
+   - Si necesitas código legacy desde una nueva feature, importa normalmente
+
+3. **Validación automática**
+   - `pnpm lint` verificará que respetes los barrels
+   - El linter bloqueará imports directos a subdirectorios de features
+   - Los tests deben pasar antes de hacer commit
+
+### Recursos
+
+- **Plan completo:** [`docs/migration-to-features.md`](../../docs/migration-to-features.md)
+- **Guía Phase 1:** [`docs/phase1-new-features-guide.md`](../../docs/phase1-new-features-guide.md)
+- **Feature ejemplo:** [`example-feature/`](./example-feature)
+- **Shared resources:** [`../shared/README.md`](../shared/README.md)

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { supabase } from '@/lib/customSupabaseClient';
@@ -8,22 +8,19 @@ import { Loader2, FileText, Clock, CheckCircle, XCircle, AlertCircle } from 'luc
 import { motion } from 'framer-motion';
 import OrderFlow from '@/components/order/OrderFlow';
 
-const MisCasos = () => {
+const UserCases = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [cases, setCases] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
 
-  useEffect(() => {
-    if (user?.id) {
-      fetchCases();
-    } else {
+  const fetchCases = useCallback(async () => {
+    if (!user?.id) {
       setLoading(false);
+      return;
     }
-  }, [user]);
 
-  const fetchCases = async () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
@@ -48,7 +45,11 @@ const MisCasos = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user?.id]);
+
+  useEffect(() => {
+    fetchCases();
+  }, [fetchCases]);
 
   const getStatusBadge = (status) => {
     const statusConfig = {
@@ -213,4 +214,4 @@ const MisCasos = () => {
   );
 };
 
-export default MisCasos;
+export default UserCases;

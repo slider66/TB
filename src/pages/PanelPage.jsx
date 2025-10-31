@@ -3,10 +3,10 @@ import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useNavigate } from 'react-router-dom';
-import { Loader2, FolderOpen, User as UserIcon, Upload } from 'lucide-react';
+import { Loader2, FolderOpen, User as UserIcon } from 'lucide-react';
 import { motion } from 'framer-motion';
-import MisCasos from '@/components/client/MisCasos';
-import MiPerfil from '@/components/client/MiPerfil';
+import UserCases from '@/components/client/UserCases';
+import UserProfile from '@/components/client/UserProfile';
 
 const PanelPage = () => {
   const { user, signOut, loading } = useAuth();
@@ -61,14 +61,14 @@ const PanelPage = () => {
             {/* Mis Casos Tab */}
             <TabsContent value="casos">
               <div className="bg-white rounded-lg shadow-md p-6">
-                <MisCasos />
+                <UserCases />
               </div>
             </TabsContent>
 
             {/* Mi Perfil Tab */}
             <TabsContent value="perfil">
               <div className="bg-white rounded-lg shadow-md p-6">
-                <MiPerfil />
+                <UserProfile />
               </div>
             </TabsContent>
           </Tabs>

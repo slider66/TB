@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { supabase } from '@/lib/customSupabaseClient';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { Loader2, User, Mail, Lock, CreditCard, Check, AlertCircle } from 'lucide-react';
+import { Loader2, User, Lock, CreditCard, Check, AlertCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-const MiPerfil = () => {
+const UserProfile = () => {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ type: '', text: '' });
@@ -37,13 +37,9 @@ const MiPerfil = () => {
     confirm_password: ''
   });
 
-  useEffect(() => {
-    if (user) {
-      fetchUserData();
-    }
-  }, [user]);
+  const fetchUserData = useCallback(async () => {
+    if (!user) return;
 
-  const fetchUserData = async () => {
     try {
       // Obtener datos del perfil
       const { data: appUserData, error: appUserError } = await supabase
@@ -88,7 +84,11 @@ const MiPerfil = () => {
       console.error('Error fetching user data:', error);
       setMessage({ type: 'error', text: 'Error al cargar los datos del perfil' });
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    fetchUserData();
+  }, [fetchUserData]);
 
   const handleProfileUpdate = async (e) => {
     e.preventDefault();
@@ -400,4 +400,4 @@ const MiPerfil = () => {
   );
 };
 
-export default MiPerfil;
+export default UserProfile;
