@@ -1,4 +1,11 @@
-﻿# Integración MCP en Visual Studio
+﻿---
+version: 1.0
+last_updated: 2025-10-31
+status: Active
+owners: ['Engineering Team']
+---
+
+# Integración MCP en Visual Studio
 
 Este proyecto expone el contrato MCP (Model Communication Protocol) vía OpenAPI para que Visual Studio pueda generar clientes tipados y probar los comandos.
 
@@ -50,4 +57,3 @@ resp.EnsureSuccessStatusCode();
 - Mantén `classification` acorde a la sensibilidad de los datos.
 - Usa 202 Accepted cuando el trabajo continúe en background.
 - Los prompts de IA deben respetar guardarraíles (sin asesoramiento legal específico).
-

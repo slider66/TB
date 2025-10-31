@@ -1,3 +1,10 @@
+---
+version: 1.0
+last_updated: 2025-10-31
+status: Active
+owners: ['Engineering Team', 'Marketing']
+---
+
 # Automatización de Metaetiquetas SEO
 
 ## Propósito
@@ -66,7 +73,8 @@ Si sólo quieres cambiar títulos/descripciones, sigue estos pasos rápidos.
    - Necesidad de metadatos adicionales (p.ej. `og:locale`, `twitter:site`) → usar la propiedad `meta`, lista de objetos `{ name?, property?, content }`.
 4. **Guardado y pruebas**:
    - `npm run build` o `npm run dev` para verificar que no aparecen warnings de Helmet.
-  - Revisar el `<head>` con las DevTools en la ruta afectada para confirmar las etiquetas.
+
+- Revisar el `<head>` con las DevTools en la ruta afectada para confirmar las etiquetas.
 
 ### Ejemplo rápido
 

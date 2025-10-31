@@ -301,28 +301,18 @@ function UserProfile() {
 
 ### 4.3 Existing Spanish Component Names
 
-**Current State**: Some legacy components use Spanish names:
+**Status**: ✅ Migration completed (2025-10-31)
 
-- `MiPerfil.jsx`
-- `MisCasos.jsx`
+**Historical Context**: Some legacy components used Spanish names but have been successfully migrated:
 
-**Migration Strategy**:
+- ✅ `MiPerfil.jsx` → Migrated to `UserProfile.jsx`
+- ✅ `MisCasos.jsx` → Migrated to `UserCases.jsx`
 
-- New components MUST use English names
-- Existing Spanish components should be renamed during refactoring
-- Use Git's rename detection to preserve history: `git mv MiPerfil.jsx UserProfile.jsx`
+**Current Standard**:
 
-**Transition Plan**:
-
-```
-Priority 1 (Next sprint):
-- MiPerfil.jsx → UserProfile.jsx
-- MisCasos.jsx → UserCases.jsx
-
-Priority 2 (Future):
-- Review all Spanish-named files
-- Create migration PR with proper git history
-```
+- All new components MUST use English names
+- Git history was preserved using `git mv` during migration
+- This ensures consistency across the codebase
 
 ---
 

@@ -1,3 +1,10 @@
+---
+version: 1.0
+last_updated: 2025-10-31
+status: Active
+owners: ['Engineering Team']
+---
+
 # Fase 1: Guía para Nuevas Features
 
 Este documento detalla los criterios y procedimientos para implementar nuevas funcionalidades bajo la arquitectura de features desde el inicio del desarrollo.

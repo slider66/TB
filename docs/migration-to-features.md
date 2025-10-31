@@ -1,3 +1,10 @@
+---
+version: 1.0
+last_updated: 2025-10-31
+status: Active
+owners: ['Engineering Team']
+---
+
 # Plan de migración a arquitectura por features
 
 Este documento describe cómo transicionar gradualmente la carpeta `src/` hacia una arquitectura orientada a features sin interrumpir el desarrollo actual ni introducir regresiones.

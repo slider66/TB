@@ -1,3 +1,10 @@
+---
+version: 1.0
+last_updated: 2025-10-31
+status: Completed
+owners: ['Engineering Team']
+---
+
 # Naming Conventions - Implementation Summary
 
 **Date**: 2025-10-31  

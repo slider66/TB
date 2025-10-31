@@ -1,3 +1,10 @@
+---
+version: 1.0
+last_updated: 2025-10-31
+status: Active
+owners: ['Engineering Team']
+---
+
 # Pipeline de verificación (CI verify build)
 
 ## Propósito
