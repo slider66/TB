@@ -152,3 +152,8 @@ supabase/.branches/
 supabase/.temp/
 *.sql
 remote_data.sql
+
+# Playwright test artifacts
+test-results/
+playwright-report/
+playwright/.cache/

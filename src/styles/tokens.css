@@ -1,9 +1,10 @@
 /**
  * Traductor Burocrático - Design Tokens
  * 
- * Variables CSS generadas desde el sistema de tokens.
+ * Variables CSS generadas automáticamente desde tokens/tokens.json
+ * NO EDITAR MANUALMENTE - Este archivo se genera con: pnpm tokens
  * Sincronizado con: docs/design-tokens-traductor-burocratico.md
- * Última actualización: 2025-10-30
+ * Última actualización: 2025-10-31
  */
 
 :root {
@@ -93,8 +94,8 @@
    * SOMBRAS
    * =========================== */
   
-  --tb-shadow-card: 0 2px 8px rgba(0, 0, 0, 0.05);
-  --tb-shadow-button: 0 2px 6px rgba(0, 0, 0, 0.08);
+  --tb-shadow-card: 0 2px 8px rgba(0,0,0,0.05);
+  --tb-shadow-button: 0 2px 6px rgba(0,0,0,0.08);
 
   /* ===========================
    * MOVIMIENTO Y TRANSICIONES

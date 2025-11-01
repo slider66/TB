@@ -9,10 +9,11 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: './src/test/setup.js',
     css: true,
+    exclude: ['**/node_modules/**', '**/dist/**', '**/tests/e2e/**', '**/.{idea,git,cache,output,temp}/**'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
-      exclude: ['node_modules/', 'src/test/', '**/*.config.js', '**/dist/**']
+      exclude: ['node_modules/', 'src/test/', '**/*.config.js', '**/dist/**', '**/tests/e2e/**']
     }
   },
   resolve: {
